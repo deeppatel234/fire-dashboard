@@ -4,6 +4,8 @@ const webpack = require("webpack");
 const PATHS = require("./paths");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
+require('dotenv').config()
+
 const pkg = require("../package.json");
 
 module.exports = ({ mode, distPath } = {}) => {
@@ -74,6 +76,9 @@ module.exports = ({ mode, distPath } = {}) => {
       new webpack.DefinePlugin({
         NODE_ENV: JSON.stringify(process.env.NODE_ENV),
         PACKAGE_VERSION: JSON.stringify(pkg.version),
+        FIREBASE_API_KEY: JSON.stringify(process.env.FIREBASE_API_KEY),
+        FIREBASE_AUTH_DOMAIN: JSON.stringify(process.env.FIREBASE_AUTH_DOMAIN),
+        FIREBASE_PROJECT_ID: JSON.stringify(process.env.FIREBASE_PROJECT_ID),
       }),
       new MiniCssExtractPlugin({
         filename: "[name].css",

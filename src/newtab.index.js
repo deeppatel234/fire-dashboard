@@ -1,10 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-const App = () => {
+import App from "./App";
+
+const NewTab = () => {
   return (
-    "Hello World"
+    <App />
   );
 };
 
-ReactDOM.render(<App />, document.getElementById("newtabRoot"));
+ReactDOM.render(<NewTab />, document.getElementById("newtabRoot"));
