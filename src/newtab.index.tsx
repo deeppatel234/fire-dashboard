@@ -4,9 +4,7 @@ import ReactDOM from "react-dom";
 import App from "./App";
 
 const NewTab = () => {
-  return (
-    <App />
-  );
+  return <App />;
 };
 
 ReactDOM.render(<NewTab />, document.getElementById("newtabRoot"));

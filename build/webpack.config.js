@@ -19,7 +19,7 @@ module.exports = ({ mode, distPath } = {}) => {
     mode,
     devtool: isDevelopment ? "cheap-module-source-map" : false,
     entry: {
-      "newtab/index": `${PATHS.SRC_DIR}/newtab.index.js`,
+      "newtab/index": `${PATHS.SRC_DIR}/newtab.index.tsx`,
     },
     output: {
       path: distPath,
@@ -29,7 +29,7 @@ module.exports = ({ mode, distPath } = {}) => {
     module: {
       rules: [
         {
-          test: /\.js$/,
+          test: /\.(ts|tsx)$/,
           include: PATHS.SRC_DIR,
           exclude: /node_modules/,
           loader: "babel-loader",
@@ -64,7 +64,7 @@ module.exports = ({ mode, distPath } = {}) => {
       ],
     },
     resolve: {
-      extensions: [".js"],
+      extensions: [".ts", ".tsx", ".js"],
       alias: {
         Components: PATHS.COMPONENTS,
         Utils: PATHS.UTILS,
