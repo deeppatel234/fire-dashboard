@@ -1,0 +1,28 @@
+:root {
+  --body-bg-color: #18191a;
+  --header-bg-color: #242526;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+#newtabRoot {
+  height: 100%;
+}
+
+.main-layout-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.main-body {
+  flex: 1;
+  overflow: auto;
+}
+
+.main-layout-wrapper {
+  background-color: var(--body-bg-color);
+}

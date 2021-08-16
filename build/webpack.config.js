@@ -1,10 +1,12 @@
 const path = require("path");
 
 const webpack = require("webpack");
-const PATHS = require("./paths");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const ESLintPlugin = require("eslint-webpack-plugin");
 
-require('dotenv').config()
+const PATHS = require("./paths");
+
+require("dotenv").config();
 
 const pkg = require("../package.json");
 
@@ -34,11 +36,7 @@ module.exports = ({ mode, distPath } = {}) => {
           exclude: /node_modules/,
           loader: "babel-loader",
           options: {
-            configFile: path.resolve(
-              __dirname,
-              '..',
-              'babel.config.js',
-            ),
+            configFile: path.resolve(__dirname, "..", "babel.config.js"),
           },
         },
         {
@@ -50,13 +48,10 @@ module.exports = ({ mode, distPath } = {}) => {
           use: [
             {
               loader: MiniCssExtractPlugin.loader,
-              options: {
-                hmr: isDevelopment,
-              },
             },
             {
-              loader: 'css-loader',
-              options: { url: false }
+              loader: "css-loader",
+              options: { url: false },
             },
             "sass-loader",
           ],
@@ -73,6 +68,9 @@ module.exports = ({ mode, distPath } = {}) => {
       },
     },
     plugins: [
+      new ESLintPlugin({
+        extensions: [".ts", ".tsx", ".js"],
+      }),
       new webpack.DefinePlugin({
         NODE_ENV: JSON.stringify(process.env.NODE_ENV),
         PACKAGE_VERSION: JSON.stringify(pkg.version),

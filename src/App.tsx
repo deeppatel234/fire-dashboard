@@ -1,43 +1,36 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { MemoryRouter as Router, Switch, Route } from "react-router-dom";
 
-import firebase from "firebase/app";
-import "firebase/firestore";
+import firebaseService from "./services/firebase";
 
-import Home from "./pages/home";
+import Home from "./pages/Home";
+import Bookmark from "./pages/Bookmark";
 
-interface FirebaseConfig {
-  apiKey: string;
-  authDomain: string;
-  projectId: string;
-};
+import Header from "./components/Header";
 
-const firebaseConfig: FirebaseConfig = {
-  apiKey: FIREBASE_API_KEY,
-  authDomain: FIREBASE_AUTH_DOMAIN,
-  projectId: FIREBASE_PROJECT_ID,
-};
+import "./app.scss";
 
-firebase.initializeApp(firebaseConfig);
-
-const db = firebase.firestore();
-
-const App = () => {
-  const addData = () => {
-    db.collection("test1").add({
-      first: "Ada",
-      last: "Lovelace",
-      born: 1815
-    }).then((docRef) => {
-      console.log("Document written with ID: ", docRef);
-    }).catch((error) => {
-        console.error("Error adding document: ", error);
-    });
-  };
+const App = (): JSX.Element => {
+  useEffect(() => {
+    firebaseService.init();
+  }, []);
 
   return (
-    <div>
-      <Home />
-    </div>
+    <Router>
+      <div className="main-layout-wrapper">
+        <Header />
+        <div className="main-body">
+          <Switch>
+            <Route path="/bookmark">
+              <Bookmark />
+            </Route>
+            <Route path="/">
+              <Home />
+            </Route>
+          </Switch>
+        </div>
+      </div>
+    </Router>
   );
 };
 

@@ -1,57 +1,25 @@
 {
-  "extends": ["airbnb", "plugin:jsx-a11y/recommended"],
-  "plugins": ["react", "jsx-a11y"],
-  "parser": "babel-eslint",
-  "parserOptions": {
-    "ecmaVersion": 6,
-    "sourceType": "module",
-    "ecmaFeatures": {
-      "jsx": true,
-      "generators": true
-    }
-  },
-  "env": {
-    "browser": true,
-    "commonjs": true,
-    "es6": true,
-    "jest": true,
-    "node": true
-  },
+  "parser": "@typescript-eslint/parser",
+  "plugins": [
+    "@typescript-eslint",
+    "prettier", "react", "react-hooks"
+  ],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier",
+    "plugin:react/recommended",
+    "plugin:prettier/recommended"
+  ],
   "settings": {
-    "import/ignore": [
-      "node_modules",
-      "\\.(json|css|jpg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm)$"
-    ],
-    "import/extensions": [".js", ".tsx", ".ts"],
-    "import/resolver": {
-      "node": {
-        "extensions": [".js", ".json", ".tsx", ".ts"]
-      },
-      "alias": {
-        "map": [["src", "./src"]]
-      }
-    },
     "react": {
-      "version": "17.0.2"
+      "version": "detect"
     }
-  },
-  "globals": {
-    "window": true,
-    "document": true,
-    "localStorage": true,
-    "FormData": true,
-    "FileReader": true,
-    "Blob": true,
-    "navigator": true
   },
   "rules": {
-    "react/jsx-filename-extension": [
-      1,
-      {
-        "extensions": [".js", ".jsx", ".ts", ".tsx"]
-      }
-    ],
-    "import/imports-first": ["error", "absolute-first"],
-    "import/newline-after-import": "error"
+    "react-hooks/rules-of-hooks": "error",
+    "prettier/prettier": ["error"],
+    "react-hooks/exhaustive-deps": "warn"
   }
 }
