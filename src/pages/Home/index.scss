@@ -1,0 +1,18 @@
+.home-wrapper {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .info-text {
+    text-align: center;
+    .time {
+      font-size: 7rem;
+      line-height: 1;
+    }
+
+    .greeting {
+      font-size: 2.5rem;
+    }
+  }
+}
