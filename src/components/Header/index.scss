@@ -1,8 +1,27 @@
 .main-header {
   background-color: var(--header-bg-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px 10px;
+  z-index: 1;
+  transition: background-color 0.3s ease;
 
   .workspace-block {
     font-size: 1.3rem;
-    color: #fff;
+    padding: 10px;
+  }
+
+  .nav-block {
+    a {
+      padding: 10px;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      font-weight: 600;
+
+      &.active {
+        color: var(--primary-color);
+      }
+    }
   }
 }

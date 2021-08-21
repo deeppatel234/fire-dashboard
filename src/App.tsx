@@ -1,7 +1,5 @@
-import React, { useEffect } from "react";
-import { MemoryRouter as Router, Switch, Route } from "react-router-dom";
-
-import firebaseService from "./services/firebase";
+import React from "react";
+import { Switch, Route, useLocation } from "react-router-dom";
 
 import Home from "./pages/Home";
 import Bookmark from "./pages/Bookmark";
@@ -10,27 +8,32 @@ import Header from "./components/Header";
 
 import "./app.scss";
 
+const bgImageUrl = "/assets/bg.jpg";
+
 const App = (): JSX.Element => {
-  useEffect(() => {
-    firebaseService.init();
-  }, []);
+  const location = useLocation();
+
+  const isHome = location.pathname === "/";
+  const isBgEnabled = isHome && bgImageUrl;
 
   return (
-    <Router>
-      <div className="main-layout-wrapper">
-        <Header />
-        <div className="main-body">
-          <Switch>
-            <Route path="/bookmark">
-              <Bookmark />
-            </Route>
-            <Route path="/">
-              <Home />
-            </Route>
-          </Switch>
-        </div>
+    <div
+      className={`main-layout-wrapper ${isBgEnabled ? "bg" : ""}`}
+      style={{ backgroundImage: isBgEnabled ? `url("${bgImageUrl}")` : "none" }}
+    >
+      {isBgEnabled ? <div className="overlay" /> : null}
+      <Header />
+      <div className="main-body">
+        <Switch>
+          <Route exact path="/bookmark">
+            <Bookmark />
+          </Route>
+          <Route exact path="/">
+            <Home />
+          </Route>
+        </Switch>
       </div>
-    </Router>
+    </div>
   );
 };
 
