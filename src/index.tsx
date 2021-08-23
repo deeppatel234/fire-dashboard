@@ -5,7 +5,8 @@ import firebaseService from "./services/firebase";
 
 import App from "./App";
 
-import "./app.scss";
+import "./styles/remixicon.css";
+import "./styles/app.scss";
 
 const Main = (): JSX.Element => {
   useEffect(() => {

@@ -6,8 +6,6 @@ import Bookmark from "./pages/Bookmark";
 
 import Header from "./components/Header";
 
-import "./app.scss";
-
 const bgImageUrl = "/assets/bg.jpg";
 
 const App = (): JSX.Element => {

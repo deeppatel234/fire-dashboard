@@ -24,7 +24,10 @@ const routes: Routes[] = [
 const Header = (): JSX.Element => {
   return (
     <div className="main-header">
-      <div className="workspace-block">Onlinesales.ai</div>
+      <div className="workspace-block">
+        Onlinesales.ai
+        <i className="ri-arrow-down-s-line" />
+      </div>
       <div className="nav-block">
         {routes.map(({ title, path, ...rest }) => {
           return (
