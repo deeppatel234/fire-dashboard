@@ -58,10 +58,13 @@
     "webpack-cli": "^4.7.2"
   },
   "dependencies": {
+    "@popperjs/core": "^2.9.3",
     "feather-icons": "^4.28.0",
     "firebase": "^8.9.1",
+    "framer-motion": "^4.1.17",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-popper": "^2.2.5",
     "react-router-dom": "^5.2.0"
   },
   "browserslist": {

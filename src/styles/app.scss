@@ -103,15 +103,20 @@
 }
 
 :root {
-  --body-bg-color: #18191a;
-  --header-bg-color: #242526;
+  --body-bg-color: #0f131a;
+  --header-bg-color: #1a1d24;
   --text-color: #fff;
   --primary-color: #2196f3;
 
   --scroll-bg-color: rgba(255, 255, 255, 0.2);
   --scroll-thumb-color: rgba(255, 255, 255, 0.3);
 
-  font-size: 16px;
+  --bg-overlay: #292d33;
+
+  --z-index-popover: 1060;
+  --popover-border-radius: 4px;
+  --popover-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+
 }
 
 *::-webkit-scrollbar {
@@ -129,6 +134,7 @@ html,
 body {
   height: 100%;
   margin: 0;
+  font-size: 16px;
 }
 
 #newtabRoot {
@@ -137,32 +143,46 @@ body {
   color: var(--text-color);
 }
 
+.main-bg {
+  position: absolute;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat, repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.overlay {
+  background-attachment: fixed;
+  background-image: radial-gradient(
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 0.5) 100%
+    ),
+    radial-gradient(rgba(0, 0, 0, 0) 33%, rgba(0, 0, 0, 0.3) 166%);
+  background-position-y: 0%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100%;
+  opacity: 1;
+  position: absolute;
+  top: 0px;
+  transition: opacity 0.3s linear 0s;
+  width: 100%;
+}
+
 .main-layout-wrapper {
   display: flex;
   flex-direction: column;
   height: 100%;
+  background-color: var(--body-bg-color);
+  position: absolute;
+  top: 0px;
+  width: 100%;
+  height: 100%;
 
   &.bg {
-    background-repeat: no-repeat, repeat;
-    background-position: center;
-    background-size: cover;
-    .overlay {
-      background-attachment: fixed;
-      background-image: radial-gradient(
-          rgba(0, 0, 0, 0) 0%,
-          rgba(0, 0, 0, 0.5) 100%
-        ),
-        radial-gradient(rgba(0, 0, 0, 0) 33%, rgba(0, 0, 0, 0.3) 166%);
-      background-position-y: 0%;
-      background-repeat: no-repeat;
-      background-size: cover;
-      height: 100%;
-      opacity: 1;
-      position: absolute;
-      top: 0px;
-      transition: opacity 0.3s linear 0s;
-      width: 100%;
-    }
+    background-color: transparent;
     .main-header {
       background-color: rgba(0, 0, 0, 0.2);
     }
@@ -172,11 +192,6 @@ body {
 .main-body {
   flex: 1;
   overflow: auto;
-  z-index: 1;
-}
-
-.main-layout-wrapper {
-  background-color: var(--body-bg-color);
 }
 
 a {

@@ -15,23 +15,32 @@ const App = (): JSX.Element => {
   const isBgEnabled = isHome && bgImageUrl;
 
   return (
-    <div
-      className={`main-layout-wrapper ${isBgEnabled ? "bg" : ""}`}
-      style={{ backgroundImage: isBgEnabled ? `url("${bgImageUrl}")` : "none" }}
-    >
-      {isBgEnabled ? <div className="overlay" /> : null}
-      <Header />
-      <div className="main-body">
-        <Switch>
-          <Route exact path="/bookmark">
-            <Bookmark />
-          </Route>
-          <Route exact path="/">
-            <Home />
-          </Route>
-        </Switch>
+    <>
+      {isBgEnabled ? (
+        <>
+          <div
+            className="main-bg"
+            style={{
+              backgroundImage: `url("${bgImageUrl}")`,
+            }}
+          />
+          <div className="overlay" />
+        </>
+      ) : null}
+      <div className={`main-layout-wrapper ${isBgEnabled ? "bg" : ""}`}>
+        <Header />
+        <div className="main-body">
+          <Switch>
+            <Route exact path="/bookmark">
+              <Bookmark />
+            </Route>
+            <Route exact path="/">
+              <Home />
+            </Route>
+          </Switch>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
