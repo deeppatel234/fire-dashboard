@@ -5,7 +5,13 @@ import { useOnClickOutside } from "../../utils/customHooks";
 
 import "./index.scss";
 
-const Popover = ({ children, component, ...rest }): JSX.Element => {
+const Popover = ({
+  children,
+  component,
+  closeOnClick,
+  className,
+  ...rest
+}): JSX.Element => {
   const [isOpen, setIsOpen] = useState(false);
   const [referenceElement, setReferenceElement] = useState(null);
   const [popperElement, setPopperElement] = useState(null);
@@ -23,6 +29,12 @@ const Popover = ({ children, component, ...rest }): JSX.Element => {
     setIsOpen(!isOpen);
   };
 
+  const onClickComponent = () => {
+    if (closeOnClick) {
+      setIsOpen(false);
+    }
+  };
+
   return (
     <>
       {React.cloneElement(children, {
@@ -32,12 +44,14 @@ const Popover = ({ children, component, ...rest }): JSX.Element => {
       {isOpen ? (
         <div
           ref={setPopperElement}
-          className="popover-wrapper"
+          className={`popover-wrapper ${className || ""}`}
           style={styles.popper}
           {...attributes.popper}
         >
           <div ref={setArrowElement} style={styles.arrow} />
-          <div ref={innerPopperElementRef}>{component}</div>
+          <div ref={innerPopperElementRef} onClick={onClickComponent}>
+            {component}
+          </div>
         </div>
       ) : null}
     </>
@@ -46,6 +60,7 @@ const Popover = ({ children, component, ...rest }): JSX.Element => {
 
 Popover.defaultProps = {
   placement: "bottom",
+  closeOnClick: true,
 };
 
 export default Popover;

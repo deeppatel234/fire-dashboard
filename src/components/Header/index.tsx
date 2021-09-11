@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useContext } from "react";
 import { NavLink } from "react-router-dom";
+
+import AppContext from "src/AppContext";
 
 import Popover from "../Popover";
 
@@ -24,12 +26,42 @@ const routes: Routes[] = [
 ];
 
 const Header = (): JSX.Element => {
+  const { workspace, setWorkSpace, workspaceList } = useContext(AppContext);
+
+  const getWorkspacePopover = (): JSX.Element => {
+    return (
+      <div className="workspace-popover">
+        {workspaceList.map((d) => {
+          return (
+            <div
+              key={d.localId}
+              className={`list-item ${
+                workspace.localId === d.localId ? "active" : ""
+              }`}
+              onClick={() => setWorkSpace(d)}
+            >
+              <i className={`icon ${d.icon}`} />
+              {d.name}
+            </div>
+          );
+        })}
+        <div className="list-item">
+          <i className="icon ri-add-line" /> Add New Workspace
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="main-header">
-      <Popover component={<div>Hello</div>}>
+      <Popover
+        className="header-wrorkspace-popover"
+        component={getWorkspacePopover()}
+      >
         <div className="workspace-block">
-          Onlinesales.ai
-          <i className="ri-arrow-down-s-line" />
+          <i className={`icon workspace ${workspace.icon}`} />
+          {workspace.name}
+          <i className="arrow ri-arrow-down-s-line" />
         </div>
       </Popover>
       <div className="nav-block">

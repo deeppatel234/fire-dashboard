@@ -105,7 +105,8 @@
 :root {
   --body-bg-color: #0f131a;
   --header-bg-color: #1a1d24;
-  --text-color: #fff;
+  --text-color: #f7f7fa;
+  --text-secondary: #e5e5ea;
   --primary-color: #2196f3;
 
   --scroll-bg-color: rgba(255, 255, 255, 0.2);
@@ -117,6 +118,7 @@
   --popover-border-radius: 4px;
   --popover-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 
+  --hover-bg-color: rgba(255, 255, 255, 0.05);
 }
 
 *::-webkit-scrollbar {

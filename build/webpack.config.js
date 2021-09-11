@@ -61,10 +61,10 @@ module.exports = ({ mode, distPath } = {}) => {
     resolve: {
       extensions: [".ts", ".tsx", ".js"],
       alias: {
-        Components: PATHS.COMPONENTS,
-        Utils: PATHS.UTILS,
-        Src: PATHS.SRC_DIR,
-        Pages: PATHS.PAGES,
+        components: PATHS.COMPONENTS,
+        utils: PATHS.UTILS,
+        src: PATHS.SRC_DIR,
+        pages: PATHS.PAGES,
       },
     },
     plugins: [
