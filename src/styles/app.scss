@@ -108,6 +108,26 @@
   --text-color: #f7f7fa;
   --text-secondary: #e5e5ea;
   --primary-color: #2196f3;
+  --danger-color: #d12f1d;
+  --success-color: #27a12e;
+
+  --btn-default-bg: #3c3f43;
+  --btn-default-hover-bg: #5c6066;
+  --btn-default-text: #e9ebf0;
+
+  --btn-primary-bg: var(--primary-color);
+  --btn-primary-hover-bg: #25b3f5;
+  --btn-primary-text: #fff;
+
+  --btn-danger-bg: var(--danger-color);
+  --btn-danger-hover-bg: #e63f30;
+  --btn-danger-text: #fff;
+
+  --btn-success-bg: var(--success-color);
+  --btn-success-hover-bg: #3fab45;
+  --btn-success-text: #fff;
+
+  --btn-border-radius: 6px;
 
   --scroll-bg-color: rgba(255, 255, 255, 0.2);
   --scroll-thumb-color: rgba(255, 255, 255, 0.3);

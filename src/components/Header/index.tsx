@@ -1,9 +1,11 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { NavLink } from "react-router-dom";
 
 import AppContext from "src/AppContext";
 
-import Popover from "../Popover";
+import Modal from "components/Modal";
+import Popover from "components/Popover";
+import WorkspaceModal from "components/WorkspaceModal";
 
 import "./index.scss";
 
@@ -27,6 +29,11 @@ const routes: Routes[] = [
 
 const Header = (): JSX.Element => {
   const { workspace, setWorkSpace, workspaceList } = useContext(AppContext);
+  const [showWorkspaceModal, setShowWorkspaceModal] = useState(true);
+
+  const toggleWorkspaceModal = () => {
+    setShowWorkspaceModal(!showWorkspaceModal);
+  };
 
   const getWorkspacePopover = (): JSX.Element => {
     return (
@@ -45,7 +52,7 @@ const Header = (): JSX.Element => {
             </div>
           );
         })}
-        <div className="list-item">
+        <div className="list-item" onClick={toggleWorkspaceModal}>
           <i className="icon ri-add-line" /> Add New Workspace
         </div>
       </div>
@@ -64,6 +71,9 @@ const Header = (): JSX.Element => {
           <i className="arrow ri-arrow-down-s-line" />
         </div>
       </Popover>
+      <Modal open={showWorkspaceModal} onClose={toggleWorkspaceModal}>
+        <WorkspaceModal />
+      </Modal>
       <div className="nav-block">
         {routes.map(({ title, path, ...rest }) => {
           return (

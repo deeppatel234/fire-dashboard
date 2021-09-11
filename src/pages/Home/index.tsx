@@ -62,7 +62,7 @@ const Home = (): JSX.Element => {
     <div className="home-wrapper">
       <div className="info-text">
         <div className="time">{timeString}</div>
-        <div className="greeting">{`${greetingsString()}, Deep`}</div>
+        <div className="greeting">{`${greetingsString()}, Hemangi`}</div>
       </div>
     </div>
   );

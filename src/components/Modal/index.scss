@@ -1,0 +1,32 @@
+.react-responsive-modal-root {
+  .react-responsive-modal-modal {
+    background-color: var(--bg-overlay);
+    border-radius: var(--popover-border-radius);
+    color: var(--text-color);
+    padding: 0;
+
+    .react-responsive-modal-closeButton {
+      top: 18px;
+      font-size: 1.5rem;
+      color: inherit;
+    }
+
+    .modal-footer {
+      padding: 0px 20px 20px 20px;
+      display: flex;
+      justify-content: end;
+
+      .btn {
+        margin-left: 12px;
+      }
+    }
+
+    .modal-body {
+      padding: 20px;
+    }
+
+    .modal-header {
+      padding: 20px 50px 0px 20px;
+    }
+  }
+}
