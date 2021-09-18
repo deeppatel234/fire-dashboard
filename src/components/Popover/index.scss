@@ -1,6 +1,29 @@
 .popover-wrapper {
+  margin-top: 10px;
   z-index: var(--z-index-popover);
-  background-color: var(--bg-overlay);
+  background-color: var(--popover-bg-color);
   border-radius: var(--popover-border-radius);
   box-shadow: var(--popover-shadow);
+
+  .arrow {
+    z-index: -1;
+    &::before {
+      content: "";
+      transform: rotate(45deg);
+      background: var(--popover-bg-color);
+      top: 0;
+      left: 0;
+      width: 10px;
+      height: 10px;
+      position: absolute;
+      z-index: -1;
+    }
+
+    &.bottom, &.bottom-start, &.bottom-end {
+      &::before {
+        top: -5px;
+        left: -6px;
+      }
+    }
+  }
 }

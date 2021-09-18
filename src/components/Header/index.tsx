@@ -64,6 +64,7 @@ const Header = (): JSX.Element => {
       <Popover
         className="header-wrorkspace-popover"
         component={getWorkspacePopover()}
+        closeOnClick
       >
         <div className="workspace-block">
           <i className={`icon workspace ${workspace.icon}`} />

@@ -1,7 +1,8 @@
 .react-responsive-modal-root {
+  z-index: var(--z-index-modal);
   .react-responsive-modal-modal {
-    background-color: var(--bg-overlay);
-    border-radius: var(--popover-border-radius);
+    background-color: var(--modal-bg-color);
+    border-radius: var(--modal-border-radius);
     color: var(--text-color);
     padding: 0;
 

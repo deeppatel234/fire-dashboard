@@ -111,6 +111,9 @@
   --danger-color: #d12f1d;
   --success-color: #27a12e;
 
+  --border-primary: #8e8e93;
+  --border-secondary: #7a7a7a;
+
   --btn-default-bg: #3c3f43;
   --btn-default-hover-bg: #5c6066;
   --btn-default-text: #e9ebf0;
@@ -132,11 +135,15 @@
   --scroll-bg-color: rgba(255, 255, 255, 0.2);
   --scroll-thumb-color: rgba(255, 255, 255, 0.3);
 
-  --bg-overlay: #292d33;
-
   --z-index-popover: 1060;
+  --popover-bg-color: #292d33;
   --popover-border-radius: 4px;
+  --popover-border-color: #575757;
   --popover-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+
+  --z-index-modal: 1020;
+  --modal-bg-color: #1a1d24;
+  --modal-border-radius: 4px;
 
   --hover-bg-color: rgba(255, 255, 255, 0.05);
 }
@@ -159,10 +166,13 @@ body {
   font-size: 16px;
 }
 
-#newtabRoot {
-  height: 100%;
+body {
   font-family: "Nunito", sans-serif;
   color: var(--text-color);
+}
+
+#newtabRoot {
+  height: 100%;
 }
 
 .main-bg {
