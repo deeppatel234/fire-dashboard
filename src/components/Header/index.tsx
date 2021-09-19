@@ -41,10 +41,8 @@ const Header = (): JSX.Element => {
         {workspaceList.map((d) => {
           return (
             <div
-              key={d.localId}
-              className={`list-item ${
-                workspace.localId === d.localId ? "active" : ""
-              }`}
+              key={d.id}
+              className={`list-item ${workspace.id === d.id ? "active" : ""}`}
               onClick={() => setWorkSpace(d)}
             >
               <i className={`icon ${d.icon}`} />
@@ -67,8 +65,8 @@ const Header = (): JSX.Element => {
         closeOnClick
       >
         <div className="workspace-block">
-          <i className={`icon workspace ${workspace.icon}`} />
-          {workspace.name}
+          <i className={`icon workspace ${workspace?.icon}`} />
+          {workspace?.name}
           <i className="arrow ri-arrow-down-s-line" />
         </div>
       </Popover>

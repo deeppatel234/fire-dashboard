@@ -1,5 +1,8 @@
-import firebase from "firebase/app";
-import "firebase/firestore";
+import { initializeApp } from "firebase/app";
+
+import { initializeFirestore } from "firebase/firestore";
+
+import { collection, addDoc } from "firebase/firestore";
 
 interface FirebaseConfig {
   apiKey: string;
@@ -19,25 +22,23 @@ class FirebaseService {
   }
 
   init() {
-    firebase.initializeApp(firebaseConfig);
+    const firebaseApp = initializeApp(firebaseConfig);
 
-    this.db = firebase.firestore();
+    this.db = initializeFirestore(firebaseApp, {});
+  }
+
+  async addData() {
+    try {
+      const docRef = await addDoc(collection(this.db, "test3"), {
+        first: "Ada",
+        last: "Lovelace",
+        born: 1815,
+      });
+      console.log("Document written with ID: ", docRef.id);
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
   }
 }
 
 export default new FirebaseService();
-
-// const addData = () => {
-//   db.collection("test1")
-//     .add({
-//       first: "Ada",
-//       last: "Lovelace",
-//       born: 1815,
-//     })
-//     .then((docRef) => {
-//       console.log("Document written with ID: ", docRef);
-//     })
-//     .catch((error) => {
-//       console.error("Error adding document: ", error);
-//     });
-// };

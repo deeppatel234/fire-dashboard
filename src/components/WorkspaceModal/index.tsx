@@ -2,11 +2,14 @@ import React from "react";
 
 import { useFormik } from "formik";
 
+
 import Modal from "components/Modal";
 import Button from "components/Button";
 import Input from "components/Input";
 
 import IconSelector from "components/IconSelector";
+
+import WorkspaceService from "../../services/WorkspaceModal";
 
 import "./index.scss";
 
@@ -17,7 +20,7 @@ const WorkspaceModal = () => {
       icon: "ri-user-line",
     },
     onSubmit: (values) => {
-      console.log(JSON.stringify(values, null, 2));
+      WorkspaceService.insert(values);
     },
   });
 
@@ -38,7 +41,7 @@ const WorkspaceModal = () => {
         </div>
       </Modal.Body>
       <Modal.Footer>
-        <Button isLoading onClick={formik.handleSubmit}>Save</Button>
+        <Button onClick={formik.handleSubmit}>Save</Button>
         <Button type="default">Cancel</Button>
       </Modal.Footer>
     </>
