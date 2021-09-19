@@ -1,0 +1,32 @@
+.input {
+  display: block;
+  width: 100%;
+  color: var(--text-color);
+  background-color: var(--input-bg);
+  background-image: none;
+  border: 1px solid var(--border-primary);
+  transition: border-color .3s ease-in-out;
+  border-radius: var(--input-border-radius);
+  font-size: 0.9rem;
+  padding: 7px 11px;
+
+  // Placeholder
+  &::placeholder {
+    color: var(--text-secondary);
+  }
+
+  &:focus,
+  &:hover:not(:disabled) {
+    border-color: var(--input-focus-border);
+    outline: 0;
+  }
+
+  &:focus {
+    box-shadow: var(--state-focus-shadow);
+  }
+
+  &:disabled {
+    background-color: var(--input-disabled-bg);
+    color: var(--text-disabled);
+  }
+}

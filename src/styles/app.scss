@@ -105,15 +105,17 @@
 :root {
   --body-bg-color: #0f131a;
   --header-bg-color: #1a1d24;
-  --text-color: #f7f7fa;
-  --text-secondary: #e5e5ea;
+  --text-color: #e9ebf0;
+  --text-secondary: #a4a9b3;
+  --text-disabled: #5c6066;
   --primary-color: #2196f3;
   --danger-color: #d12f1d;
   --success-color: #27a12e;
 
-  --border-primary: #8e8e93;
-  --border-secondary: #7a7a7a;
+  --border-primary: #3c3f43;
+  --border-secondary: #292d33;
 
+  // Button
   --btn-default-bg: #3c3f43;
   --btn-default-hover-bg: #5c6066;
   --btn-default-text: #e9ebf0;
@@ -135,15 +137,24 @@
   --scroll-bg-color: rgba(255, 255, 255, 0.2);
   --scroll-thumb-color: rgba(255, 255, 255, 0.3);
 
+  // Popover
   --z-index-popover: 1060;
   --popover-bg-color: #292d33;
   --popover-border-radius: 4px;
   --popover-border-color: #575757;
   --popover-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 
+  // Modal
   --z-index-modal: 1020;
   --modal-bg-color: #1a1d24;
   --modal-border-radius: 4px;
+
+  // Input
+  --input-bg: #1a1d24;
+  --input-border-radius: 6px;
+  --input-focus-border: #34c3ff;
+  --state-focus-shadow: 0 0 0 3px rgba(52, 195, 255, 0.25);
+  --input-disabled-bg: #292d33;
 
   --hover-bg-color: rgba(255, 255, 255, 0.05);
 }
