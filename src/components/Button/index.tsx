@@ -32,7 +32,7 @@ const Button = React.forwardRef(
             [`btn-${type}`]: true,
             outline,
             rounded,
-            disabled,
+            disabled: disabled || isLoading,
             block,
             link,
             [`btn-${size}`]: true,

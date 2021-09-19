@@ -6,8 +6,7 @@ import { iconWithGroup } from "./icons";
 
 import "./index.scss";
 
-const IconSelector = () => {
-  const [selectedIcon, setSelectedIcon] = useState("ri-home-line");
+const IconSelector = ({ selectedIcon, setSelectedIcon }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const onClickGroupSideBar = (key) => {
