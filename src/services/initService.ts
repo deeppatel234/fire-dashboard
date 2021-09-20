@@ -1,61 +1,37 @@
 import Dexie from "dexie";
 
 import WorkspaceModal from "./WorkspaceModal";
+import BookmarkModal from "./BookmarkModal";
 
-const idb =
-  window.indexedDB ||
-  window.mozIndexedDB ||
-  window.webkitIndexedDB ||
-  window.msIndexedDB;
+const workspaceDBName = "workspace";
+const workspaceDBVersion = 1;
 
-export const isIDBSupported = !!idb;
+const appDbVersion = 1;
 
 export const initWorkpaceStorage = () => {
-  const db = new Dexie("workspace");
+  const db = new Dexie(workspaceDBName);
 
-  db.version(1).stores({
+  db.version(workspaceDBVersion).stores({
     [WorkspaceModal.getModalName()]: WorkspaceModal.getModalIndexes().join(","),
   });
 
   WorkspaceModal.setDb(db[WorkspaceModal.getModalName()]);
 };
 
-// export const initStorage = (workspace) => {
-//   const modalList = [];
+export const initStorage = (workspace) => {
+  const modalList = [BookmarkModal];
+  const db = new Dexie(workspace.collectionKey);
 
-//   return new Promise((resolve, reject) => {
-//     const dbRequest = idb.open(
-//       workspace.collectionKey,
-//       workspace.localDBVersion,
-//     );
+  db.version(appDbVersion).stores(
+    modalList.reduce((memo, modal) => {
+      return {
+        ...memo,
+        [modal.getModalName()]: modal.getModalIndexes().join(","),
+      };
+    }, {}),
+  );
 
-//     dbRequest.onerror = () => {
-//       console.error("Error in open database");
-//       reject();
-//     };
-
-//     dbRequest.onsuccess = () => {
-//       const db = dbRequest.result;
-//       modalList.forEach((modal) => {
-//         modal.setDb(db);
-//       });
-//       resolve();
-//     };
-
-//     dbRequest.onupgradeneeded = (event) => {
-//       const db = event.target.result;
-
-//       modalList.forEach((modal) => {
-//         if (!db.objectStoreNames.contains(modal.getModalName())) {
-//           const ts = db.createObjectStore(
-//             modal.getModalName(),
-//             modal.getModalConfig(),
-//           );
-//           modal.getAllIndexes().forEach(({ name, keyPath, options = {} }) => {
-//             ts.createIndex(name, keyPath, options);
-//           });
-//         }
-//       });
-//     };
-//   });
-// };
+  modalList.forEach((modal) => {
+    modal.setDb(db[modal.getModalName()]);
+  });
+};

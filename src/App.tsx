@@ -7,6 +7,7 @@ import Bookmark from "pages/Bookmark";
 import AppContext from "src/AppContext";
 import Header from "components/Header";
 
+import { initStorage } from "./services/initService";
 import WorkspaceModal from "./services/WorkspaceModal";
 
 const bgImageUrl = "/assets/bg.jpg";
@@ -17,12 +18,21 @@ const App = (): JSX.Element => {
   const [workspace, setWorkSpace] = useState({});
   const [isLoading, setIsLoading] = useState(true);
 
+  const loadWorkspaceDb = async (newWorkspace) => {
+    try {
+      initStorage(newWorkspace);
+      setWorkSpace(newWorkspace);
+      setIsLoading(false);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const loadData = async () => {
     try {
       const workspaceData = await WorkspaceModal.getAll();
       setWorkspaceList(workspaceData);
-      setWorkSpace(workspaceData[0]);
-      setIsLoading(false);
+      loadWorkspaceDb(workspaceData[0]);
     } catch (err) {
       console.log(err);
     }
@@ -31,6 +41,10 @@ const App = (): JSX.Element => {
   useEffect(() => {
     loadData();
   }, []);
+
+  const onChangeWorkspace = (newWorkspace) => {
+    loadWorkspaceDb(newWorkspace);
+  };
 
   if (isLoading) {
     return <div>Loading</div>;
@@ -44,7 +58,7 @@ const App = (): JSX.Element => {
       value={{
         workspaceList,
         workspace,
-        setWorkSpace,
+        setWorkSpace: onChangeWorkspace,
       }}
     >
       {isBgEnabled ? (

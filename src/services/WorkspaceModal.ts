@@ -12,7 +12,6 @@ class WorkspaceModal extends BaseModal {
       settings: {},
       ...data,
       collectionKey: `${data.name}-${this.getUniqId()}`,
-      localDBVersion: 1,
     });
   }
 }
