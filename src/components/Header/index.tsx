@@ -29,11 +29,26 @@ const routes: Routes[] = [
 
 const Header = (): JSX.Element => {
   const { workspace, setWorkSpace, workspaceList } = useContext(AppContext);
-  const [showWorkspaceModal, setShowWorkspaceModal] = useState(true);
+  const [showWorkspaceModal, setShowWorkspaceModal] = useState({
+    open: false,
+    dataToEdit: null,
+  });
 
   const toggleWorkspaceModal = () => {
-    setShowWorkspaceModal(!showWorkspaceModal);
+    setShowWorkspaceModal({
+      open: !showWorkspaceModal.open,
+      dataToEdit: null,
+    });
   };
+
+  const onClickSettings = (dataToEdit) => {
+    setShowWorkspaceModal({
+      open: true,
+      dataToEdit,
+    });
+  };
+
+  console.log(workspaceList);
 
   const getWorkspacePopover = (): JSX.Element => {
     return (
@@ -45,13 +60,20 @@ const Header = (): JSX.Element => {
               className={`list-item ${workspace.id === d.id ? "active" : ""}`}
               onClick={() => setWorkSpace(d)}
             >
-              <i className={`icon ${d.icon}`} />
-              {d.name}
+              <div className="content">
+                <i className={`workspace-icon ${d.icon}`} />
+                {d.name}
+              </div>
+              <div className="settings" onClick={() => onClickSettings(d)}>
+                <i className="ri-settings-3-line" />
+              </div>
             </div>
           );
         })}
-        <div className="list-item" onClick={toggleWorkspaceModal}>
-          <i className="icon ri-add-line" /> Add New Workspace
+        <div className="list-item add" onClick={toggleWorkspaceModal}>
+          <div className="content">
+            <i className="workspace-icon ri-add-line" /> Add New Workspace
+          </div>
         </div>
       </div>
     );
@@ -70,8 +92,11 @@ const Header = (): JSX.Element => {
           <i className="arrow ri-arrow-down-s-line" />
         </div>
       </Popover>
-      <Modal open={showWorkspaceModal} onClose={toggleWorkspaceModal}>
-        <WorkspaceModal />
+      <Modal open={showWorkspaceModal.open} onClose={toggleWorkspaceModal}>
+        <WorkspaceModal
+          dataToEdit={showWorkspaceModal.dataToEdit}
+          onClose={toggleWorkspaceModal}
+        />
       </Modal>
       <div className="nav-block">
         {routes.map(({ title, path, ...rest }) => {

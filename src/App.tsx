@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Switch, Route, useLocation } from "react-router-dom";
 
 import Home from "pages/Home";
@@ -15,13 +15,17 @@ const bgImageUrl = "/assets/bg.jpg";
 const App = (): JSX.Element => {
   const location = useLocation();
   const [workspaceList, setWorkspaceList] = useState([]);
-  const [workspace, setWorkSpace] = useState({});
+  const [workspaceId, setWorkSpaceId] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
+
+  const workspace = useMemo(() => {
+    return workspaceList.find((w) => w.id === workspaceId) || {};
+  }, [workspaceId, workspaceList]);
 
   const loadWorkspaceDb = async (newWorkspace) => {
     try {
       initStorage(newWorkspace);
-      setWorkSpace(newWorkspace);
+      setWorkSpaceId(newWorkspace.id);
       setIsLoading(false);
     } catch (err) {
       console.log(err);
@@ -46,6 +50,24 @@ const App = (): JSX.Element => {
     loadWorkspaceDb(newWorkspace);
   };
 
+  const updateWorkspace = (updatedData) => {
+    if (workspaceList.find((w) => w.id === updatedData.id)) {
+      setWorkspaceList(
+        workspaceList.map((w) => {
+          if (w.id === updatedData.id) {
+            return updatedData;
+          }
+
+          return w;
+        }),
+      );
+
+      return;
+    }
+
+    setWorkspaceList([...workspaceList, updatedData]);
+  };
+
   if (isLoading) {
     return <div>Loading</div>;
   }
@@ -59,6 +81,7 @@ const App = (): JSX.Element => {
         workspaceList,
         workspace,
         setWorkSpace: onChangeWorkspace,
+        updateWorkspace,
       }}
     >
       {isBgEnabled ? (

@@ -1,27 +1,37 @@
-import React from "react";
+import React, { useContext } from "react";
 
 import { useFormik } from "formik";
-
 
 import Modal from "components/Modal";
 import Button from "components/Button";
 import Input from "components/Input";
-
 import IconSelector from "components/IconSelector";
+
+import AppContext from "src/AppContext";
 
 import WorkspaceService from "../../services/WorkspaceModal";
 
 import "./index.scss";
 
-const WorkspaceModal = () => {
+const WorkspaceModal = ({ dataToEdit, onClose }) => {
+  const { updateWorkspace } = useContext(AppContext);
+
+  const onSubmitData = async (dataToSave) => {
+    try {
+      const response = await WorkspaceService.put(dataToSave);
+      updateWorkspace(response);
+      onClose();
+    } catch (err) {
+      console.log("err", err);
+    }
+  };
+
   const formik = useFormik({
-    initialValues: {
+    initialValues: dataToEdit || {
       name: "",
       icon: "ri-user-line",
     },
-    onSubmit: (values) => {
-      WorkspaceService.insert(values);
-    },
+    onSubmit: onSubmitData,
   });
 
   return (
@@ -42,7 +52,9 @@ const WorkspaceModal = () => {
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={formik.handleSubmit}>Save</Button>
-        <Button type="default">Cancel</Button>
+        <Button type="default" onClick={onClose}>
+          Cancel
+        </Button>
       </Modal.Footer>
     </>
   );

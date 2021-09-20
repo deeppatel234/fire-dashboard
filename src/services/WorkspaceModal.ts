@@ -7,11 +7,11 @@ class WorkspaceModal extends BaseModal {
     this.modalName = "workspace";
   }
 
-  insert(data) {
-    return super.insert({
+  put(data) {
+    return super.put({
       settings: {},
-      ...data,
       collectionKey: `${data.name}-${this.getUniqId()}`,
+      ...data,
     });
   }
 }

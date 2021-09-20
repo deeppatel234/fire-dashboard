@@ -24,14 +24,16 @@ class BaseModal {
     this.db = db;
   }
 
-  insert(data) {
+  async put(data) {
     const epoc = new Date().valueOf();
 
-    return this.db.put({
+    const id = await this.db.put({
       ...data,
       createAt: epoc,
       writeAt: epoc,
     });
+
+    return this.db.get(id);
   }
 
   getAll() {
