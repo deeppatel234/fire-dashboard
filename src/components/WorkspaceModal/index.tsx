@@ -5,6 +5,9 @@ import { useFormik } from "formik";
 import Modal from "components/Modal";
 import Button from "components/Button";
 import Input from "components/Input";
+import Radio from "components/Radio";
+import RadioGroup from "components/RadioGroup";
+
 import IconSelector from "components/IconSelector";
 
 import AppContext from "src/AppContext";
@@ -36,7 +39,7 @@ const WorkspaceModal = ({ dataToEdit, onClose }) => {
 
   return (
     <>
-      <Modal.Header>Add Workspace</Modal.Header>
+      <Modal.Header>{dataToEdit ? "Settings" : "Add Workspace"}</Modal.Header>
       <Modal.Body className="workspace-modal-wrapper">
         <div className="workspace-basic">
           <IconSelector
@@ -48,6 +51,25 @@ const WorkspaceModal = ({ dataToEdit, onClose }) => {
             value={formik.values.name}
             onChangeValue={(val) => formik.setFieldValue("name", val)}
           />
+        </div>
+        <div className="setting-block">
+          <div className="title">Home</div>
+          <div className="setting-content">
+            <RadioGroup
+              name="clockType"
+              value={formik.values?.settings?.home?.clockType}
+              onChangeValue={(val) =>
+                formik.setFieldValue("settings.home.clockType", val)
+              }
+            >
+              <Radio value="12hr" label="12 Hr" />
+              <Radio value="24hr" label="24 Hr" />
+            </RadioGroup>
+          </div>
+        </div>
+        <div className="setting-block">
+          <div className="title">Bookmark</div>
+          <div className="setting-content">Bookmark settings</div>
         </div>
       </Modal.Body>
       <Modal.Footer>

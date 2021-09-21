@@ -30,9 +30,10 @@ const routes: Routes[] = [
 const Header = (): JSX.Element => {
   const { workspace, setWorkSpace, workspaceList } = useContext(AppContext);
   const [showWorkspaceModal, setShowWorkspaceModal] = useState({
-    open: false,
+    open: true,
     dataToEdit: null,
   });
+  const [isOpenWorkspacePopper, setIsOpenWorkspacePopper] = useState(false);
 
   const toggleWorkspaceModal = () => {
     setShowWorkspaceModal({
@@ -41,7 +42,9 @@ const Header = (): JSX.Element => {
     });
   };
 
-  const onClickSettings = (dataToEdit) => {
+  const onClickSettings = (event, dataToEdit) => {
+    event.stopPropagation();
+    setIsOpenWorkspacePopper(false);
     setShowWorkspaceModal({
       open: true,
       dataToEdit,
@@ -64,7 +67,7 @@ const Header = (): JSX.Element => {
                 <i className={`workspace-icon ${d.icon}`} />
                 {d.name}
               </div>
-              <div className="settings" onClick={() => onClickSettings(d)}>
+              <div className="settings" onClick={(event) => onClickSettings(event, d)}>
                 <i className="ri-settings-3-line" />
               </div>
             </div>
@@ -84,6 +87,8 @@ const Header = (): JSX.Element => {
       <Popover
         className="header-wrorkspace-popover"
         component={getWorkspacePopover()}
+        isOpen={isOpenWorkspacePopper}
+        setIsOpen={setIsOpenWorkspacePopper}
         closeOnClick
       >
         <div className="workspace-block">

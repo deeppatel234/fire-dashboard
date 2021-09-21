@@ -1,0 +1,134 @@
+.radio {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 0.9rem;
+
+  &.disabled {
+    label {
+      cursor: not-allowed;
+      color: var(--text-disabled);
+    }
+  }
+
+  label {
+    line-height: 16px;
+    margin-bottom: 0;
+    font-weight: normal;
+    cursor: pointer;
+  }
+
+  [type="radio"]:focus ~ .radio-inner::before {
+    box-shadow: var(--state-focus-shadow);
+  }
+  .radio-checker {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 36px;
+    min-height: 36px;
+    line-height: 1;
+    position: relative;
+  }
+  .radio-wrapper {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    left: 10px;
+    top: 10px;
+
+    [type="radio"] {
+      opacity: 0;
+    }
+
+    &::before,
+    &::after,
+    .radio-inner::before,
+    .radio-inner::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      display: block;
+    }
+
+    &::before,
+    .radio-inner::before {
+      width: 16px;
+      height: 16px;
+    }
+
+    &::before {
+      border: 1px solid var(--radio-checked-bg);
+      background-color: transparent;
+      border-radius: 50%;
+
+      transform: scale(1);
+      opacity: 0.7;
+      visibility: hidden;
+      transition: transform 0.2s linear, opacity 0.2s linear;
+
+      .checked & {
+        transform: scale(1.5);
+        opacity: 0;
+        visibility: visible;
+      }
+    }
+
+    &::after {
+      top: -10px;
+      right: -10px;
+      bottom: -10px;
+      left: -10px;
+    }
+  }
+}
+
+// Out border.
+.radio-inner {
+  &::before {
+    border: 1px solid var(--radio-border-color);
+    background-color: transparent;
+    border-radius: 50%;
+
+    transition: background 0.2s linear, border 0.2s linear,
+      box-shadow 0.2s linear;
+
+    .radio:hover & {
+      border-color: var(--radio-checked-bg);
+    }
+
+    .radio.disabled & {
+      border-color: var(--radio-disabled-bg);
+      background-color: var(--radio-disabled-bg);
+    }
+
+    .radio.checked & {
+      border-color: var(--radio-checked-bg);
+      background-color: var(--radio-checked-bg);
+    }
+
+    .radio.disabled.checked & {
+      opacity: 0.3;
+    }
+  }
+
+  // Solid circle.
+  &::after {
+    width: 6px;
+    height: 6px;
+    background-color: var(--radio-marker);
+    margin-top: 5px;
+    margin-left: 5px;
+    border-radius: 50%;
+    opacity: 0;
+    transform: scale(0);
+    transition: opacity 0.2s ease-in,
+      transform 0.2s cubic-bezier(0.12, 0.4, 0.29, 1.46);
+
+    .checked & {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+}

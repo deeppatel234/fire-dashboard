@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 type CallBackFunction = (event: Event) => null;
 
@@ -28,4 +28,26 @@ export const useOnClickOutside = (
   }, [ref, listener]);
 
   return ref;
+};
+
+export const useControlled = (controlledValue, defaultValue) => {
+  const controlledRef = useRef(false);
+  controlledRef.current = controlledValue !== undefined;
+
+  const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue);
+
+  // If it is controlled, this directly returns the attribute value.
+  const value = controlledRef.current ? controlledValue : uncontrolledValue;
+
+  const setValue = useCallback(
+    (nextValue) => {
+      // Only update the value in state when it is not under control.
+      if (!controlledRef.current) {
+        setUncontrolledValue(nextValue);
+      }
+    },
+    [controlledRef],
+  );
+
+  return [value, setValue, controlledRef.current];
 };

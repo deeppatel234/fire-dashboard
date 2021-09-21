@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import { usePopper } from "react-popper";
 
-import { useOnClickOutside } from "../../utils/customHooks";
+import { useOnClickOutside, useControlled } from "utils/customHooks";
 
 import "./index.scss";
 
@@ -16,18 +16,12 @@ const Popover = ({
   placement,
   ...rest
 }): JSX.Element => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useControlled(pIsOpen);
   const [referenceElement, setReferenceElement] = useState(null);
   const [popperElement, setPopperElement] = useState(null);
   const [arrowElement, setArrowElement] = useState(null);
 
   const setOpenToUse = pSetIsOpen || setIsOpen;
-
-  useEffect(() => {
-    if (pIsOpen !== undefined) {
-      setIsOpen(pIsOpen);
-    }
-  }, [pIsOpen]);
 
   const innerPopperElementRef = useOnClickOutside(() => {
     setOpenToUse(false);
