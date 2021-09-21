@@ -3,6 +3,7 @@
 
   .workspace-basic {
     display: flex;
+    margin-bottom: 30px;
 
     .icon-selector-block {
       margin-right: 15px;
@@ -14,10 +15,12 @@
     .title {
       padding: 10px;
       background: #2c2f34;
-      margin-bottom: 5px;
+      margin-bottom: 15px;
       border-radius: 2px;
     }
     .setting-content {
+      margin: 10px;
+      margin-bottom: 25px;
     }
   }
 }

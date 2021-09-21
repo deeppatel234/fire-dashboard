@@ -36,7 +36,11 @@ const App = (): JSX.Element => {
     try {
       const workspaceData = await WorkspaceModal.getAll();
       setWorkspaceList(workspaceData);
-      loadWorkspaceDb(workspaceData[0]);
+      if (workspaceData[0]) {
+        loadWorkspaceDb(workspaceData[0]);
+      } else {
+        setIsLoading(false);
+      }
     } catch (err) {
       console.log(err);
     }

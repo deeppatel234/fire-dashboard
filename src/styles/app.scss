@@ -248,3 +248,36 @@ a {
   text-decoration: none;
   color: inherit;
 }
+
+
+$grid-columns: 12;
+
+@mixin calc-grid-column($index, $class) {
+  .col-#{$class}-#{$index} {
+    width: percentage(($index / $grid-columns));
+  }
+}
+
+@media (min-width: 576px) {
+  @for $i from 0 through $grid-columns {
+    @include calc-grid-column($i, "sm");
+  }
+}
+
+@media (min-width: 992px) {
+  @for $i from 0 through $grid-columns {
+    @include calc-grid-column($i, "md");
+  }
+}
+
+@media (min-width: 1200px) {
+  @for $i from 0 through $grid-columns {
+    @include calc-grid-column($i, "xl");
+  }
+}
+
+@media (min-width: 1400px) {
+  @for $i from 0 through $grid-columns {
+    @include calc-grid-column($i, "xxl");
+  }
+}

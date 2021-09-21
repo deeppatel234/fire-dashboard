@@ -1,3 +1,13 @@
 .radio-group-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
 
+  &.inline {
+    flex-direction: row;
+  }
+
+  .radio {
+    margin-right: 25px;
+  }
 }

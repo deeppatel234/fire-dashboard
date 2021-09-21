@@ -24,7 +24,7 @@
   .radio-checker {
     padding-top: 10px;
     padding-bottom: 10px;
-    padding-left: 36px;
+    padding-left: 26px;
     min-height: 36px;
     line-height: 1;
     position: relative;
@@ -34,7 +34,7 @@
     width: 16px;
     height: 16px;
     display: inline-block;
-    left: 10px;
+    left: 0;
     top: 10px;
 
     [type="radio"] {
@@ -75,12 +75,12 @@
       }
     }
 
-    &::after {
-      top: -10px;
-      right: -10px;
-      bottom: -10px;
-      left: -10px;
-    }
+    // &::after {
+    //   top: -10px;
+    //   right: -10px;
+    //   bottom: -10px;
+    //   left: -10px;
+    // }
   }
 }
 

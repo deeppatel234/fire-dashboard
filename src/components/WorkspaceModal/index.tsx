@@ -7,6 +7,8 @@ import Button from "components/Button";
 import Input from "components/Input";
 import Radio from "components/Radio";
 import RadioGroup from "components/RadioGroup";
+import FormGroup from "components/FormGroup";
+import FormItem from "components/FormItem";
 
 import IconSelector from "components/IconSelector";
 
@@ -33,6 +35,12 @@ const WorkspaceModal = ({ dataToEdit, onClose }) => {
     initialValues: dataToEdit || {
       name: "",
       icon: "ri-user-line",
+      settings: {
+        home: {
+          clockType: "12hr",
+          showGreeting: "yes",
+        },
+      },
     },
     onSubmit: onSubmitData,
   });
@@ -41,36 +49,50 @@ const WorkspaceModal = ({ dataToEdit, onClose }) => {
     <>
       <Modal.Header>{dataToEdit ? "Settings" : "Add Workspace"}</Modal.Header>
       <Modal.Body className="workspace-modal-wrapper">
-        <div className="workspace-basic">
-          <IconSelector
-            selectedIcon={formik.values.icon}
-            setSelectedIcon={(val) => formik.setFieldValue("icon", val)}
-          />
-          <Input
-            placeholder="Workspace Name"
-            value={formik.values.name}
-            onChangeValue={(val) => formik.setFieldValue("name", val)}
-          />
-        </div>
-        <div className="setting-block">
-          <div className="title">Home</div>
-          <div className="setting-content">
-            <RadioGroup
-              name="clockType"
-              value={formik.values?.settings?.home?.clockType}
-              onChangeValue={(val) =>
-                formik.setFieldValue("settings.home.clockType", val)
-              }
-            >
-              <Radio value="12hr" label="12 Hr" />
-              <Radio value="24hr" label="24 Hr" />
-            </RadioGroup>
+        <FormGroup values={formik.values} setValue={formik.setFieldValue}>
+          <div className="workspace-basic">
+            <IconSelector
+              selectedIcon={formik.values.icon}
+              setSelectedIcon={(val) => formik.setFieldValue("icon", val)}
+            />
+            <Input
+              placeholder="Workspace Name"
+              value={formik.values.name}
+              onChangeValue={(val) => formik.setFieldValue("name", val)}
+            />
           </div>
-        </div>
-        <div className="setting-block">
-          <div className="title">Bookmark</div>
-          <div className="setting-content">Bookmark settings</div>
-        </div>
+          <div className="setting-block">
+            <div className="title">Home</div>
+            <div className="setting-content">
+              <FormItem
+                formKey="settings.home.userName"
+                label="Your Name"
+                componentType="input"
+              >
+                <Input />
+              </FormItem>
+              <FormItem formKey="settings.home.clockType" label="Clock Type">
+                <RadioGroup name="clockType">
+                  <Radio value="12hr" label="12 Hr" />
+                  <Radio value="24hr" label="24 Hr" />
+                </RadioGroup>
+              </FormItem>
+              <FormItem
+                formKey="settings.home.showGreeting"
+                label="Show Greeting"
+              >
+                <RadioGroup name="showGreeting">
+                  <Radio value="yes" label="Yes" />
+                  <Radio value="no" label="No" />
+                </RadioGroup>
+              </FormItem>
+            </div>
+          </div>
+          {/* <div className="setting-block">
+            <div className="title">Bookmark</div>
+            <div className="setting-content">Bookmark settings</div>
+          </div> */}
+        </FormGroup>
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={formik.handleSubmit}>Save</Button>

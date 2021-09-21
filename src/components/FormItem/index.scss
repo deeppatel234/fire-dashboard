@@ -1,0 +1,20 @@
+.form-item {
+  display: flex;
+  margin: 15px 0;
+
+  .label {
+    margin-top: 8px;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+  }
+  .component {
+    &.input {
+      padding-top: 3px;
+    }
+    .error-msg {
+      // color: var(--danger);
+      // font-size: var(--fontSizeCaption);
+      margin-top: 1px;
+    }
+  }
+}

@@ -1,10 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
+
+import AppContext from "src/AppContext";
 
 import "./index.scss";
 
 const Home = (): JSX.Element => {
+  const { workspace } = useContext(AppContext);
+
   const [timeString, setTimeString] = useState("");
-  const is12Hr = true;
+
+  const is12Hr = useMemo(() => {
+    return workspace.settings?.home?.clockType === "12hr";
+  }, [workspace]);
 
   const formatTime = (i: number): string => {
     let formated = `${i}`;
@@ -62,7 +69,13 @@ const Home = (): JSX.Element => {
     <div className="home-wrapper">
       <div className="info-text">
         <div className="time">{timeString}</div>
-        <div className="greeting">{`${greetingsString()}, Hemangi`}</div>
+        {workspace.settings?.home?.showGreeting ? (
+          <div className="greeting">{`${greetingsString()}${
+            workspace.settings.home.userName
+              ? `, ${workspace.settings.home.userName}`
+              : ""
+          }`}</div>
+        ) : null}
       </div>
     </div>
   );

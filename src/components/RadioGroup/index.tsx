@@ -52,4 +52,8 @@ const RadioGroup = ({
   );
 };
 
+RadioGroup.defaultProps = {
+  inline: true,
+};
+
 export default RadioGroup;
