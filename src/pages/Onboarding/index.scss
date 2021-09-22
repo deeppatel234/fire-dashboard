@@ -1,0 +1,36 @@
+.onboarding-wrapper {
+  display: flex;
+  height: 100%;
+
+  .svg-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+      max-width: 100%;
+      width: 80%;
+    }
+    .add-workspace-svg {
+      color: var(--primary-color);
+    }
+  }
+
+  .form-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    .onboarding-title {
+      font-size: 2rem;
+      padding: 50px 0;
+    }
+    .workspace-modal {
+      .modal-footer  {
+        padding-top: 20px;
+        display: flex;
+        justify-content: center;
+      }
+    }
+  }
+}

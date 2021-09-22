@@ -18,13 +18,22 @@ import WorkspaceService from "../../services/WorkspaceModal";
 
 import "./index.scss";
 
-const WorkspaceModal = ({ dataToEdit, onClose }) => {
+const WorkspaceModal = ({
+  dataToEdit,
+  onClose,
+  showClose,
+  onSuccess,
+  showHeader,
+}) => {
   const { updateWorkspace } = useContext(AppContext);
 
   const onSubmitData = async (dataToSave) => {
     try {
       const response = await WorkspaceService.put(dataToSave);
       updateWorkspace(response);
+      if (onSuccess) {
+        onSuccess();
+      }
       onClose();
     } catch (err) {
       console.log("err", err);
@@ -47,7 +56,9 @@ const WorkspaceModal = ({ dataToEdit, onClose }) => {
 
   return (
     <>
-      <Modal.Header>{dataToEdit ? "Settings" : "Add Workspace"}</Modal.Header>
+      {showHeader ? (
+        <Modal.Header>{dataToEdit ? "Settings" : "Add Workspace"}</Modal.Header>
+      ) : null}
       <Modal.Body className="workspace-modal-wrapper">
         <FormGroup values={formik.values} setValue={formik.setFieldValue}>
           <div className="workspace-basic">
@@ -95,13 +106,22 @@ const WorkspaceModal = ({ dataToEdit, onClose }) => {
         </FormGroup>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={formik.handleSubmit}>Save</Button>
-        <Button type="default" onClick={onClose}>
-          Cancel
+        <Button onClick={formik.handleSubmit}>
+          {dataToEdit ? "Save" : "Create"}
         </Button>
+        {showClose ? (
+          <Button type="default" onClick={onClose}>
+            Cancel
+          </Button>
+        ) : null}
       </Modal.Footer>
     </>
   );
+};
+
+WorkspaceModal.defaultProps = {
+  showClose: true,
+  showHeader: true,
 };
 
 export default WorkspaceModal;
