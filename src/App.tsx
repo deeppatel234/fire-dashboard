@@ -1,8 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Switch, Route, useLocation } from "react-router-dom";
+import { Switch, Route, useLocation, useHistory } from "react-router-dom";
 
 import Home from "pages/Home";
 import Bookmark from "pages/Bookmark";
+import Onboarding from "pages/Onboarding";
 
 import AppContext from "src/AppContext";
 import Header from "components/Header";
@@ -14,6 +15,7 @@ const bgImageUrl = "/assets/bg.jpg";
 
 const App = (): JSX.Element => {
   const location = useLocation();
+  const history = useHistory();
   const [workspaceList, setWorkspaceList] = useState([]);
   const [workspaceId, setWorkSpaceId] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
@@ -35,10 +37,11 @@ const App = (): JSX.Element => {
   const loadData = async () => {
     try {
       const workspaceData = await WorkspaceModal.getAll();
-      setWorkspaceList(workspaceData);
       if (workspaceData[0]) {
+        setWorkspaceList(workspaceData);
         loadWorkspaceDb(workspaceData[0]);
       } else {
+        history.push("/onboarding");
         setIsLoading(false);
       }
     } catch (err) {
@@ -77,6 +80,7 @@ const App = (): JSX.Element => {
   }
 
   const isHome = location.pathname === "/";
+  const isOnboarding = location.pathname === "/onboarding";
   const isBgEnabled = isHome && bgImageUrl;
 
   return (
@@ -100,11 +104,14 @@ const App = (): JSX.Element => {
         </>
       ) : null}
       <div className={`main-layout-wrapper ${isBgEnabled ? "bg" : ""}`}>
-        <Header />
+        {!isOnboarding ? <Header /> : null}
         <div className="main-body">
           <Switch>
             <Route exact path="/bookmark">
               <Bookmark />
+            </Route>
+            <Route exact path="/onboarding">
+              <Onboarding />
             </Route>
             <Route exact path="/">
               <Home />

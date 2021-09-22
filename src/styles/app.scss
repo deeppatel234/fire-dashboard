@@ -1,3 +1,5 @@
+@use "sass:math";
+
 @font-face {
   font-family: "Nunito";
   font-style: italic;
@@ -254,7 +256,7 @@ $grid-columns: 12;
 
 @mixin calc-grid-column($index, $class) {
   .col-#{$class}-#{$index} {
-    width: percentage(($index / $grid-columns));
+    width: percentage(math.div($index, $grid-columns));
   }
 }
 

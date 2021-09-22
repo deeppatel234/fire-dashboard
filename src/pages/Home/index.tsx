@@ -69,7 +69,7 @@ const Home = (): JSX.Element => {
     <div className="home-wrapper">
       <div className="info-text">
         <div className="time">{timeString}</div>
-        {workspace.settings?.home?.showGreeting ? (
+        {workspace.settings?.home?.showGreeting === "yes" ? (
           <div className="greeting">{`${greetingsString()}${
             workspace.settings.home.userName
               ? `, ${workspace.settings.home.userName}`

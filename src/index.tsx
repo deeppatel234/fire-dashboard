@@ -14,6 +14,7 @@ const Main = (): JSX.Element => {
 
   const load = async () => {
     try {
+      firebaseService.init();
       await initWorkpaceStorage();
       setIsLoading(false);
     } catch (err) {
@@ -22,7 +23,6 @@ const Main = (): JSX.Element => {
   };
 
   useEffect(() => {
-    firebaseService.init();
     load();
   }, []);
 
