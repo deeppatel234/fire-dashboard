@@ -4,6 +4,7 @@ import { Switch, Route, useLocation, useHistory } from "react-router-dom";
 import Home from "pages/Home";
 import Bookmark from "pages/Bookmark";
 import Onboarding from "pages/Onboarding";
+import FirebaseSetup from "pages/FirebaseSetup";
 
 import AppContext from "src/AppContext";
 import Header from "components/Header";
@@ -80,6 +81,7 @@ const App = (): JSX.Element => {
   }
 
   const isHome = location.pathname === "/";
+  const isFirebase = location.pathname === "/firebase";
   const isOnboarding = location.pathname === "/onboarding";
   const isBgEnabled = isHome && bgImageUrl;
 
@@ -104,7 +106,7 @@ const App = (): JSX.Element => {
         </>
       ) : null}
       <div className={`main-layout-wrapper ${isBgEnabled ? "bg" : ""}`}>
-        {!isOnboarding ? <Header /> : null}
+        {!isOnboarding && !isFirebase ? <Header /> : null}
         <div className="main-body">
           <Switch>
             <Route exact path="/bookmark">
@@ -112,6 +114,9 @@ const App = (): JSX.Element => {
             </Route>
             <Route exact path="/onboarding">
               <Onboarding />
+            </Route>
+            <Route exact path="/firebase">
+              <FirebaseSetup />
             </Route>
             <Route exact path="/">
               <Home />

@@ -1,0 +1,59 @@
+.firebase-setup-wrapper {
+  display: flex;
+  height: 100%;
+
+  .svg-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+      max-width: 100%;
+      width: 70%;
+    }
+    .server-svg {
+      color: var(--primary-color);
+    }
+  }
+
+  .form-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    .onboarding-title {
+      font-size: 2rem;
+      padding: 50px 0;
+    }
+    .setup-modal {
+      min-width: 400px;
+      .modal-footer  {
+        padding-top: 20px;
+        display: flex;
+        justify-content: center;
+      }
+      .setting-block {
+        margin-top: 20px;
+        .title {
+          padding: 10px;
+          background: #2c2f34;
+          margin-bottom: 15px;
+          border-radius: 2px;
+        }
+        .setting-content {
+          margin: 10px;
+          margin-bottom: 25px;
+        }
+        .account-info {
+          color: var(--text-secondary);
+          padding-top: 12px;
+          text-align: center;
+        }
+      }
+      .footer {
+        display: flex;
+        justify-content: center;
+      }
+    }
+  }
+}

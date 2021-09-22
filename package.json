@@ -70,7 +70,8 @@
     "react-dom": "^17.0.2",
     "react-popper": "^2.2.5",
     "react-responsive-modal": "^6.1.0",
-    "react-router-dom": "^5.2.0"
+    "react-router-dom": "^5.2.0",
+    "react-toastify": "^8.0.2"
   },
   "browserslist": {
     "production": [
