@@ -244,6 +244,12 @@ body {
 .main-body {
   flex: 1;
   overflow: auto;
+
+  .image-loader-main {
+    position: fixed;
+    top: 80px;
+    left: 20px;
+  }
 }
 
 a {

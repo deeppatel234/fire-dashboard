@@ -1,0 +1,14 @@
+.loader {
+  display: inline-flex;
+  line-height: 0;
+  font-size: 3rem;
+  i {
+    animation: loadingKeyFrames 1s linear infinite;
+  }
+  @keyframes loadingKeyFrames {
+    to {
+      transform: rotate(1turn)
+    }
+  }
+}
+

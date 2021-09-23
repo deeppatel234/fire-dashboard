@@ -8,11 +8,12 @@ import FirebaseSetup from "pages/FirebaseSetup";
 
 import AppContext from "src/AppContext";
 import Header from "components/Header";
+import Loading from "components/Loading";
 
 import { initStorage } from "./services/initService";
 import WorkspaceModal from "./services/WorkspaceModal";
 
-const bgImageUrl = "/assets/bg.jpg";
+const DEFAULT_IMAGE = "/assets/bg.jpg";
 
 const App = (): JSX.Element => {
   const location = useLocation();
@@ -20,15 +21,36 @@ const App = (): JSX.Element => {
   const [workspaceList, setWorkspaceList] = useState([]);
   const [workspaceId, setWorkSpaceId] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
+  const [bgImageUrl, setBgImageUrl] = useState();
+  const [isBgLoading, setIsBgLoading] = useState(false);
 
   const workspace = useMemo(() => {
     return workspaceList.find((w) => w.id === workspaceId) || {};
   }, [workspaceId, workspaceList]);
 
+  const loadImage = async () => {
+    try {
+      setIsBgLoading(true);
+      const res = await fetch(
+        `https://source.unsplash.com/random/${window.outerWidth}x${window.innerHeight}?nature,water`,
+      );
+      if (res.url) {
+        await fetch(res.url);
+        setBgImageUrl(res.url);
+      } else {
+        setBgImageUrl(DEFAULT_IMAGE);
+      }
+    } catch (err) {
+      setBgImageUrl(DEFAULT_IMAGE);
+    }
+    setIsBgLoading(false);
+  };
+
   const loadWorkspaceDb = async (newWorkspace) => {
     try {
       initStorage(newWorkspace);
       setWorkSpaceId(newWorkspace.id);
+      loadImage();
       setIsLoading(false);
     } catch (err) {
       console.log(err);
@@ -108,6 +130,7 @@ const App = (): JSX.Element => {
       <div className={`main-layout-wrapper ${isBgEnabled ? "bg" : ""}`}>
         {!isOnboarding && !isFirebase ? <Header /> : null}
         <div className="main-body">
+          {isBgLoading ? <Loading className="image-loader-main" /> : null}
           <Switch>
             <Route exact path="/bookmark">
               <Bookmark />
