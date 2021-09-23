@@ -11,7 +11,7 @@ const Onboarding = () => {
   const history = useHistory();
 
   const onSuccessWorkspaceForm = () => {
-    history.push("/firebase");
+    history.push("/firebase/create");
   };
 
   return (

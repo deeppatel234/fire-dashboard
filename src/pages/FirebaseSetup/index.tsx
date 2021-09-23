@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { useHistory } from "react-router";
+import { useHistory, useParams } from "react-router";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
 
@@ -16,14 +16,24 @@ import "./index.scss";
 
 const FirebaseSetup = () => {
   const history = useHistory();
+  const params = useParams();
+
   const [isLoading, setIsLoading] = useState(false);
+
+  const isEditMode = useMemo(() => {
+    return params?.mode === "edit";
+  }, [params]);
 
   const initialValues = useMemo(() => {
     return firebase.getConfig();
   }, []);
 
   const goToHome = () => {
-    history.push("/");
+    if (isEditMode) {
+      history.goBack();
+    } else {
+      history.push("/");
+    }
   };
 
   const onSubmitData = async (data) => {
@@ -50,7 +60,11 @@ const FirebaseSetup = () => {
         <ServerSvg />
       </div>
       <div className="form-content col-md-6">
-        <div className="onboarding-title">Sync your data with firebase</div>
+        <div className="onboarding-title">
+          {isEditMode
+            ? "Firebase sync configuration"
+            : "Sync your data with firebase"}
+        </div>
         <div className="setup-modal">
           <FormGroup
             values={formik.values}
@@ -88,7 +102,7 @@ const FirebaseSetup = () => {
               Save
             </Button>
             <Button onClick={goToHome} link disabled={isLoading}>
-              Skip
+              {isEditMode ? "Close" : "Skip"}
             </Button>
           </div>
         </div>

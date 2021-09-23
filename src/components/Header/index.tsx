@@ -51,8 +51,6 @@ const Header = (): JSX.Element => {
     });
   };
 
-  console.log(workspaceList);
-
   const getWorkspacePopover = (): JSX.Element => {
     return (
       <div className="workspace-popover">
@@ -67,7 +65,10 @@ const Header = (): JSX.Element => {
                 <i className={`workspace-icon ${d.icon}`} />
                 {d.name}
               </div>
-              <div className="settings" onClick={(event) => onClickSettings(event, d)}>
+              <div
+                className="settings"
+                onClick={(event) => onClickSettings(event, d)}
+              >
                 <i className="ri-settings-3-line" />
               </div>
             </div>
@@ -111,6 +112,14 @@ const Header = (): JSX.Element => {
             </NavLink>
           );
         })}
+        <div className="setting-block">
+          <a onClick={(event) => onClickSettings(event, workspace)}>
+            <i className="ri-settings-3-line" />
+          </a>
+          <NavLink to="/firebase/edit">
+            <i className="ri-refresh-line" />
+          </NavLink>
+        </div>
       </div>
     </div>
   );

@@ -81,7 +81,7 @@ const App = (): JSX.Element => {
   }
 
   const isHome = location.pathname === "/";
-  const isFirebase = location.pathname === "/firebase";
+  const isFirebase = location.pathname.startsWith("/firebase");
   const isOnboarding = location.pathname === "/onboarding";
   const isBgEnabled = isHome && bgImageUrl;
 
@@ -115,7 +115,7 @@ const App = (): JSX.Element => {
             <Route exact path="/onboarding">
               <Onboarding />
             </Route>
-            <Route exact path="/firebase">
+            <Route path="/firebase/:mode">
               <FirebaseSetup />
             </Route>
             <Route exact path="/">

@@ -22,15 +22,40 @@
   }
 
   .nav-block {
+    display: inline-flex;
+    align-items: center;
+
     a {
+      display: inline-flex;
+      align-items: center;
       padding: 10px;
       font-size: 0.85rem;
       text-transform: uppercase;
       font-weight: 600;
+      cursor: pointer;
+
+      i {
+        font-weight: normal;
+        font-size: 1.1rem;
+      }
 
       &.active {
         color: var(--primary-color);
       }
+    }
+  }
+
+  .setting-block {
+    border-left: 1px solid var(--border-secondary);
+    padding-left: 10px;
+    margin-left: 12px;
+  }
+}
+
+.main-layout-wrapper.bg {
+  .main-header {
+    .setting-block {
+      border-left: none;
     }
   }
 }
