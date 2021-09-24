@@ -52,12 +52,12 @@ const Radio = ({
       })}
     >
       <div className="radio-checker">
-        <label htmlFor={value}>
+        <label htmlFor={`${name || nameContext}-${value}`}>
           <span className="radio-wrapper">
             <input
               type="radio"
               name={name || nameContext}
-              id={value}
+              id={`${name || nameContext}-${value}`}
               value={value}
               disabled={disabled || disabledContext}
               onChange={onChangeRadio}

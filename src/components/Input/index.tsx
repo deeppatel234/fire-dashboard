@@ -15,12 +15,7 @@ const Input = ({ className, onChange, onChangeValue, ...props }) => {
 
   return (
     <input
-      className={classNames(
-        {
-          input: true,
-        },
-        className,
-      )}
+      className={classNames("input-component", className)}
       onChange={onChangeInput}
       {...props}
     />
