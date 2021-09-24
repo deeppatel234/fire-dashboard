@@ -28,29 +28,60 @@ const App = (): JSX.Element => {
     return workspaceList.find((w) => w.id === workspaceId) || {};
   }, [workspaceId, workspaceList]);
 
-  const loadImage = async () => {
-    try {
-      setIsBgLoading(true);
-      const res = await fetch(
-        `https://source.unsplash.com/random/${window.outerWidth}x${window.innerHeight}?nature,water`,
-      );
-      if (res.url) {
-        await fetch(res.url);
-        setBgImageUrl(res.url);
-      } else {
-        setBgImageUrl(DEFAULT_IMAGE);
-      }
-    } catch (err) {
-      setBgImageUrl(DEFAULT_IMAGE);
-    }
-    setIsBgLoading(false);
+  const setDefaultImg = () => {
+    setBgImageUrl(DEFAULT_IMAGE);
   };
+
+  const loadImage = async () => {
+    if (workspace?.settings?.home?.showBgImage === "yes") {
+      try {
+        setIsBgLoading(true);
+        let urlToLoad = "";
+
+        if (workspace.settings.home.bgConfig.unsplashRendom === "yes") {
+          urlToLoad = `https://source.unsplash.com/random/${window.outerWidth}x${window.innerHeight}?nature,water`;
+        } else {
+          const urls = workspace.settings.home.bgConfig.imageUrls;
+          const currentIndex = parseInt(
+            localStorage.getItem("imageIndex") || 0,
+            10,
+          );
+          const totalLength = urls?.length;
+          if (totalLength) {
+            const newIndex = currentIndex < totalLength ? currentIndex : 0;
+            urlToLoad = urls[newIndex];
+            localStorage.setItem("imageIndex", newIndex + 1);
+          }
+        }
+
+        if (urlToLoad) {
+          const res = await fetch(urlToLoad);
+          if (res.url) {
+            await fetch(res.url);
+            setBgImageUrl(res.url);
+          } else {
+            setDefaultImg();
+          }
+        } else {
+          setDefaultImg();
+        }
+      } catch (err) {
+        setDefaultImg();
+      }
+      setIsBgLoading(false);
+    } else {
+      setBgImageUrl(null);
+    }
+  };
+
+  useEffect(() => {
+    loadImage();
+  }, [workspace]);
 
   const loadWorkspaceDb = async (newWorkspace) => {
     try {
       initStorage(newWorkspace);
       setWorkSpaceId(newWorkspace.id);
-      loadImage();
       setIsLoading(false);
     } catch (err) {
       console.log(err);
