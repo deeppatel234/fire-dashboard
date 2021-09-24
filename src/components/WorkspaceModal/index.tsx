@@ -5,6 +5,8 @@ import { useFormik } from "formik";
 import Modal from "components/Modal";
 import Button from "components/Button";
 import Input from "components/Input";
+import Textarea from "components/Textarea";
+import Switch from "components/Switch";
 import Radio from "components/Radio";
 import RadioGroup from "components/RadioGroup";
 import FormGroup from "components/FormGroup";
@@ -47,7 +49,11 @@ const WorkspaceModal = ({
       settings: {
         home: {
           clockType: "12hr",
-          showGreeting: "yes",
+          showGreeting: true,
+          showBgImage: true,
+          bgConfig: {
+            unsplashRendom: true,
+          },
         },
       },
     },
@@ -91,12 +97,34 @@ const WorkspaceModal = ({
               <FormItem
                 formKey="settings.home.showGreeting"
                 label="Show Greeting"
+                componentType="switch"
               >
-                <RadioGroup name="showGreeting">
-                  <Radio value="yes" label="Yes" />
-                  <Radio value="no" label="No" />
-                </RadioGroup>
+                <Switch />
               </FormItem>
+              <FormItem
+                formKey="settings.home.showBgImage"
+                label="Show Image"
+                componentType="switch"
+              >
+                <Switch />
+              </FormItem>
+              {formik.values?.settings?.home?.showBgImage ? (
+                <>
+                  <FormItem
+                    formKey="settings.home.bgConfig.unsplashRendom"
+                    label="Rendom Image from Unsplash"
+                    componentType="switch"
+                  >
+                    <Switch />
+                  </FormItem>
+                  <FormItem
+                    formKey="settings.home.bgConfig.imageUrls[2]"
+                    label="Custom Image Urls"
+                  >
+                    <Textarea className="url-textarea" />
+                  </FormItem>
+                </>
+              ) : null}
             </div>
           </div>
           {/* <div className="setting-block">

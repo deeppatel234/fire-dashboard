@@ -19,7 +19,9 @@ const App = (): JSX.Element => {
   const location = useLocation();
   const history = useHistory();
   const [workspaceList, setWorkspaceList] = useState([]);
-  const [workspaceId, setWorkSpaceId] = useState(1);
+  const [workspaceId, setWorkSpaceId] = useState(() => {
+    return parseInt(localStorage.getItem("workspaceId") || 1, 10);
+  });
   const [isLoading, setIsLoading] = useState(true);
   const [bgImageUrl, setBgImageUrl] = useState();
   const [isBgLoading, setIsBgLoading] = useState(false);
@@ -33,12 +35,12 @@ const App = (): JSX.Element => {
   };
 
   const loadImage = async () => {
-    if (workspace?.settings?.home?.showBgImage === "yes") {
+    if (workspace?.settings?.home?.showBgImage) {
       try {
         setIsBgLoading(true);
         let urlToLoad = "";
 
-        if (workspace.settings.home.bgConfig.unsplashRendom === "yes") {
+        if (workspace.settings.home.bgConfig.unsplashRendom) {
           urlToLoad = `https://source.unsplash.com/random/${window.outerWidth}x${window.innerHeight}?nature,water`;
         } else {
           const urls = workspace.settings.home.bgConfig.imageUrls;
@@ -93,7 +95,9 @@ const App = (): JSX.Element => {
       const workspaceData = await WorkspaceModal.getAll();
       if (workspaceData[0]) {
         setWorkspaceList(workspaceData);
-        loadWorkspaceDb(workspaceData[0]);
+        loadWorkspaceDb(
+          workspaceData.find((w) => w.id === workspaceId) || workspaceData[0],
+        );
       } else {
         history.push("/onboarding");
         setIsLoading(false);
@@ -109,6 +113,7 @@ const App = (): JSX.Element => {
 
   const onChangeWorkspace = (newWorkspace) => {
     loadWorkspaceDb(newWorkspace);
+    localStorage.setItem("workspaceId", newWorkspace.id);
   };
 
   const updateWorkspace = (updatedData) => {

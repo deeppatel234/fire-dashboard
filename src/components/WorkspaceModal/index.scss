@@ -21,6 +21,10 @@
     .setting-content {
       margin: 10px;
       margin-bottom: 25px;
+
+      .url-textarea {
+        max-height: 150px;
+      }
     }
   }
 }

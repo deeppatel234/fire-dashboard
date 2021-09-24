@@ -1,0 +1,65 @@
+.rs-btn-toggle {
+  background-color: var(--toggle-bg);
+  border-radius: 12px;
+  box-sizing: border-box;
+  color: var(--toggle-thumb);
+  cursor: pointer;
+  display: inline-block;
+  height: 24px;
+  min-width: 44px;
+  position: relative;
+  transition: background-color .2s ease-in-out,width .2s ease-in-out;
+  user-select: none;
+  vertical-align: middle;
+
+  &::after {
+    content: "";
+    background-color: currentColor;
+    cursor: pointer;
+    position: absolute;
+    transition: left .2s ease-in-out,margin-left .2s ease-in-out,width .2s ease-in-out;
+    border-radius: 9px;
+    height: 18px;
+    left: 3px;
+    top: 3px;
+    width: 18px;
+  }
+
+  &:hover {
+    background-color: var(--toggle-hover-bg);
+  }
+
+  .rs-btn-toggle-inner {
+    font-size: 12px;
+    height: 24px;
+    line-height: 2;
+    margin-left: 24px;
+    margin-right: 8px;
+  }
+
+  &.checked {
+    background-color: var(--toggle-checked-bg);
+    box-shadow: none;
+    color: var(--toggle-thumb);
+
+    &::after {
+      left: 100%;
+      margin-left: -21px;
+    }
+
+    &:hover {
+      background-color: var(--toggle-checked-hover-bg);
+    }
+
+    .rs-btn-toggle-inner {
+      margin-left: 8px;
+      margin-right: 24px;
+    }
+  }
+}
+
+.rs-btn-toggle-inner { 
+  display: block;
+  transition: margin .2s ease-in-out;
+}
+

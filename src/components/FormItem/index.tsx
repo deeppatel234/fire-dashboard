@@ -6,6 +6,10 @@ import FormGroupContext from "../FormGroup/FormGroupContext";
 
 import "./index.scss";
 
+const valueKeyMap = {
+  switch: "checked",
+};
+
 const FormItem = ({
   children,
   className,
@@ -50,9 +54,12 @@ const FormItem = ({
       >
         <div>
           {typeof children === "function"
-            ? children({ value, onChangeValue })
+            ? children({
+                [valueKeyMap[componentType] || "value"]: value,
+                onChangeValue,
+              })
             : React.cloneElement(children, {
-                value,
+                [valueKeyMap[componentType] || "value"]: value,
                 onChangeValue,
               })}
         </div>
