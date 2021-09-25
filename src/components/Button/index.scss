@@ -15,6 +15,18 @@
   transition: all 0.3s ease-out;
   outline: none;
 
+  &.p0 {
+    padding: 0;
+  }
+
+  .btn-icon {
+    display: flex;
+    align-items: center;
+    margin-right: 5px;
+    font-size: 1rem;
+    line-height: 0;
+  }
+
   &:hover {
     background-color: var(--btn-default-hover-bg);
     border-color: var(--btn-default-hover-bg);

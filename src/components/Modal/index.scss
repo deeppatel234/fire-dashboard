@@ -1,10 +1,13 @@
 .react-responsive-modal-root {
   z-index: var(--z-index-modal);
   .react-responsive-modal-modal {
+    display: inline-flex;
+    flex-direction: column;
     background-color: var(--modal-bg-color);
     border-radius: var(--modal-border-radius);
     color: var(--text-color);
     padding: 0;
+    max-height: 90%;
 
     .react-responsive-modal-closeButton {
       top: 18px;
@@ -13,7 +16,7 @@
     }
 
     .modal-footer {
-      padding: 0px 20px 20px 20px;
+      padding: 20px;
       display: flex;
       justify-content: end;
 
@@ -24,6 +27,8 @@
 
     .modal-body {
       padding: 20px;
+      padding-bottom: 0;
+      overflow: auto;
     }
 
     .modal-header {

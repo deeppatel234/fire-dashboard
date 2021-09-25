@@ -30,7 +30,7 @@ const routes: Routes[] = [
 const Header = (): JSX.Element => {
   const { workspace, setWorkSpace, workspaceList } = useContext(AppContext);
   const [showWorkspaceModal, setShowWorkspaceModal] = useState({
-    open: true,
+    open: false,
     dataToEdit: null,
   });
   const [isOpenWorkspacePopper, setIsOpenWorkspacePopper] = useState(false);

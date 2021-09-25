@@ -1,24 +1,37 @@
 import React, { useContext } from "react";
 
-import { useFormik } from "formik";
+import { useFormik, FormikProvider } from "formik";
 
 import Modal from "components/Modal";
 import Button from "components/Button";
 import Input from "components/Input";
-import Textarea from "components/Textarea";
 import Switch from "components/Switch";
 import Radio from "components/Radio";
 import RadioGroup from "components/RadioGroup";
 import FormGroup from "components/FormGroup";
 import FormItem from "components/FormItem";
-
 import IconSelector from "components/IconSelector";
-
 import AppContext from "src/AppContext";
 
 import WorkspaceService from "../../services/WorkspaceModal";
+import MultiImage from "./MultiImage";
 
 import "./index.scss";
+
+const defaultSettings = {
+  name: "",
+  icon: "ri-user-line",
+  settings: {
+    home: {
+      clockType: "12hr",
+      showGreeting: true,
+      showBgImage: true,
+      bgConfig: {
+        unsplashRendom: true,
+      },
+    },
+  },
+};
 
 const WorkspaceModal = ({
   dataToEdit,
@@ -30,6 +43,9 @@ const WorkspaceModal = ({
   const { updateWorkspace } = useContext(AppContext);
 
   const onSubmitData = async (dataToSave) => {
+    const { imageUrls } = dataToSave.settings.home.bgConfig;
+    dataToSave.settings.home.bgConfig.imageUrls = imageUrls.filter((i) => !!i);
+
     try {
       const response = await WorkspaceService.put(dataToSave);
       updateWorkspace(response);
@@ -43,20 +59,7 @@ const WorkspaceModal = ({
   };
 
   const formik = useFormik({
-    initialValues: dataToEdit || {
-      name: "",
-      icon: "ri-user-line",
-      settings: {
-        home: {
-          clockType: "12hr",
-          showGreeting: true,
-          showBgImage: true,
-          bgConfig: {
-            unsplashRendom: true,
-          },
-        },
-      },
-    },
+    initialValues: dataToEdit || defaultSettings,
     onSubmit: onSubmitData,
   });
 
@@ -117,12 +120,13 @@ const WorkspaceModal = ({
                   >
                     <Switch />
                   </FormItem>
-                  <FormItem
-                    formKey="settings.home.bgConfig.imageUrls[2]"
-                    label="Custom Image Urls"
-                  >
-                    <Textarea className="url-textarea" />
-                  </FormItem>
+                  <FormikProvider value={formik}>
+                    <MultiImage
+                      formKey="settings.home.bgConfig.imageUrls"
+                      value={formik.values.settings.home.bgConfig.imageUrls}
+                      setValue={formik.setFieldValue}
+                    />
+                  </FormikProvider>
                 </>
               ) : null}
             </div>

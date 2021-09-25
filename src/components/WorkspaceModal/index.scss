@@ -25,6 +25,26 @@
       .url-textarea {
         max-height: 150px;
       }
+
+      .mutli-image-wrapper {
+        .input-wrapper {
+          display: flex;
+          align-items: center;
+          margin-bottom: 10px;
+
+          .close-icon {
+            line-height: 0;
+            padding: 10px 0;
+            font-size: 1.4rem;
+            display: flex;
+            padding-left: 8px;
+            cursor: pointer;
+          }
+        }
+        .footer-add {
+          padding-top: 5px;
+        }
+      }
     }
   }
 }

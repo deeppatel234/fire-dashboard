@@ -167,6 +167,10 @@ a {
 }
 
 
+.d-flex {
+  display: flex;
+}
+
 $grid-columns: 12;
 
 @mixin calc-grid-column($index, $class) {
