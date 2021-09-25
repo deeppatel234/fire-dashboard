@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { format } from "date-fns/esm";
+import _keyBy from "lodash/keyBy";
 
 import AppContext from "src/AppContext";
 import Button from "components/Button";
@@ -14,15 +15,15 @@ import "./index.scss";
 const Bookmark = (): JSX.Element => {
   const { workspace } = useContext(AppContext);
   const { tabs } = useChromeTabs({ ignoreUrls: ["chrome://newtab/"] });
-  const [groups, setGroups] = useState([]);
-  const [list, setList] = useState([]);
+  const [groups, setGroups] = useState({});
+  const [bookmarks, setBookmarks] = useState({});
 
   const loadData = async () => {
     try {
       const groupResponse = await BookmarkGroupModal.getAll();
       const response = await BookmarkModal.getAll();
-      setGroups(groupResponse);
-      setList(response);
+      setGroups(_keyBy(groupResponse, "id"));
+      setBookmarks(_keyBy(response, "id"));
     } catch (err) {}
   };
 
@@ -46,21 +47,22 @@ const Bookmark = (): JSX.Element => {
           };
         }),
       );
-      setGroups([groupResponse, ...groups]);
-      setList([...response, ...list]);
+      setGroups({ ..._keyBy([groupResponse], "id"), ...groups });
+      setBookmarks({ ..._keyBy(response, "id"), ...bookmarks });
     } catch (err) {
       console.log("err", err);
     }
   };
 
-  console.log(groups, list);
+  console.log(groups, bookmarks);
 
   return (
     <div className="bookmark-wrapper">
       <div className="group-wrapper">
-        {groups.map((group) => {
+        {Object.keys(groups).map((id) => {
+          const group = groups[id];
           return (
-            <div className="group-list-item">
+            <div key={id} className="group-list-item">
               <i className={`group-icon ${group.icon}`} />
               <span className="group-list-title">{group.name}</span>
             </div>
