@@ -24,12 +24,39 @@ class BaseModal {
     this.db = db;
   }
 
-  async put(data) {
+  async add(data) {
     const epoc = new Date().valueOf();
 
-    const id = await this.db.put({
+    const id = await this.db.add({
       ...data,
       createAt: epoc,
+      writeAt: epoc,
+    });
+
+    return this.db.get(id);
+  }
+
+  async bulkAdd(data) {
+    const epoc = new Date().valueOf();
+
+    const ids = await this.db.bulkAdd(
+      data.map((d) => ({
+        ...d,
+        createAt: epoc,
+        writeAt: epoc,
+      })),
+      null,
+      { allKeys: true },
+    );
+
+    return this.db.bulkGet(ids);
+  }
+
+  async update(data) {
+    const epoc = new Date().valueOf();
+
+    const id = await this.db.update(data.id, {
+      ...data,
       writeAt: epoc,
     });
 

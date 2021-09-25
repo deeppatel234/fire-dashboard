@@ -47,12 +47,19 @@ const WorkspaceModal = ({
     dataToSave.settings.home.bgConfig.imageUrls = imageUrls.filter((i) => !!i);
 
     try {
-      const response = await WorkspaceService.put(dataToSave);
+      let response = null;
+      if (dataToSave.id) {
+        response = await WorkspaceService.update(dataToSave);
+      } else {
+        response = await WorkspaceService.add(dataToSave);
+      }
       updateWorkspace(response);
       if (onSuccess) {
         onSuccess();
       }
-      onClose();
+      if (onClose) {
+        onClose();
+      }
     } catch (err) {
       console.log("err", err);
     }

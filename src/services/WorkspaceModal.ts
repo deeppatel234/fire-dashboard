@@ -7,8 +7,8 @@ class WorkspaceModal extends BaseModal {
     this.modalName = "workspace";
   }
 
-  put(data) {
-    return super.put({
+  add(data) {
+    return super.add({
       settings: {},
       collectionKey: `${data.name}-${this.getUniqId()}`,
       ...data,

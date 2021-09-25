@@ -60,6 +60,7 @@
   "dependencies": {
     "@popperjs/core": "^2.9.3",
     "classnames": "^2.3.1",
+    "date-fns": "^2.24.0",
     "dexie": "^3.0.3",
     "feather-icons": "^4.28.0",
     "firebase": "^9.0.2",

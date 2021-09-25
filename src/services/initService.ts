@@ -2,6 +2,7 @@ import Dexie from "dexie";
 
 import WorkspaceModal from "./WorkspaceModal";
 import BookmarkModal from "./BookmarkModal";
+import BookmarkGroupModal from "./BookmarkGroupModal";
 
 const workspaceDBName = "workspace";
 const workspaceDBVersion = 1;
@@ -19,7 +20,7 @@ export const initWorkpaceStorage = () => {
 };
 
 export const initStorage = (workspace) => {
-  const modalList = [BookmarkModal];
+  const modalList = [BookmarkModal, BookmarkGroupModal];
   const db = new Dexie(workspace.collectionKey);
 
   db.version(appDbVersion).stores(

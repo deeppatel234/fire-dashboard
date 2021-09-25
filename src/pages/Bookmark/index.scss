@@ -5,6 +5,38 @@
   .group-wrapper {
     overflow: auto;
     border-right: 1px solid var(--border-primary);
+    padding: 15px 15px 0 15px;
+    width: 250px;
+
+    .group-list-item {
+      display: flex;
+      align-items: center;
+      background: var(--gray-800);
+      font-size: 0.8rem;
+      padding: 8px;
+      margin-bottom: 10px;
+      border-radius: 4px;
+      cursor: pointer;
+
+      &:hover {
+        background: var(--gray-700);
+      }
+
+      .group-icon {
+        width: 20px;
+        height: 20px;
+        margin-right: 12px;
+        font-size: 1.3rem;
+        color: var(--text-secondary);
+      }
+
+      .group-list-title {
+        flex: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
   }
   .card-wrapper {
     flex: 1;

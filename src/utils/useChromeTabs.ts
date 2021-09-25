@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
 
-const useChromeTabs = () => {
+const useChromeTabs = ({ ignoreUrls }) => {
   const [tabs, setTabs] = useState([]);
 
   const getCurrentTab = () => {
     chrome.tabs.query({}, (tabs) => {
-      setTabs(tabs);
+      setTabs(tabs.filter((tab) => !ignoreUrls.includes(tab.url)));
     });
   };
 
