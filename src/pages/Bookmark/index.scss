@@ -3,10 +3,29 @@
   height: 100%;
 
   .group-wrapper {
+    display: flex;
+    flex-direction: column;
     overflow: auto;
     border-right: 1px solid var(--border-primary);
-    padding: 15px 15px 0 15px;
     width: 250px;
+
+    .group-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 20px 0;
+      padding: 0 15px;
+
+      .group-header-title {
+        font-size: 1.2rem;
+      }
+    }
+
+    .group-list {
+      flex: 1;
+      overflow: auto;
+      padding: 0 15px;
+    }
 
     .group-list-item {
       display: flex;
@@ -38,15 +57,80 @@
       }
     }
   }
+
   .card-wrapper {
     flex: 1;
     overflow: auto;
+    scroll-behavior: smooth;
+
+    .group-card-wrapper {
+      border-bottom: 1px solid var(--border-primary);
+      padding-bottom: 30px;
+      margin: 40px 20px;
+
+      .group-card-title {
+        font-size: 1.1rem;
+        margin-bottom: 15px;
+
+        .group-name-edit {
+          display: none;
+          line-height: 1;
+          vertical-align: middle;
+          margin-left: 10px;
+          cursor: pointer;
+        }
+      }
+      .group-card-content {
+        display: flex;
+        flex-wrap: wrap;
+
+        .bookmark-card {
+          display: flex;
+          align-items: center;
+          width: 200px;
+          background: var(--gray-700);
+          font-size: 0.9rem;
+          padding: 10px;
+          margin: 7.5px 15px 7.5px 0px;
+          border-radius: 4px;
+          cursor: pointer;
+
+          &:hover {
+            background: var(--gray-600);
+          }
+
+          .bookmark-title {
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+          .fav-img {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+          }
+          .fav-img-icon {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+          }
+        }
+      }
+
+      &:hover {
+        .group-card-title {
+          .group-name-edit {
+            display: inline-block;
+          }
+        }
+      }
+    }
   }
+
   .current-tab-wrapper {
     display: flex;
     flex-direction: column;
     border-left: 1px solid var(--border-primary);
-    padding: 0 15px;
     width: 230px;
 
     .current-tab-header {
@@ -54,6 +138,7 @@
       align-items: center;
       justify-content: space-between;
       margin: 20px 0;
+      padding: 0 15px;
 
       .tab-title {
         font-size: 1.2rem;
@@ -63,6 +148,7 @@
     .current-tab-list {
       flex: 1;
       overflow: auto;
+      padding: 0 15px;
 
       .current-list-item {
         display: flex;

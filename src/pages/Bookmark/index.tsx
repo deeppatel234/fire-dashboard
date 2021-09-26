@@ -1,6 +1,7 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { format } from "date-fns/esm";
 import _keyBy from "lodash/keyBy";
+import _groupBy from "lodash/groupBy";
 
 import AppContext from "src/AppContext";
 import Button from "components/Button";
@@ -17,6 +18,10 @@ const Bookmark = (): JSX.Element => {
   const { tabs } = useChromeTabs({ ignoreUrls: ["chrome://newtab/"] });
   const [groups, setGroups] = useState({});
   const [bookmarks, setBookmarks] = useState({});
+
+  const groupedBookmark = useMemo(() => {
+    return _groupBy(bookmarks, "groupId");
+  }, [bookmarks]);
 
   const loadData = async () => {
     try {
@@ -54,22 +59,87 @@ const Bookmark = (): JSX.Element => {
     }
   };
 
-  console.log(groups, bookmarks);
+  const onClickGroup = (id) => {
+    document.getElementById(`group-${id}`).scrollIntoView();
+  };
+
+  const onClickCreateGroup = async () => {
+    try {
+      const groupResponse = await BookmarkGroupModal.add({
+        name: `Untitled`,
+        icon: "ri-folder-line",
+      });
+      setGroups({ ..._keyBy([groupResponse], "id"), ...groups });
+    } catch (err) {
+      console.log("err", err);
+    }
+  };
+
+  const onClickCard = (bookmark) => {
+    window.open(bookmark.url, "_self");
+  };
 
   return (
     <div className="bookmark-wrapper">
       <div className="group-wrapper">
+        <div className="group-header">
+          <div className="group-header-title">Collections</div>
+          <Button outline size="small" onClick={onClickCreateGroup}>
+            Create
+          </Button>
+        </div>
+        <div className="group-list">
+          {Object.keys(groups).map((id) => {
+            const group = groups[id];
+
+            return (
+              <div
+                key={id}
+                className="group-list-item"
+                onClick={() => onClickGroup(id)}
+              >
+                <i className={`group-icon ${group.icon}`} />
+                <span className="group-list-title">{group.name}</span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+      <div className="card-wrapper">
         {Object.keys(groups).map((id) => {
-          const group = groups[id];
+          const bookmarks = groupedBookmark[id] || [];
+          const groupData = groups[id] || {};
+
           return (
-            <div key={id} className="group-list-item">
-              <i className={`group-icon ${group.icon}`} />
-              <span className="group-list-title">{group.name}</span>
+            <div key={id} id={`group-${id}`} className="group-card-wrapper">
+              <div className="group-card-title">
+                {groupData.name}
+                <span className="group-name-edit">
+                  <i className="ri-pencil-line" />
+                </span>
+              </div>
+              <div className="group-card-content">
+                {bookmarks.map((bookmark) => {
+                  return (
+                    <div
+                      key={bookmark.id}
+                      className="bookmark-card"
+                      onClick={() => onClickCard(bookmark)}
+                    >
+                      {bookmark.favIconUrl ? (
+                        <img className="fav-img" src={bookmark.favIconUrl} />
+                      ) : (
+                        <i className="ri-window-line fav-img fav-img-icon" />
+                      )}
+                      <span className="bookmark-title">{bookmark.title}</span>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           );
         })}
       </div>
-      <div className="card-wrapper">cards</div>
       {tabs?.length ? (
         <div className="current-tab-wrapper">
           <div className="current-tab-header">
