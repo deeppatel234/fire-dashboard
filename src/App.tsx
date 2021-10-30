@@ -168,7 +168,7 @@ const App = (): JSX.Element => {
         <div className="main-body">
           {isBgLoading ? <Loading className="image-loader-main" /> : null}
           <Switch>
-            <Route exact path="/bookmark">
+            <Route exact path="/">
               <Bookmark />
             </Route>
             <Route exact path="/onboarding">
