@@ -64,11 +64,14 @@
     scroll-behavior: smooth;
 
     .group-card-wrapper {
+      background: var(--body-bg-color);
       border-bottom: 1px solid var(--border-primary);
       padding-bottom: 30px;
       margin: 40px 20px;
 
       .group-card-title {
+        display: flex;
+        align-items: center;
         font-size: 1.1rem;
         margin-bottom: 15px;
 

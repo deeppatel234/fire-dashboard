@@ -14,7 +14,7 @@ import {
   arrayMove,
   SortableContext,
   sortableKeyboardCoordinates,
-  horizontalListSortingStrategy,
+  rectSortingStrategy,
 } from "@dnd-kit/sortable";
 
 import BookmarkContext from "../BookmarkContext";
@@ -69,10 +69,12 @@ const GroupCard = ({ groupData }): JSX.Element => {
       className="group-card-wrapper"
       ref={setNodeRef}
       style={style}
-      {...attributes}
-      {...listeners}
     >
       <div className="group-card-title">
+        <div className="drag-icon" {...attributes} {...listeners}>
+          <i className="ri-more-2-fill" />
+          <i className="ri-more-2-fill" />
+        </div>
         {groupData.name}
         <span className="group-name-edit">
           <i className="ri-pencil-line" />
@@ -85,8 +87,9 @@ const GroupCard = ({ groupData }): JSX.Element => {
       >
         <div className="group-card-content">
           <SortableContext
+            id={`group-bookmark-card-${groupData.id}`}
             items={sortedBookmarks}
-            strategy={horizontalListSortingStrategy}
+            strategy={rectSortingStrategy}
           >
             {sortedBookmarks.map((bookmark) => (
               <BookmarkCard key={bookmark.id} bookmark={bookmark} />

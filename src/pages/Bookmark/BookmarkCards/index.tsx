@@ -52,6 +52,7 @@ const BookmarkCards = (): JSX.Element => {
     >
       <div className="card-wrapper">
         <SortableContext
+          id="group-card"
           items={sortedGroupList}
           strategy={verticalListSortingStrategy}
         >

@@ -77,6 +77,7 @@ const Collections = (): JSX.Element => {
         </div>
         <div className="group-list">
           <SortableContext
+            id="collection-cards"
             items={sortedGroupList}
             strategy={verticalListSortingStrategy}
           >
