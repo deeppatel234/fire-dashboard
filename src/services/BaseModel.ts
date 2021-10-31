@@ -63,6 +63,17 @@ class BaseModal {
     return this.db.get(id);
   }
 
+  async bulkPut(data) {
+    const epoc = new Date().valueOf();
+
+    const ids = await this.db.bulkPut(
+      data.map((d) => ({ ...d, writeAt: epoc })),
+      { allKeys: true },
+    );
+
+    return this.db.bulkGet(ids);
+  }
+
   getAll() {
     return this.db.toArray();
   }

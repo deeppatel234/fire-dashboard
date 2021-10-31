@@ -4,21 +4,22 @@ import _keyBy from "lodash/keyBy";
 
 import Button from "components/Button";
 
-import BookmarkModal from "../../services/BookmarkModal";
-import BookmarkGroupModal from "../../services/BookmarkGroupModal";
+import BookmarkModal from "../../../services/BookmarkModal";
+import BookmarkGroupModal from "../../../services/BookmarkGroupModal";
 
 import useChromeTabs from "utils/useChromeTabs";
-import BookmarkContext from "./BookmarkContext";
+import BookmarkContext from "../BookmarkContext";
 
 const ActiveTabs = (): JSX.Element => {
   const { tabs } = useChromeTabs({ ignoreUrls: ["chrome://newtab/"] });
-  const { setGroups, setBookmarks } = useContext(BookmarkContext);
+  const { setGroups, setBookmarks, groups } = useContext(BookmarkContext);
 
   const onClickSaveSession = async () => {
     try {
       const groupResponse = await BookmarkGroupModal.add({
         name: `Session ${format(new Date(), "d-M-yyyy H:mm:ss")}`,
         icon: "ri-folder-line",
+        position: Object.keys(groups).length,
       });
       const response = await BookmarkModal.bulkAdd(
         tabs.map((tab) => {
