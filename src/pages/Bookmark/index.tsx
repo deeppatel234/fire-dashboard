@@ -9,9 +9,7 @@ import BookmarkModal from "../../services/BookmarkModal";
 import BookmarkGroupModal from "../../services/BookmarkGroupModal";
 
 import BookmarkContext from "./BookmarkContext";
-import ActiveTabs from "./ActiveTabs";
-import BookmarkCards from "./BookmarkCards";
-import Collections from "./Collections";
+import BookmarkView from "./BookmarkView";
 
 import "./index.scss";
 
@@ -39,6 +37,7 @@ const Bookmark = (): JSX.Element => {
 
   const updateGroupData = async (newGroupData) => {
     try {
+      setGroups(_keyBy(newGroupData, "id"));
       const newGroupResponse = await BookmarkGroupModal.bulkPut(newGroupData);
       setGroups(_keyBy(newGroupResponse, "id"));
     } catch (err) {}
@@ -46,6 +45,10 @@ const Bookmark = (): JSX.Element => {
 
   const updateBookmarkData = async (newBookmark) => {
     try {
+      setBookmarks((bookmarks) => ({
+        ...bookmarks,
+        ..._keyBy(newBookmark, "id"),
+      }));
       const newBookmarkResponse = await BookmarkModal.bulkPut(newBookmark);
       setBookmarks((bookmarks) => ({
         ...bookmarks,
@@ -71,11 +74,7 @@ const Bookmark = (): JSX.Element => {
         updateBookmarkData,
       }}
     >
-      <div className="bookmark-wrapper">
-        <Collections />
-        <BookmarkCards />
-        <ActiveTabs />
-      </div>
+      <BookmarkView />
     </BookmarkContext.Provider>
   );
 };

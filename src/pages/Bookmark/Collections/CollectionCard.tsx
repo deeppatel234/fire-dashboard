@@ -1,31 +1,14 @@
 import React from "react";
-import { useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
 
-const CollectionCard = ({ group }): JSX.Element => {
-  const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id: group.id });
-
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-  };
-
-  const onClickGroup = (id) => {
+const CollectionCard = ({ id, data, style }): JSX.Element => {
+  const onClickGroup = () => {
     document.getElementById(`group-${id}`).scrollIntoView();
   };
 
   return (
-    <div
-      className="group-list-item"
-      onClick={() => onClickGroup(group.id)}
-      ref={setNodeRef}
-      style={style}
-      {...attributes}
-      {...listeners}
-    >
-      <i className={`group-icon ${group.icon}`} />
-      <span className="group-list-title">{group.name}</span>
+    <div className="group-list-item" onClick={onClickGroup} style={style}>
+      <i className={`group-icon ${data.icon}`} />
+      <span className="group-list-title">{data.name}</span>
     </div>
   );
 };
