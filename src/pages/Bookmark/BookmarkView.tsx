@@ -21,6 +21,7 @@ import BookmarkCard from "./BookmarkCards/BookmarkCard";
 import TabCard from "./ActiveTabs/TabCard";
 
 import BookmarkContext from "./BookmarkContext";
+import NewGroupDrop from "./NewGroupDrop";
 
 import "./index.scss";
 
@@ -36,9 +37,14 @@ const DragElements = {
 };
 
 const BookmarkView = (): JSX.Element => {
-  const { data, setData, updateData, setDataTabIds } =
-    useContext(BookmarkContext);
-
+  const {
+    data,
+    setData,
+    updateData,
+    bookmarks,
+    createGroupAndAddBookmark,
+    tabData,
+  } = useContext(BookmarkContext);
   const sensors = useSensors(
     useSensor(MouseSensor, {
       activationConstraint: {
@@ -51,6 +57,7 @@ const BookmarkView = (): JSX.Element => {
     }),
   );
   const [activeDrag, setActiveDrag] = useState(null);
+  const [showNewGroupDrop, setShowNewGroupDrop] = useState(false);
 
   const findContainer = (id) => {
     if (id in data.items) {
@@ -65,17 +72,25 @@ const BookmarkView = (): JSX.Element => {
     const id = active?.id;
     const { sortable = {}, ...restData } = active?.data?.current;
 
-    if (!id || !sortable.containerId) {
+    if (!id || !restData.type) {
       return null;
     }
 
     setActiveDrag(restData);
+
+    if (["tab", "bookmark"].includes(restData.type)) {
+      setShowNewGroupDrop(true);
+    }
   };
 
   const handleDragOver = (dragState) => {
     const { active, over, draggingRect } = dragState;
     const { id: activeId } = active || {};
     const { id: overId } = over || {};
+
+    if (!overId || overId === "NewGroupDroppable") {
+      return;
+    }
 
     const { type, tabId } = active?.data?.current;
 
@@ -172,11 +187,34 @@ const BookmarkView = (): JSX.Element => {
     });
   };
 
+  const cleanOnEnd = () => {
+    if (showNewGroupDrop) {
+      setShowNewGroupDrop(false);
+    }
+    setActiveDrag(null);
+  };
+
   const handleDragEnd = (dragState) => {
     const { active, over } = dragState;
     const { id: activeId } = active || {};
     const { id: overId } = over || {};
-    const { type } = active?.data?.current;
+    const { type, tabId, bookmarkId } = active?.data?.current;
+
+    if (overId === "NewGroupDroppable") {
+      if (type === "tab") {
+        const tab = tabData[tabId];
+        createGroupAndAddBookmark({
+          favIconUrl: tab.favIconUrl,
+          url: tab.url,
+          title: tab.title,
+        });
+      } else if (type === "bookmark") {
+        const bookmark = bookmarks[bookmarkId];
+        createGroupAndAddBookmark(bookmark);
+      }
+      cleanOnEnd();
+      return;
+    }
 
     const activeContainer = findContainer(activeId);
     const overContainer = findContainer(overId);
@@ -187,7 +225,7 @@ const BookmarkView = (): JSX.Element => {
         !overContainer ||
         activeContainer === overContainer
       ) {
-        setActiveDrag(null);
+        cleanOnEnd();
         return;
       }
       updateData(type, {
@@ -200,7 +238,7 @@ const BookmarkView = (): JSX.Element => {
       });
     } else if (type === "tab") {
       if (!overContainer) {
-        setActiveDrag(null);
+        cleanOnEnd();
         return;
       }
 
@@ -213,7 +251,7 @@ const BookmarkView = (): JSX.Element => {
         !overContainer ||
         activeContainer !== overContainer
       ) {
-        setActiveDrag(null);
+        cleanOnEnd();
         return;
       }
 
@@ -235,7 +273,7 @@ const BookmarkView = (): JSX.Element => {
       }
     }
 
-    setActiveDrag(null);
+    cleanOnEnd();
   };
 
   const renderActiveDrag = () => {
@@ -256,6 +294,7 @@ const BookmarkView = (): JSX.Element => {
       onDragEnd={handleDragEnd}
     >
       <div className="bookmark-wrapper">
+        {showNewGroupDrop ? <NewGroupDrop /> : null}
         <Collections />
         <BookmarkCards />
         <ActiveTabs />

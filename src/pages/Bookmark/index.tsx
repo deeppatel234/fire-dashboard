@@ -22,7 +22,9 @@ const sortData = (list) => {
 
 const Bookmark = (): JSX.Element => {
   const { workspace } = useContext(AppContext);
-  const { tabIds, tabData } = useChromeTabs({ ignoreUrls: ["chrome://newtab/"] });
+  const { tabIds, tabData } = useChromeTabs({
+    ignoreUrls: ["chrome://newtab/"],
+  });
   const [groups, setGroups] = useState({});
   const [bookmarks, setBookmarks] = useState({});
   const [data, setData] = useState({});
@@ -133,6 +135,35 @@ const Bookmark = (): JSX.Element => {
     setData(newData);
   };
 
+  const createNewGroup = async () => {
+    try {
+      const groupResponse = await BookmarkGroupModal.add({
+        name: `Untitled`,
+        icon: "ri-folder-line",
+        position: Object.keys(groups).length,
+      });
+      setGroups({ ..._keyBy([groupResponse], "id"), ...groups });
+      return groupResponse;
+    } catch (err) {
+      console.log("err", err);
+    }
+  };
+
+  const createGroupAndAddBookmark = async (data) => {
+    try {
+      const groupResponse = await createNewGroup();
+      await updateBookmarkData([
+        {
+          ...data,
+          groupId: groupResponse.id,
+          position: 0,
+        },
+      ]);
+    } catch (err) {
+      console.log("err", err);
+    }
+  };
+
   return (
     <BookmarkContext.Provider
       value={{
@@ -147,6 +178,8 @@ const Bookmark = (): JSX.Element => {
         updateData,
         setGroups,
         setBookmarks,
+        createNewGroup,
+        createGroupAndAddBookmark,
       }}
     >
       <BookmarkView />
