@@ -35,8 +35,7 @@ const DragElements = {
 };
 
 const BookmarkView = (): JSX.Element => {
-  const { data, setData, updateData, groups, bookmarks } =
-    useContext(BookmarkContext);
+  const { data, setData, updateData } = useContext(BookmarkContext);
 
   const sensors = useSensors(
     useSensor(MouseSensor, {
@@ -208,7 +207,7 @@ const BookmarkView = (): JSX.Element => {
       return null;
     }
 
-    return <Component {...activeDrag} />;
+    return <Component {...activeDrag} isDragComponent />;
   };
 
   return (
