@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 import {
@@ -22,6 +22,7 @@ import TabCard from "./ActiveTabs/TabCard";
 
 import BookmarkContext from "./BookmarkContext";
 import NewGroupDrop from "./NewGroupDrop";
+import NewGroupModal from "./NewGroupModal";
 
 import "./index.scss";
 
@@ -44,6 +45,7 @@ const BookmarkView = (): JSX.Element => {
     bookmarks,
     createGroupAndAddBookmark,
     tabData,
+    resetData,
   } = useContext(BookmarkContext);
   const sensors = useSensors(
     useSensor(MouseSensor, {
@@ -57,7 +59,9 @@ const BookmarkView = (): JSX.Element => {
     }),
   );
   const [activeDrag, setActiveDrag] = useState(null);
+  const [showCreateModal, setShowCreateModal] = useState(false);
   const [showNewGroupDrop, setShowNewGroupDrop] = useState(false);
+  const cancelResolveRef = useRef({});
 
   const findContainer = (id) => {
     if (id in data.items) {
@@ -192,6 +196,7 @@ const BookmarkView = (): JSX.Element => {
       setShowNewGroupDrop(false);
     }
     setActiveDrag(null);
+    cancelResolveRef.current = {};
   };
 
   const handleDragEnd = (dragState) => {
@@ -204,13 +209,19 @@ const BookmarkView = (): JSX.Element => {
       if (type === "tab") {
         const tab = tabData[tabId];
         createGroupAndAddBookmark({
-          favIconUrl: tab.favIconUrl,
-          url: tab.url,
-          title: tab.title,
+          bookmarkData: {
+            favIconUrl: tab.favIconUrl,
+            url: tab.url,
+            title: tab.title,
+          },
+          groupData: cancelResolveRef.current.data,
         });
       } else if (type === "bookmark") {
         const bookmark = bookmarks[bookmarkId];
-        createGroupAndAddBookmark(bookmark);
+        createGroupAndAddBookmark({
+          bookmarkData: bookmark,
+          groupData: cancelResolveRef.current.data,
+        });
       }
       cleanOnEnd();
       return;
@@ -276,6 +287,26 @@ const BookmarkView = (): JSX.Element => {
     cleanOnEnd();
   };
 
+  const onDragCancel = () => {
+    cleanOnEnd();
+    resetData();
+  };
+
+  const cancelDrop = async ({ over }) => {
+    if (over?.id !== "NewGroupDroppable") {
+      return false;
+    }
+
+    setActiveDrag(null);
+    setShowCreateModal(true);
+
+    const confirmed = await new Promise<boolean>((resolve) => {
+      cancelResolveRef.current.callback = resolve;
+    });
+
+    return confirmed === false;
+  };
+
   const renderActiveDrag = () => {
     const Component = DragElements[activeDrag.type];
 
@@ -289,9 +320,11 @@ const BookmarkView = (): JSX.Element => {
   return (
     <DndContext
       sensors={sensors}
+      cancelDrop={cancelDrop}
       onDragStart={handleDragStart}
       onDragOver={handleDragOver}
       onDragEnd={handleDragEnd}
+      onDragCancel={onDragCancel}
     >
       <div className="bookmark-wrapper">
         {showNewGroupDrop ? <NewGroupDrop /> : null}
@@ -305,6 +338,18 @@ const BookmarkView = (): JSX.Element => {
         </DragOverlay>,
         document.body,
       )}
+      <NewGroupModal
+        isOpen={showCreateModal}
+        onConfirm={(data) => {
+          setShowCreateModal(false);
+          cancelResolveRef.current.data = data;
+          cancelResolveRef.current.callback(true);
+        }}
+        onClose={() => {
+          setShowCreateModal(false);
+          cancelResolveRef.current.callback(false);
+        }}
+      />
     </DndContext>
   );
 };

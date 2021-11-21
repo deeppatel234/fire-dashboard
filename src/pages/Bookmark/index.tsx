@@ -68,6 +68,10 @@ const Bookmark = (): JSX.Element => {
     setDataTabIds(tabIds);
   }, [tabIds]);
 
+  const resetData = () => {
+    setData(originalData);
+  };
+
   const updateGroupData = async (newGroupData) => {
     try {
       const newGroupResponse = await BookmarkGroupModal.bulkPut(newGroupData);
@@ -135,11 +139,12 @@ const Bookmark = (): JSX.Element => {
     setData(newData);
   };
 
-  const createNewGroup = async () => {
+  const createNewGroup = async (data) => {
     try {
       const groupResponse = await BookmarkGroupModal.add({
-        name: `Untitled`,
         icon: "ri-folder-line",
+        ...data,
+        name: data.name || `Untitled`,
         position: Object.keys(groups).length,
       });
       setGroups({ ..._keyBy([groupResponse], "id"), ...groups });
@@ -149,12 +154,12 @@ const Bookmark = (): JSX.Element => {
     }
   };
 
-  const createGroupAndAddBookmark = async (data) => {
+  const createGroupAndAddBookmark = async ({ groupData, bookmarkData }) => {
     try {
-      const groupResponse = await createNewGroup();
+      const groupResponse = await createNewGroup(groupData);
       await updateBookmarkData([
         {
-          ...data,
+          ...bookmarkData,
           groupId: groupResponse.id,
           position: 0,
         },
@@ -180,6 +185,7 @@ const Bookmark = (): JSX.Element => {
         setBookmarks,
         createNewGroup,
         createGroupAndAddBookmark,
+        resetData,
       }}
     >
       <BookmarkView />
