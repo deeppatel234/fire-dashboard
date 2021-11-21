@@ -10,7 +10,6 @@ import {
   DropAnimation,
   defaultDropAnimation,
   MouseSensor,
-  MeasuringStrategy,
 } from "@dnd-kit/core";
 import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 
@@ -257,7 +256,7 @@ const BookmarkView = (): JSX.Element => {
       onDragEnd={handleDragEnd}
     >
       <div className="bookmark-wrapper">
-        {/* <Collections /> */}
+        <Collections />
         <BookmarkCards />
         <ActiveTabs />
       </div>

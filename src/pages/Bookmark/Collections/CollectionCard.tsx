@@ -1,14 +1,20 @@
-import React from "react";
+import React, { useContext } from "react";
 
-const CollectionCard = ({ id, data, style }): JSX.Element => {
+import BookmarkContext from "../BookmarkContext";
+
+const CollectionCard = ({ groupId, style }): JSX.Element => {
+  const { groups } = useContext(BookmarkContext);
+
+  const groupData = groups[groupId] || {};
+
   const onClickGroup = () => {
-    document.getElementById(`group-${id}`).scrollIntoView();
+    document.getElementById(`group-${groupId}`).scrollIntoView();
   };
 
   return (
     <div className="group-list-item" onClick={onClickGroup} style={style}>
-      <i className={`group-icon ${data.icon}`} />
-      <span className="group-list-title">{data.name}</span>
+      <i className={`group-icon ${groupData.icon}`} />
+      <span className="group-list-title">{groupData.name}</span>
     </div>
   );
 };
