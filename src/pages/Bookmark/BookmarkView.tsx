@@ -85,10 +85,6 @@ const BookmarkView = (): JSX.Element => {
 
     if (type === "tab") {
       if (!overContainer) {
-        setDataTabIds((prev) => {
-          return arrayMove(prev, prev.indexOf(activeId), prev.indexOf(overId));
-        });
-
         return;
       }
     } else if (
@@ -132,20 +128,20 @@ const BookmarkView = (): JSX.Element => {
       }
 
       if (type === "tab") {
-        const filteredOverContainer = prev.items[overContainer].filter(
-          (i) => !i.startsWith("tab"),
-        );
+        Object.keys(prev.items).forEach((k) => {
+          prev.items[k] = prev.items[k].filter((i) => !i.startsWith("tab"));
+        });
 
         return {
           ...prev,
           items: {
             ...prev.items,
             [overContainer]: [
-              ...filteredOverContainer.slice(0, newIndex),
+              ...prev.items[overContainer].slice(0, newIndex),
               `tab-${tabId}`,
-              ...filteredOverContainer.slice(
+              ...prev.items[overContainer].slice(
                 newIndex,
-                filteredOverContainer.length,
+                prev.items[overContainer].length,
               ),
             ],
           },
@@ -259,11 +255,6 @@ const BookmarkView = (): JSX.Element => {
       onDragStart={handleDragStart}
       onDragOver={handleDragOver}
       onDragEnd={handleDragEnd}
-      measuring={{
-        droppable: {
-          strategy: MeasuringStrategy.Always,
-        },
-      }}
     >
       <div className="bookmark-wrapper">
         {/* <Collections /> */}
