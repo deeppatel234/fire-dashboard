@@ -84,41 +84,8 @@
 
     .current-tab-list {
       flex: 1;
-      overflow: auto;
+      // overflow: auto;
       padding: 0 15px;
-
-      .current-list-item {
-        display: flex;
-        align-items: center;
-        background: var(--gray-800);
-        font-size: 0.8rem;
-        padding: 8px;
-        margin-bottom: 10px;
-        border-radius: 4px;
-        cursor: pointer;
-
-        &:hover {
-          background: var(--gray-700);
-        }
-
-        .fav-img {
-          width: 20px;
-          height: 20px;
-          margin-right: 12px;
-        }
-
-        .fav-img-icon {
-          font-size: 1.3rem;
-          color: var(--text-secondary);
-        }
-
-        .tab-title {
-          flex: 1;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
-      }
     }
   }
 }
@@ -187,5 +154,38 @@
   .fav-img-icon {
     font-size: 1.3rem;
     color: var(--text-secondary);
+  }
+}
+
+.active-list-item {
+  display: flex;
+  align-items: center;
+  background: var(--gray-800);
+  font-size: 0.8rem;
+  padding: 8px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--gray-700);
+  }
+
+  .fav-img {
+    width: 20px;
+    height: 20px;
+    margin-right: 12px;
+  }
+
+  .fav-img-icon {
+    font-size: 1.3rem;
+    color: var(--text-secondary);
+  }
+
+  .tab-title {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }

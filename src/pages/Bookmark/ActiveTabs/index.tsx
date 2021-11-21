@@ -6,13 +6,13 @@ import Button from "components/Button";
 
 import BookmarkModal from "../../../services/BookmarkModal";
 import BookmarkGroupModal from "../../../services/BookmarkGroupModal";
+import Sortable from "../../../components/DragAndDrop/Sortable";
 
-import useChromeTabs from "utils/useChromeTabs";
 import BookmarkContext from "../BookmarkContext";
+import TabCard from "./TabCard";
 
 const ActiveTabs = (): JSX.Element => {
-  const { tabs } = useChromeTabs({ ignoreUrls: ["chrome://newtab/"] });
-  const { setGroups, setBookmarks, groups } = useContext(BookmarkContext);
+  const { setGroups, setBookmarks, groups, dataTabIds, tabData } = useContext(BookmarkContext);
 
   const onClickSaveSession = async () => {
     try {
@@ -22,7 +22,8 @@ const ActiveTabs = (): JSX.Element => {
         position: Object.keys(groups).length,
       });
       const response = await BookmarkModal.bulkAdd(
-        tabs.map((tab) => {
+        dataTabIds.map((id) => {
+          const tab = tabData[id];
           return {
             favIconUrl: tab.favIconUrl,
             url: tab.url,
@@ -50,18 +51,26 @@ const ActiveTabs = (): JSX.Element => {
         </Button>
       </div>
       <div className="current-tab-list">
-        {tabs.map((tab) => {
-          return (
-            <div key={tab.id} className="current-list-item">
-              {tab.favIconUrl ? (
-                <img className="fav-img" src={tab.favIconUrl} />
-              ) : (
-                <i className="ri-window-line fav-img fav-img-icon" />
-              )}
-              <span className="tab-title">{tab.title}</span>
-            </div>
-          );
-        })}
+        <Sortable id="ActiveTabs" dataList={dataTabIds}>
+          {dataTabIds.map((id) => {
+            return (
+              <Sortable.Item
+                key={id}
+                id={id}
+                componentProps={{
+                  tabId: id,
+                }}
+                sortableProps={{
+                  data: {
+                    type: "tab",
+                    tabId: id,
+                  },
+                }}
+                component={TabCard}
+              />
+            );
+          })}
+        </Sortable>
       </div>
     </div>
   );

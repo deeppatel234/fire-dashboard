@@ -16,7 +16,7 @@ const GroupCard = ({ groupId, dragProps, isDragComponent }): JSX.Element => {
         dataList={data.items[`Group-${groupId}`] || []}
       >
         {data.items[`Group-${groupId}`]?.map?.((id) => {
-          const [, groupId, bookmarkId] = id.split("-");
+          const [type, groupId, bookmarkId] = id.split("-");
           const intGroupId = parseInt(groupId, 10);
           const intBookmarkId = parseInt(bookmarkId, 10);
 
@@ -25,8 +25,10 @@ const GroupCard = ({ groupId, dragProps, isDragComponent }): JSX.Element => {
               key={id}
               id={id}
               componentProps={{
+                type,
                 groupId: intGroupId,
                 bookmarkId: intBookmarkId,
+                tabId: groupId,
               }}
               sortableProps={{
                 data: {

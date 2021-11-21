@@ -6,6 +6,7 @@ import _isEqual from "lodash/isEqual";
 import _cloneDeep from "lodash/cloneDeep";
 
 import AppContext from "src/AppContext";
+import useChromeTabs from "utils/useChromeTabs";
 
 import BookmarkModal from "../../services/BookmarkModal";
 import BookmarkGroupModal from "../../services/BookmarkGroupModal";
@@ -21,9 +22,11 @@ const sortData = (list) => {
 
 const Bookmark = (): JSX.Element => {
   const { workspace } = useContext(AppContext);
+  const { tabIds, tabData } = useChromeTabs({ ignoreUrls: ["chrome://newtab/"] });
   const [groups, setGroups] = useState({});
   const [bookmarks, setBookmarks] = useState({});
   const [data, setData] = useState({});
+  const [dataTabIds, setDataTabIds] = useState([]);
   const [originalData, setOriginalData] = useState({});
 
   const loadData = async () => {
@@ -59,9 +62,12 @@ const Bookmark = (): JSX.Element => {
     setOriginalData(_cloneDeep(dataToStore));
   }, [bookmarks, groups]);
 
+  useEffect(() => {
+    setDataTabIds(tabIds);
+  }, [tabIds]);
+
   const updateGroupData = async (newGroupData) => {
     try {
-      setGroups(_keyBy(newGroupData, "id"));
       const newGroupResponse = await BookmarkGroupModal.bulkPut(newGroupData);
       setGroups(_keyBy(newGroupResponse, "id"));
     } catch (err) {}
@@ -69,10 +75,6 @@ const Bookmark = (): JSX.Element => {
 
   const updateBookmarkData = async (newBookmark) => {
     try {
-      setBookmarks((bookmarks) => ({
-        ...bookmarks,
-        ..._keyBy(newBookmark, "id"),
-      }));
       const newBookmarkResponse = await BookmarkModal.bulkPut(newBookmark);
       setBookmarks((bookmarks) => ({
         ...bookmarks,
@@ -104,11 +106,21 @@ const Bookmark = (): JSX.Element => {
         if (!_isEqual(newItems[key], oldItems[key])) {
           updateBookmarkData(
             newItems[key].map((i, index) => {
-              const [, , bookmarkId] = i.split("-");
+              const [type, tabId, bookmarkId] = i.split("-");
               const intBookmarkId = parseInt(bookmarkId, 10);
+              let dataToSave = bookmarks[intBookmarkId];
+
+              if (type === "tab") {
+                const tab = tabData[tabId];
+                dataToSave = {
+                  favIconUrl: tab.favIconUrl,
+                  url: tab.url,
+                  title: tab.title,
+                };
+              }
 
               return {
-                ...bookmarks[intBookmarkId],
+                ...dataToSave,
                 groupId,
                 position: index,
               };
@@ -127,6 +139,10 @@ const Bookmark = (): JSX.Element => {
         groups,
         bookmarks,
         data,
+        dataTabIds,
+        tabIds,
+        tabData,
+        setDataTabIds,
         setData,
         updateData,
         setGroups,

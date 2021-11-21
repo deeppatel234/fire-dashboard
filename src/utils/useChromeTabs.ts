@@ -1,7 +1,16 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import _keyBy from "lodash/keyBy";
 
 const useChromeTabs = ({ ignoreUrls }) => {
   const [tabs, setTabs] = useState([]);
+
+  const tabIds = useMemo(() => {
+    return tabs.map((tab) => tab.id);
+  }, [tabs]);
+
+  const tabData = useMemo(() => {
+    return _keyBy(tabs, "id");
+  }, [tabs]);
 
   const getCurrentTab = () => {
     chrome.tabs.query({}, (tabs) => {
@@ -29,7 +38,7 @@ const useChromeTabs = ({ ignoreUrls }) => {
     addListeners();
   }, []);
 
-  return { tabs };
+  return { tabs, tabIds, tabData };
 };
 
 export default useChromeTabs;

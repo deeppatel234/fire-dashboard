@@ -2,10 +2,11 @@ import React, { useContext } from "react";
 
 import BookmarkContext from "../BookmarkContext";
 
-const BookmarkCard = ({ bookmarkId }): JSX.Element => {
-  const { bookmarks } = useContext(BookmarkContext);
+const BookmarkCard = ({ type, tabId, bookmarkId }): JSX.Element => {
+  const { bookmarks, tabData } = useContext(BookmarkContext);
 
-  const bookmark = bookmarks[bookmarkId] || {};
+  const bookmark =
+    type === "tab" ? tabData[tabId] : bookmarks[bookmarkId] || {};
 
   const onClickBookmark = () => {
     window.open(bookmark.url, "_self");

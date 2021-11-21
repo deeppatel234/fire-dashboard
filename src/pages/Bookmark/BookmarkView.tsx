@@ -19,6 +19,7 @@ import BookmarkCards from "./BookmarkCards";
 import Collections from "./Collections";
 import GroupCard from "./BookmarkCards/GroupCard";
 import BookmarkCard from "./BookmarkCards/BookmarkCard";
+import TabCard from "./ActiveTabs/TabCard";
 
 import BookmarkContext from "./BookmarkContext";
 
@@ -32,10 +33,12 @@ const dropAnimation: DropAnimation = {
 const DragElements = {
   group: GroupCard,
   bookmark: BookmarkCard,
+  tab: TabCard,
 };
 
 const BookmarkView = (): JSX.Element => {
-  const { data, setData, updateData } = useContext(BookmarkContext);
+  const { data, setData, updateData, setDataTabIds } =
+    useContext(BookmarkContext);
 
   const sensors = useSensors(
     useSensor(MouseSensor, {
@@ -63,7 +66,6 @@ const BookmarkView = (): JSX.Element => {
     const id = active?.id;
     const { sortable = {}, ...restData } = active?.data?.current;
 
-    console.log("calleddd", active, restData);
     if (!id || !sortable.containerId) {
       return null;
     }
@@ -76,12 +78,20 @@ const BookmarkView = (): JSX.Element => {
     const { id: activeId } = active || {};
     const { id: overId } = over || {};
 
-    const { type } = active?.data?.current;
+    const { type, tabId } = active?.data?.current;
 
     const activeContainer = findContainer(activeId);
     const overContainer = findContainer(overId);
 
-    if (
+    if (type === "tab") {
+      if (!overContainer) {
+        setDataTabIds((prev) => {
+          return arrayMove(prev, prev.indexOf(activeId), prev.indexOf(overId));
+        });
+
+        return;
+      }
+    } else if (
       !activeContainer ||
       !overContainer ||
       activeContainer === overContainer
@@ -95,17 +105,15 @@ const BookmarkView = (): JSX.Element => {
           ...prev,
           groupIds: arrayMove(
             prev.groupIds,
-            prev.groupIds.indexOf((key) => key === activeContainer),
-            prev.groupIds.indexOf((key) => key === overContainer),
+            prev.groupIds.indexOf(activeContainer),
+            prev.groupIds.indexOf(overContainer),
           ),
         };
       }
 
-      const activeItems = prev.items[activeContainer];
       const overItems = prev.items[overContainer];
 
       // Find the indexes for the items
-      const activeIndex = activeItems.indexOf(activeId);
       const overIndex = overItems.indexOf(overId);
 
       let newIndex;
@@ -116,12 +124,38 @@ const BookmarkView = (): JSX.Element => {
         const isBelowLastItem =
           over &&
           overIndex === overItems.length - 1 &&
-          draggingRect.offsetTop > over.rect.offsetTop + over.rect.height;
+          draggingRect?.offsetTop > over.rect.offsetTop + over.rect.height;
 
         const modifier = isBelowLastItem ? 1 : 0;
 
         newIndex = overIndex >= 0 ? overIndex + modifier : overItems.length + 1;
       }
+
+      if (type === "tab") {
+        const filteredOverContainer = prev.items[overContainer].filter(
+          (i) => !i.startsWith("tab"),
+        );
+
+        return {
+          ...prev,
+          items: {
+            ...prev.items,
+            [overContainer]: [
+              ...filteredOverContainer.slice(0, newIndex),
+              `tab-${tabId}`,
+              ...filteredOverContainer.slice(
+                newIndex,
+                filteredOverContainer.length,
+              ),
+            ],
+          },
+        };
+      }
+
+      const activeItems = prev.items[activeContainer];
+
+      // Find the indexes for the items
+      const activeIndex = activeItems.indexOf(activeId);
 
       return {
         ...prev,
@@ -168,6 +202,15 @@ const BookmarkView = (): JSX.Element => {
           data.groupIds.indexOf(activeContainer),
           data.groupIds.indexOf(overContainer),
         ),
+      });
+    } else if (type === "tab") {
+      if (!overContainer) {
+        setActiveDrag(null);
+        return;
+      }
+
+      updateData(type, {
+        ...data,
       });
     } else {
       if (
@@ -225,7 +268,7 @@ const BookmarkView = (): JSX.Element => {
       <div className="bookmark-wrapper">
         {/* <Collections /> */}
         <BookmarkCards />
-        {/* <ActiveTabs /> */}
+        <ActiveTabs />
       </div>
       {createPortal(
         <DragOverlay adjustScale={false} dropAnimation={dropAnimation}>
