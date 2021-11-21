@@ -1,6 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 
-const BookmarkCard = ({ data: bookmark }): JSX.Element => {
+import BookmarkContext from "../BookmarkContext";
+
+const BookmarkCard = ({ bookmarkId }): JSX.Element => {
+  const { bookmarks } = useContext(BookmarkContext);
+
+  const bookmark = bookmarks[bookmarkId] || {};
+
   const onClickBookmark = () => {
     window.open(bookmark.url, "_self");
   };

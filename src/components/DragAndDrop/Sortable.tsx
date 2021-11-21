@@ -27,6 +27,8 @@ Sortable.Item = ({
   data,
   as: As = "div",
   customDrag = false,
+  componentProps,
+  sortableProps,
   ...props
 }): JSX.Element => {
   const {
@@ -36,7 +38,7 @@ Sortable.Item = ({
     transform,
     transition,
     isDragging,
-  } = useSortable({ id });
+  } = useSortable({ id, ...sortableProps });
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -45,6 +47,7 @@ Sortable.Item = ({
   };
 
   const childProps = {
+    ...componentProps,
     id,
     data,
     dragProps: {

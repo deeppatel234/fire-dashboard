@@ -1,33 +1,45 @@
-import React, { useContext, useMemo } from "react";
+import React, { useContext } from "react";
 
-import { verticalListSortingStrategy } from "@dnd-kit/sortable";
+import {
+  verticalListSortingStrategy,
+  defaultAnimateLayoutChanges,
+} from "@dnd-kit/sortable";
 
 import BookmarkContext from "../BookmarkContext";
 import GroupCard from "./GroupCard";
 import Sortable from "../../../components/DragAndDrop/Sortable";
 
-const BookmarkCards = (): JSX.Element => {
-  const { sortedGroupList } = useContext(BookmarkContext);
+const animateLayoutChanges = (args) =>
+  args.isSorting || args.wasDragging ? defaultAnimateLayoutChanges(args) : true;
 
-  const preparedDataList = useMemo(() => {
-    return sortedGroupList.map((group) => `CollectionCards-${group.id}`);
-  }, [sortedGroupList]);
+const BookmarkCards = (): JSX.Element => {
+  const { data } = useContext(BookmarkContext);
 
   return (
     <div className="card-wrapper">
       <Sortable
-        id="CollectionCards"
-        dataList={preparedDataList}
+        id="Groups"
+        dataList={data.groupIds || []}
         strategy={verticalListSortingStrategy}
       >
-        {sortedGroupList.map((groupData) => {
-          const id = `CollectionCards-${groupData.id}`;
+        {data.groupIds?.map?.((id) => {
+          const [, groupId] = id.split("-");
+          const intGroupId = parseInt(groupId, 10);
 
           return (
             <Sortable.Item
               key={id}
               id={id}
-              data={groupData}
+              componentProps={{
+                groupId: intGroupId,
+              }}
+              sortableProps={{
+                data: {
+                  type: "group",
+                  groupId: intGroupId,
+                },
+                animateLayoutChanges,
+              }}
               component={GroupCard}
               customDrag
             />

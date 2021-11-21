@@ -1,23 +1,13 @@
-import React, { useContext, useMemo } from "react";
-import _sortBy from "lodash/sortBy";
+import React, { useContext } from "react";
 
 import Sortable from "../../../components/DragAndDrop/Sortable";
 import BookmarkContext from "../BookmarkContext";
 import BookmarkCard from "./BookmarkCard";
 
-const GroupCard = ({ data: groupData, dragProps }): JSX.Element => {
-  const { groupedBookmark } = useContext(BookmarkContext);
-  const id = groupData.id;
+const GroupCard = ({ groupId, dragProps }): JSX.Element => {
+  const { groups, data } = useContext(BookmarkContext);
 
-  const sortedBookmarks = useMemo(() => {
-    return _sortBy(groupedBookmark[id] || [], "position");
-  }, [groupedBookmark[id]]);
-
-  const preparedData = useMemo(() => {
-    return sortedBookmarks.map(
-      (bookmark) => `BookmarkCard-${bookmark.id}-${groupData.id}`,
-    );
-  }, [sortedBookmarks]);
+  const groupData = groups[groupId] || {};
 
   return (
     <div className="group-card-wrapper">
@@ -33,15 +23,30 @@ const GroupCard = ({ data: groupData, dragProps }): JSX.Element => {
       </div>
 
       <div className="group-card-content">
-        <Sortable id={`GroupBookmarkCard-${id}`} dataList={preparedData}>
-          {sortedBookmarks.map((bookmark) => {
-            const id = `BookmarkCard-${bookmark.id}-${groupData.id}`;
+        <Sortable
+          id={`Bookmarks-${groupId}`}
+          dataList={data.items[`Group-${groupId}`] || []}
+        >
+          {data.items[`Group-${groupId}`]?.map?.((id) => {
+            const [, groupId, bookmarkId] = id.split("-");
+            const intGroupId = parseInt(groupId, 10);
+            const intBookmarkId = parseInt(bookmarkId, 10);
 
             return (
               <Sortable.Item
                 key={id}
                 id={id}
-                data={bookmark}
+                componentProps={{
+                  groupId: intGroupId,
+                  bookmarkId: intBookmarkId,
+                }}
+                sortableProps={{
+                  data: {
+                    type: "bookmark",
+                    groupId: intGroupId,
+                    bookmarkId: intBookmarkId,
+                  },
+                }}
                 component={BookmarkCard}
               />
             );
