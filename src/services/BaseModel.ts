@@ -55,12 +55,16 @@ class BaseModal {
   async update(data) {
     const epoc = new Date().valueOf();
 
-    const id = await this.db.update(data.id, {
+    const isUpdated = await this.db.update(data.id, {
       ...data,
       writeAt: epoc,
     });
 
-    return this.db.get(id);
+    if (isUpdated) {
+      return this.db.get(data.id);
+    }
+
+    return Promise.reject();
   }
 
   async bulkPut(data) {

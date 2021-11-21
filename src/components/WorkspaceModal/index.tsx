@@ -40,7 +40,7 @@ const WorkspaceModal = ({
   onSuccess,
   showHeader,
 }) => {
-  const { updateWorkspace } = useContext(AppContext);
+  const { updateWorkspace, setWorkSpace } = useContext(AppContext);
 
   const onSubmitData = async (dataToSave) => {
     const { imageUrls } = dataToSave.settings.home.bgConfig;
@@ -54,6 +54,9 @@ const WorkspaceModal = ({
         response = await WorkspaceService.add(dataToSave);
       }
       updateWorkspace(response);
+      if (!dataToSave.id) {
+        setWorkSpace(response);
+      }
       if (onSuccess) {
         onSuccess();
       }
