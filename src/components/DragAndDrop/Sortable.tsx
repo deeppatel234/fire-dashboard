@@ -29,6 +29,7 @@ Sortable.Item = ({
   customDrag = false,
   componentProps,
   sortableProps,
+  isDragComponent,
   ...props
 }): JSX.Element => {
   const {
@@ -43,7 +44,7 @@ Sortable.Item = ({
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
-    opacity: isDragging ? 0.5 : 1,
+    opacity: isDragComponent || isDragging ? 0.5 : 1,
   };
 
   const childProps = {

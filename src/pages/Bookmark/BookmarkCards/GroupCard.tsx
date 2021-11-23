@@ -37,6 +37,7 @@ const GroupCard = ({ groupId, dragProps, isDragComponent }): JSX.Element => {
                   bookmarkId: intBookmarkId,
                 },
               }}
+              isDragComponent={type === "tab"}
               component={BookmarkCard}
             />
           );
