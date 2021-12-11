@@ -12,6 +12,7 @@ import FormGroup from "components/FormGroup";
 import FormItem from "components/FormItem";
 import IconSelector from "components/IconSelector";
 import AppContext from "src/AppContext";
+import { routes } from "src/constants/routes";
 
 import WorkspaceService from "../../services/WorkspaceModal";
 import MultiImage from "./MultiImage";
@@ -22,6 +23,7 @@ const defaultSettings = {
   name: "",
   icon: "ri-user-line",
   settings: {
+    defaultApp: routes.HOME.key,
     home: {
       clockType: "12hr",
       showGreeting: true,
@@ -91,6 +93,15 @@ const WorkspaceModal = ({
               onChangeValue={(val) => formik.setFieldValue("name", val)}
             />
           </div>
+          <FormItem formKey="settings.defaultApp" label="Default App">
+            <RadioGroup name="defaultApp">
+              <Radio value={routes.HOME.key} label={routes.HOME.title} />
+              <Radio
+                value={routes.BOOKMARK.key}
+                label={routes.BOOKMARK.title}
+              />
+            </RadioGroup>
+          </FormItem>
           <div className="setting-block">
             <div className="title">Home</div>
             <div className="setting-content">

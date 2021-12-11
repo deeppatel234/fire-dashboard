@@ -9,6 +9,7 @@ import FirebaseSetup from "pages/FirebaseSetup";
 import AppContext from "src/AppContext";
 import Header from "components/Header";
 import Loading from "components/Loading";
+import { routes } from "src/constants/routes";
 
 import { initStorage } from "./services/initService";
 import WorkspaceModal from "./services/WorkspaceModal";
@@ -85,6 +86,7 @@ const App = (): JSX.Element => {
       initStorage(newWorkspace);
       setWorkSpaceId(newWorkspace.id);
       setIsLoading(false);
+      history.push(routes[newWorkspace.settings.defaultApp].path);
     } catch (err) {
       console.log(err);
     }
@@ -99,7 +101,7 @@ const App = (): JSX.Element => {
           workspaceData.find((w) => w.id === workspaceId) || workspaceData[0],
         );
       } else {
-        history.push("/onboarding");
+        history.replace(routes.ONBOARDING.path);
         setIsLoading(false);
       }
     } catch (err) {
@@ -168,16 +170,16 @@ const App = (): JSX.Element => {
         <div className="main-body">
           {isBgLoading ? <Loading className="image-loader-main" /> : null}
           <Switch>
-            <Route exact path="/">
+            <Route exact path={routes.BOOKMARK.path}>
               <Bookmark />
             </Route>
-            <Route exact path="/onboarding">
+            <Route exact path={routes.ONBOARDING.path}>
               <Onboarding />
             </Route>
-            <Route path="/firebase/:mode">
+            <Route path={routes.FIREBASE.path}>
               <FirebaseSetup />
             </Route>
-            <Route exact path="/">
+            <Route exact path={routes.HOME.path}>
               <Home />
             </Route>
           </Switch>
