@@ -154,16 +154,29 @@ const Bookmark = (): JSX.Element => {
     }
   };
 
-  const createGroupAndAddBookmark = async ({ groupData, bookmarkData }) => {
+  const createGroupAndAddBookmark = async ({
+    groupData,
+    bookmarkData,
+    bookmarkList,
+  }) => {
     try {
       const groupResponse = await createNewGroup(groupData);
-      await updateBookmarkData([
-        {
-          ...bookmarkData,
-          groupId: groupResponse.id,
-          position: 0,
-        },
-      ]);
+
+      const dataToSave = bookmarkList
+        ? bookmarkList.map((b) => ({
+            ...b,
+            groupId: groupResponse.id,
+            position: 0,
+          }))
+        : [
+            {
+              ...bookmarkData,
+              groupId: groupResponse.id,
+              position: 0,
+            },
+          ];
+
+      await updateBookmarkData(dataToSave);
     } catch (err) {
       console.log("err", err);
     }

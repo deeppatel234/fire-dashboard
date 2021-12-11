@@ -59,6 +59,16 @@
       padding: 0 15px;
     }
   }
+
+  .bookmark-body-wrapper {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+
+    .bookmark-header {
+      padding: 10px 6px;
+    }
+  }
 }
 
 .group-list-item {
@@ -95,7 +105,7 @@
   background: var(--body-bg-color);
   border-bottom: 1px solid var(--border-primary);
   padding-bottom: 30px;
-  padding: 40px 20px;
+  padding: 20px;
 
   .group-card-title {
     display: flex;

@@ -1,0 +1,48 @@
+.react-checkbox-tree {
+  width: 700px;
+  min-height: 400px;
+  font-size: 0.9rem;
+
+  button.rct-option {
+    outline: none;
+  }
+
+  li.rct-node {
+    margin: 8px 0;
+
+    .rct-text {
+      button.rct-collapse.rct-collapse-btn {
+        line-height: 0;
+        font-size: 1.1rem;
+      }
+      label {
+        display: flex;
+        align-items: center;
+        padding: 2px;
+
+        &:hover {
+          background: rgba(255,255,255, 0.1);
+        }
+
+        span.rct-checkbox {
+          line-height: 0;
+          font-size: 1.1rem;
+        }
+        span.rct-node-icon {
+          line-height: 0;
+          font-size: 1rem;
+        }
+      }
+    }
+  }
+  .rct-node-icon {
+    color: var(--primary-color);
+
+    .ri-folder-line {
+      color: var(--gray-300);
+    }
+    .ri-folder-open-line {
+      color: var(--gray-200);
+    }
+  }
+}

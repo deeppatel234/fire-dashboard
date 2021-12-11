@@ -23,6 +23,7 @@ import TabCard from "./ActiveTabs/TabCard";
 import BookmarkContext from "./BookmarkContext";
 import NewGroupDrop from "./NewGroupDrop";
 import NewGroupModal from "./NewGroupModal";
+import ImportBookmark from "./ImportBookmark";
 
 import "./index.scss";
 
@@ -329,7 +330,12 @@ const BookmarkView = (): JSX.Element => {
       <div className="bookmark-wrapper">
         {showNewGroupDrop ? <NewGroupDrop /> : null}
         <Collections />
-        <BookmarkCards />
+        <div className="bookmark-body-wrapper">
+          <div className="bookmark-header">
+            <ImportBookmark />
+          </div>
+          <BookmarkCards />
+        </div>
         <ActiveTabs />
       </div>
       {createPortal(
