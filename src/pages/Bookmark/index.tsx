@@ -142,7 +142,6 @@ const Bookmark = (): JSX.Element => {
   const createNewGroup = async (data) => {
     try {
       const groupResponse = await BookmarkGroupModal.add({
-        icon: "ri-folder-line",
         ...data,
         name: data.name || `Untitled`,
         position: Object.keys(groups).length,

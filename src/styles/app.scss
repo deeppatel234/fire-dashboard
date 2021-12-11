@@ -215,11 +215,14 @@ $grid-columns: 12;
 
 .drag-icon {
   display: inline-flex;
-  padding-right: 20px;
-  margin-left: -6px;
+  width: 30px;
   cursor: grab;
 
   .ri-more-2-fill {
     width: 8px;
+
+    &.first {
+      margin-left: -6px;
+    }
   }
 }

@@ -5,7 +5,7 @@ import _keyBy from "lodash/keyBy";
 import {
   DndContext,
   KeyboardSensor,
-  PointerSensor,
+  MouseSensor,
   useSensor,
   useSensors,
   DragOverlay,
@@ -24,6 +24,7 @@ import BookmarkGroupModal from "../../../services/BookmarkGroupModal";
 import CollectionCard from "./CollectionCard";
 import BookmarkContext from "../BookmarkContext";
 import Sortable from "../../../components/DragAndDrop/Sortable";
+import NewGroupModal from "../NewGroupModal";
 
 const dropAnimation: DropAnimation = {
   ...defaultDropAnimation,
@@ -33,22 +34,32 @@ const dropAnimation: DropAnimation = {
 const Collections = (): JSX.Element => {
   const { setGroups, groups, data, updateData } = useContext(BookmarkContext);
   const [activeDrag, setActiveDrag] = useState(null);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+
+  const toggleCreateModal = () => {
+    setShowCreateModal(!showCreateModal);
+  };
 
   const sensors = useSensors(
-    useSensor(PointerSensor),
+    useSensor(MouseSensor, {
+      activationConstraint: {
+        delay: 250,
+        tolerance: 10,
+      },
+    }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     }),
   );
 
-  const onClickCreateGroup = async () => {
+  const onClickCreateGroup = async (data) => {
     try {
       const groupResponse = await BookmarkGroupModal.add({
-        name: `Untitled`,
-        icon: "ri-folder-line",
+        ...data,
         position: Object.keys(groups).length,
       });
       setGroups({ ..._keyBy([groupResponse], "id"), ...groups });
+      toggleCreateModal();
     } catch (err) {
       console.log("err", err);
     }
@@ -84,7 +95,7 @@ const Collections = (): JSX.Element => {
       <div className="group-wrapper">
         <div className="group-header">
           <div className="group-header-title">Collections</div>
-          <Button outline size="small" onClick={onClickCreateGroup}>
+          <Button outline size="small" onClick={toggleCreateModal}>
             Create
           </Button>
         </div>
@@ -124,6 +135,11 @@ const Collections = (): JSX.Element => {
         </DragOverlay>,
         document.body,
       )}
+      <NewGroupModal
+        isOpen={showCreateModal}
+        onConfirm={onClickCreateGroup}
+        onClose={toggleCreateModal}
+      />
     </DndContext>
   );
 };

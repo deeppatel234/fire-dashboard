@@ -1,5 +1,4 @@
-import React, { useContext } from "react";
-import { format } from "date-fns/esm";
+import React, { useContext, useState } from "react";
 import _keyBy from "lodash/keyBy";
 
 import Button from "components/Button";
@@ -9,16 +8,21 @@ import BookmarkGroupModal from "../../../services/BookmarkGroupModal";
 import Sortable from "../../../components/DragAndDrop/Sortable";
 
 import BookmarkContext from "../BookmarkContext";
+import NewGroupModal from "../NewGroupModal";
 import TabCard from "./TabCard";
 
 const ActiveTabs = (): JSX.Element => {
   const { setGroups, setBookmarks, groups, dataTabIds, tabData } = useContext(BookmarkContext);
+  const [showCreateModal, setShowCreateModal] = useState(false);
 
-  const onClickSaveSession = async () => {
+  const toggleCreateModal = () => {
+    setShowCreateModal(!showCreateModal);
+  };
+
+  const onClickSaveSession = async (data) => {
     try {
       const groupResponse = await BookmarkGroupModal.add({
-        name: `Session ${format(new Date(), "d-M-yyyy H:mm:ss")}`,
-        icon: "ri-folder-line",
+        ...data,
         position: Object.keys(groups).length,
       });
       const response = await BookmarkModal.bulkAdd(
@@ -37,6 +41,7 @@ const ActiveTabs = (): JSX.Element => {
         ..._keyBy(response, "id"),
         ...bookmarks,
       }));
+      toggleCreateModal();
     } catch (err) {
       console.log("err", err);
     }
@@ -46,7 +51,7 @@ const ActiveTabs = (): JSX.Element => {
     <div className="current-tab-wrapper">
       <div className="current-tab-header">
         <div className="tab-title">Tabs</div>
-        <Button outline size="small" onClick={onClickSaveSession}>
+        <Button outline size="small" onClick={toggleCreateModal}>
           Save Session
         </Button>
       </div>
@@ -72,6 +77,11 @@ const ActiveTabs = (): JSX.Element => {
           })}
         </Sortable>
       </div>
+      <NewGroupModal
+        isOpen={showCreateModal}
+        onConfirm={onClickSaveSession}
+        onClose={toggleCreateModal}
+      />
     </div>
   );
 };

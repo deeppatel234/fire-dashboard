@@ -126,11 +126,21 @@
     flex-wrap: wrap;
   }
 
+  .hover {
+    display: none;
+  }
+
   &:hover {
     .group-card-title {
       .group-name-edit {
         display: inline-block;
       }
+    }
+    .hover {
+      display: inline-block;
+    }
+    .hover-revert {
+      display: none;
     }
   }
 }

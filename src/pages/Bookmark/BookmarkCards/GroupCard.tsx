@@ -64,11 +64,12 @@ const GroupCard = ({ groupId, dragProps, isDragComponent }): JSX.Element => {
   };
 
   return (
-    <div className="group-card-wrapper">
+    <div id={`group-${groupData.id}`} className="group-card-wrapper">
       <div className="group-card-title">
         <div className="drag-icon" {...dragProps}>
-          <i className="ri-more-2-fill" />
-          <i className="ri-more-2-fill" />
+          <i className={`hover-revert ${groupData.icon}`} />
+          <i className="ri-more-2-fill hover first" />
+          <i className="ri-more-2-fill hover" />
         </div>
         {groupData.name}
         <span className="group-name-edit">
