@@ -139,14 +139,24 @@ const Bookmark = (): JSX.Element => {
     setData(newData);
   };
 
-  const createNewGroup = async (data) => {
+  const createNewGroup = async (newGroupData) => {
     try {
       const groupResponse = await BookmarkGroupModal.add({
-        ...data,
-        name: data.name || `Untitled`,
-        position: Object.keys(groups).length,
+        ...newGroupData,
+        name: newGroupData.name || `Untitled`,
+        position: 0,
       });
-      setGroups({ ..._keyBy([groupResponse], "id"), ...groups });
+      await updateGroupData(
+        [`Group-${groupResponse.id}`, ...data.groupIds].map((id, index) => {
+          const [, groupId] = id.split("-");
+          const intGroupId = parseInt(groupId, 10);
+
+          return {
+            ...(intGroupId === groupResponse.id ? groupResponse : groups[intGroupId]),
+            position: index,
+          };
+        }),
+      );
       return groupResponse;
     } catch (err) {
       console.log("err", err);
