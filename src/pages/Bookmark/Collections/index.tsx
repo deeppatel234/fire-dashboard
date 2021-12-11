@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 import { createPortal } from "react-dom";
-import _keyBy from "lodash/keyBy";
 
 import {
   DndContext,
@@ -20,7 +19,6 @@ import {
 
 import Button from "components/Button";
 
-import BookmarkGroupModal from "../../../services/BookmarkGroupModal";
 import CollectionCard from "./CollectionCard";
 import BookmarkContext from "../BookmarkContext";
 import Sortable from "../../../components/DragAndDrop/Sortable";
@@ -32,7 +30,7 @@ const dropAnimation: DropAnimation = {
 };
 
 const Collections = (): JSX.Element => {
-  const { setGroups, groups, data, updateData } = useContext(BookmarkContext);
+  const { createNewGroup, data, updateData } = useContext(BookmarkContext);
   const [activeDrag, setActiveDrag] = useState(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
 
@@ -52,13 +50,9 @@ const Collections = (): JSX.Element => {
     }),
   );
 
-  const onClickCreateGroup = async (data) => {
+  const onClickCreateGroup = async (newData) => {
     try {
-      const groupResponse = await BookmarkGroupModal.add({
-        ...data,
-        position: Object.keys(groups).length,
-      });
-      setGroups({ ..._keyBy([groupResponse], "id"), ...groups });
+      await createNewGroup(newData);
       toggleCreateModal();
     } catch (err) {
       console.log("err", err);
