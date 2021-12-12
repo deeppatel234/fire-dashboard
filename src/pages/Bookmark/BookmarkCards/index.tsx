@@ -12,7 +12,7 @@ import Sortable from "../../../components/DragAndDrop/Sortable";
 const animateLayoutChanges = (args) =>
   args.isSorting || args.wasDragging ? defaultAnimateLayoutChanges(args) : true;
 
-const BookmarkCards = (): JSX.Element => {
+const BookmarkCards = ({ isSortingContainer }): JSX.Element => {
   const { data } = useContext(BookmarkContext);
 
   return (
@@ -32,6 +32,7 @@ const BookmarkCards = (): JSX.Element => {
               id={id}
               componentProps={{
                 groupId: intGroupId,
+                isSortingContainer,
               }}
               sortableProps={{
                 data: {
@@ -41,7 +42,6 @@ const BookmarkCards = (): JSX.Element => {
                 animateLayoutChanges,
               }}
               component={GroupCard}
-              customDrag
             />
           );
         })}

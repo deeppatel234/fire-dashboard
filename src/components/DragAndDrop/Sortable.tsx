@@ -30,6 +30,7 @@ Sortable.Item = ({
   componentProps,
   sortableProps,
   isDragComponent,
+  disabled,
   ...props
 }): JSX.Element => {
   const {
@@ -60,7 +61,7 @@ Sortable.Item = ({
   return (
     <As
       {...props}
-      ref={setNodeRef}
+      ref={disabled ? null : setNodeRef}
       style={style}
       {...(customDrag ? {} : { ...attributes, ...listeners })}
     >

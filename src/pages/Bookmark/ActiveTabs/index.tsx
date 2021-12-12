@@ -8,7 +8,7 @@ import BookmarkContext from "../BookmarkContext";
 import NewGroupModal from "../NewGroupModal";
 import TabCard from "./TabCard";
 
-const ActiveTabs = (): JSX.Element => {
+const ActiveTabs = ({ isSortingContainer }): JSX.Element => {
   const { createGroupAndAddBookmark, dataTabIds, tabData } =
     useContext(BookmarkContext);
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -51,6 +51,7 @@ const ActiveTabs = (): JSX.Element => {
               <Sortable.Item
                 key={id}
                 id={id}
+                disabled={isSortingContainer}
                 componentProps={{
                   tabId: id,
                 }}

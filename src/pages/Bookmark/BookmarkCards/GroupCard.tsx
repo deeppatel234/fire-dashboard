@@ -4,7 +4,7 @@ import Sortable from "../../../components/DragAndDrop/Sortable";
 import BookmarkContext from "../BookmarkContext";
 import BookmarkCard from "./BookmarkCard";
 
-const GroupCard = ({ groupId, dragProps, isDragComponent }): JSX.Element => {
+const GroupCard = ({ groupId, isDragComponent, isSortingContainer }): JSX.Element => {
   const { groups, data } = useContext(BookmarkContext);
 
   const groupData = groups[groupId] || {};
@@ -24,6 +24,7 @@ const GroupCard = ({ groupId, dragProps, isDragComponent }): JSX.Element => {
             <Sortable.Item
               key={id}
               id={id}
+              disabled={isSortingContainer}
               componentProps={{
                 type,
                 groupId: intGroupId,
@@ -66,7 +67,7 @@ const GroupCard = ({ groupId, dragProps, isDragComponent }): JSX.Element => {
   return (
     <div id={`group-${groupData.id}`} className="group-card-wrapper">
       <div className="group-card-title">
-        <div className="drag-icon" {...dragProps}>
+        <div className="drag-icon">
           <i className={`hover-revert ${groupData.icon}`} />
           <i className="ri-more-2-fill hover first" />
           <i className="ri-more-2-fill hover" />

@@ -64,6 +64,8 @@ const BookmarkView = (): JSX.Element => {
   const [showNewGroupDrop, setShowNewGroupDrop] = useState(false);
   const cancelResolveRef = useRef({});
 
+  const isSortingContainer = activeDrag ? activeDrag.type === "group" : false;
+
   const findContainer = (id) => {
     if (id in data.items) {
       return id;
@@ -334,9 +336,9 @@ const BookmarkView = (): JSX.Element => {
           <div className="bookmark-header">
             <ImportBookmark />
           </div>
-          <BookmarkCards />
+          <BookmarkCards isSortingContainer={isSortingContainer} />
         </div>
-        <ActiveTabs />
+        <ActiveTabs isSortingContainer={isSortingContainer} />
       </div>
       {createPortal(
         <DragOverlay adjustScale={false} dropAnimation={dropAnimation}>
