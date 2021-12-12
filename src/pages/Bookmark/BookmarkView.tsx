@@ -96,10 +96,15 @@ const BookmarkView = (): JSX.Element => {
     const { id: overId } = over || {};
 
     if (!overId || overId === "NewGroupDroppable") {
+      resetData();
       return;
     }
 
     const { type, tabId } = active?.data?.current;
+
+    if (type === "group") {
+      return;
+    }
 
     const activeContainer = findContainer(activeId);
     const overContainer = findContainer(overId);
@@ -117,17 +122,6 @@ const BookmarkView = (): JSX.Element => {
     }
 
     setData((prev) => {
-      if (type === "group") {
-        return {
-          ...prev,
-          groupIds: arrayMove(
-            prev.groupIds,
-            prev.groupIds.indexOf(activeContainer),
-            prev.groupIds.indexOf(overContainer),
-          ),
-        };
-      }
-
       const overItems = prev.items[overContainer];
 
       // Find the indexes for the items
