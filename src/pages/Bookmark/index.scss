@@ -125,6 +125,16 @@
   .group-card-content {
     display: flex;
     flex-wrap: wrap;
+
+    .empty-block {
+      text-align: center;
+      width: 100%;
+      border: 1px dashed var(--border-secondary);
+      color: var(--border-secondary);
+      font-size: 0.9rem;
+      padding: 8px;
+      border-radius: var(--btn-border-radius);
+    }
   }
 
   .hover {

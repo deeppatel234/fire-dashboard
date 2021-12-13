@@ -4,18 +4,21 @@ import Sortable from "../../../components/DragAndDrop/Sortable";
 import BookmarkContext from "../BookmarkContext";
 import BookmarkCard from "./BookmarkCard";
 
-const GroupCard = ({ groupId, isDragComponent, isSortingContainer }): JSX.Element => {
+const GroupCard = ({
+  groupId,
+  isDragComponent,
+  isSortingContainer,
+}): JSX.Element => {
   const { groups, data } = useContext(BookmarkContext);
 
   const groupData = groups[groupId] || {};
 
+  const dataList = data.items[`Group-${groupId}`] || [];
+
   const renderData = () => {
     return (
-      <Sortable
-        id={`Bookmarks-${groupId}`}
-        dataList={data.items[`Group-${groupId}`] || []}
-      >
-        {data.items[`Group-${groupId}`]?.map?.((id) => {
+      <Sortable id={`Bookmarks-${groupId}`} dataList={dataList}>
+        {dataList.map?.((id) => {
           const [type, groupId, bookmarkId] = id.split("-");
           const intGroupId = parseInt(groupId, 10);
           const intBookmarkId = parseInt(bookmarkId, 10);
@@ -73,12 +76,15 @@ const GroupCard = ({ groupId, isDragComponent, isSortingContainer }): JSX.Elemen
           <i className="ri-more-2-fill hover" />
         </div>
         {groupData.name}
-        <span className="group-name-edit">
+        {/* <span className="group-name-edit">
           <i className="ri-pencil-line" />
-        </span>
+        </span> */}
       </div>
       <div className="group-card-content">
         {isDragComponent ? renderDragData() : renderData()}
+        {!dataList.length ? (
+          <div className="empty-block">Drag bookmark here</div>
+        ) : null}
       </div>
     </div>
   );
