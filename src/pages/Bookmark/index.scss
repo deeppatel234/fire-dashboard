@@ -101,61 +101,6 @@
   }
 }
 
-.group-card-wrapper {
-  background: var(--body-bg-color);
-  border-bottom: 1px solid var(--border-primary);
-  padding-bottom: 30px;
-  padding: 20px;
-  cursor: grab;
-
-  .group-card-title {
-    display: flex;
-    align-items: center;
-    font-size: 1.1rem;
-    margin-bottom: 15px;
-
-    .group-name-edit {
-      display: none;
-      line-height: 1;
-      vertical-align: middle;
-      margin-left: 10px;
-      cursor: pointer;
-    }
-  }
-  .group-card-content {
-    display: flex;
-    flex-wrap: wrap;
-
-    .empty-block {
-      text-align: center;
-      width: 100%;
-      border: 1px dashed var(--border-secondary);
-      color: var(--border-secondary);
-      font-size: 0.9rem;
-      padding: 8px;
-      border-radius: var(--btn-border-radius);
-    }
-  }
-
-  .hover {
-    display: none;
-  }
-
-  &:hover {
-    .group-card-title {
-      .group-name-edit {
-        display: inline-block;
-      }
-    }
-    .hover {
-      display: inline-block;
-    }
-    .hover-revert {
-      display: none;
-    }
-  }
-}
-
 .bookmark-card {
   display: flex;
   align-items: center;

@@ -1,19 +1,47 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 
-import Sortable from "../../../components/DragAndDrop/Sortable";
-import BookmarkContext from "../BookmarkContext";
-import BookmarkCard from "./BookmarkCard";
+import Button from "components/Button";
+import Popover from "components/Popover";
+import useChromeTabs from "utils/useChromeTabs";
+
+import Sortable from "../../../../components/DragAndDrop/Sortable";
+import BookmarkContext from "../../BookmarkContext";
+import BookmarkCard from "../BookmarkCard";
+
+import "./index.scss";
 
 const GroupCard = ({
   groupId,
   isDragComponent,
   isSortingContainer,
 }): JSX.Element => {
-  const { groups, data } = useContext(BookmarkContext);
+  const { groups, data, bookmarks } = useContext(BookmarkContext);
+  const { removeAllTabs, createTabs } = useChromeTabs();
+  const [isOpenOptionPopper, setIsOpenOptionPopper] = useState(false);
 
   const groupData = groups[groupId] || {};
 
   const dataList = data.items[`Group-${groupId}`] || [];
+
+  const onClickOpenTabs = () => {
+    const tabList = dataList.map((id) => {
+      const [, , bookmarkId] = id.split("-");
+      const intBookmarkId = parseInt(bookmarkId, 10);
+      const bookmark = bookmarks[intBookmarkId];
+
+      return {
+        url: bookmark.url,
+        pinned: bookmark.pinned,
+      };
+    });
+
+    createTabs(tabList);
+  };
+
+  const onClickCloseOpenTabs = async () => {
+    await removeAllTabs();
+    onClickOpenTabs();
+  };
 
   const renderData = () => {
     return (
@@ -67,6 +95,10 @@ const GroupCard = ({
     });
   };
 
+  const renderOptionPopover = () => {
+    return <div>hahaha</div>;
+  };
+
   return (
     <div id={`group-${groupData.id}`} className="group-card-wrapper">
       <div className="group-card-title">
@@ -76,9 +108,43 @@ const GroupCard = ({
           <i className="ri-more-2-fill hover" />
         </div>
         {groupData.name}
-        {/* <span className="group-name-edit">
-          <i className="ri-pencil-line" />
-        </span> */}
+        <div className={`options-block ${isOpenOptionPopper ? "show" : ""}`}>
+          <Button
+            link
+            iconLeft="ri-window-line"
+            size="small"
+            disabled={!dataList.length}
+            onClick={onClickOpenTabs}
+          >
+            Open Tabs
+          </Button>
+          <Button
+            link
+            iconLeft="ri-arrow-up-down-line"
+            size="small"
+            disabled={!dataList.length}
+            onClick={onClickCloseOpenTabs}
+          >
+            Close all open these
+          </Button>
+          <Popover
+            className="group-title-option-popover"
+            component={renderOptionPopover()}
+            isOpen={isOpenOptionPopper}
+            setIsOpen={setIsOpenOptionPopper}
+            closeOnClick
+          >
+            <Button
+              link
+              iconLeft="ri-arrow-down-s-line"
+              size="small"
+              disabled={!dataList.length}
+              onClick={onClickCloseOpenTabs}
+            >
+              Options
+            </Button>
+          </Popover>
+        </div>
       </div>
       <div className="group-card-content">
         {isDragComponent ? renderDragData() : renderData()}

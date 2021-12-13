@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import _keyBy from "lodash/keyBy";
 
-const useChromeTabs = ({ ignoreUrls }) => {
+const useChromeTabs = ({ ignoreUrls } = {}) => {
   const [tabs, setTabs] = useState([]);
 
   const tabIds = useMemo(() => {
@@ -14,7 +14,11 @@ const useChromeTabs = ({ ignoreUrls }) => {
 
   const getCurrentTab = () => {
     chrome.tabs.query({}, (tabs) => {
-      setTabs(tabs.filter((tab) => !ignoreUrls.includes(tab.url)));
+      if (ignoreUrls) {
+        setTabs(tabs.filter((tab) => !ignoreUrls.includes(tab.url)));
+      } else {
+        setTabs(tabs);
+      }
     });
   };
 
@@ -38,7 +42,25 @@ const useChromeTabs = ({ ignoreUrls }) => {
     addListeners();
   }, []);
 
-  return { tabs, tabIds, tabData };
+  const removeAllTabs = () => {
+    return new Promise((resolve) => {
+      chrome.tabs.getCurrent((currentTab) => {
+        const otherTabs = tabIds.filter((id) => id !== currentTab.id);
+
+        chrome.tabs.remove(otherTabs);
+
+        resolve();
+      });
+    });
+  };
+
+  const createTabs = (tabList) => {
+    tabList.forEach((tabToCreate) => {
+      chrome.tabs.create(tabToCreate);
+    });
+  };
+
+  return { tabs, tabIds, tabData, removeAllTabs, createTabs };
 };
 
 export default useChromeTabs;
