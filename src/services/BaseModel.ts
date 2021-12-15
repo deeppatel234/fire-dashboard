@@ -1,9 +1,16 @@
-const ObjectId = (
-  m = Math,
-  d = Date,
-  h = 16,
-  s = (str) => m.floor(str).toString(h),
-) => s(d.now() / 1000) + " ".repeat(h).replace(/./g, () => s(m.random() * h));
+const createUUID = () => {
+  // Decent solution from http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript
+  let d = Date.now();
+  const uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+    /[xy]/g,
+    function (c) {
+      const r = (d + Math.random() * 16) % 16 | 0;
+      d = Math.floor(d / 16);
+      return (c === "x" ? r : (r & 0x7) | 0x8).toString(16);
+    },
+  );
+  return uuid;
+};
 
 class BaseModal {
   constructor() {
@@ -15,35 +22,45 @@ class BaseModal {
   }
 
   getModalIndexes() {
-    return ["++id", "serverId", ...(this.modalIndexes || [])];
+    return ["id", "serverId", "writeAt", ...(this.modalIndexes || [])];
   }
 
   onModalCreate() {}
 
   setDb(db) {
     this.db = db;
+
+    db.hook("creating", (primKey, obj) => {
+      const epoc = this.getTime();
+
+      obj.id = this.getUniqId();
+      obj.createAt = epoc;
+      obj.writeAt = epoc;
+
+      return obj.id;
+    });
+
+    db.hook("updating", (modifications) => {
+      const epoc = this.getTime();
+
+      modifications.writeAt = epoc;
+
+      return modifications;
+    });
   }
 
   async add(data) {
-    const epoc = new Date().valueOf();
-
     const id = await this.db.add({
       ...data,
-      createAt: epoc,
-      writeAt: epoc,
     });
 
     return this.db.get(id);
   }
 
   async bulkAdd(data) {
-    const epoc = new Date().valueOf();
-
     const ids = await this.db.bulkAdd(
       data.map((d) => ({
         ...d,
-        createAt: epoc,
-        writeAt: epoc,
       })),
       null,
       { allKeys: true },
@@ -53,11 +70,8 @@ class BaseModal {
   }
 
   async update(data) {
-    const epoc = new Date().valueOf();
-
     const isUpdated = await this.db.update(data.id, {
       ...data,
-      writeAt: epoc,
     });
 
     if (isUpdated) {
@@ -68,10 +82,8 @@ class BaseModal {
   }
 
   async bulkPut(data) {
-    const epoc = new Date().valueOf();
-
     const ids = await this.db.bulkPut(
-      data.map((d) => ({ ...d, writeAt: epoc })),
+      data.map((d) => ({ ...d })),
       { allKeys: true },
     );
 
@@ -82,8 +94,12 @@ class BaseModal {
     return this.db.toArray();
   }
 
+  getTime() {
+    return new Date().getTime();
+  }
+
   getUniqId() {
-    return ObjectId();
+    return createUUID();
   }
 }
 
