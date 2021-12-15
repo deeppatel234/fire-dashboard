@@ -12,6 +12,10 @@
   "chrome_url_overrides" : {
     "newtab": "newtab/index.html"
   },
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
   "permissions": [
     "tabs",
     "bookmarks"

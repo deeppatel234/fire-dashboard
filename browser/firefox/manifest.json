@@ -15,5 +15,8 @@
   "permissions": [
     "tabs",
     "bookmarks"
-  ]
+  ],
+  "background": {
+    "scripts": ["background.js"]
+  }
 }
