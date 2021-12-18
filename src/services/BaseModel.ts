@@ -1,4 +1,4 @@
-import { collection, addDoc, getDocs } from "firebase/firestore";
+import { collection, setDoc, getDocs, query, where, doc } from "firebase/firestore";
 
 const createUUID = () => {
   // Decent solution from http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript
@@ -19,6 +19,7 @@ class BaseModal {
     this.db = null;
     this.dbName = null;
     this.firebaseDb = null;
+    this.firebaseCollection = null;
   }
 
   getModalName() {
@@ -70,16 +71,45 @@ class BaseModal {
     });
   }
 
-  setFirebasedb(db) {
-    this.firebaseDb = collection(db, `${this.dbName}_${this.getModalName()}`);
+  getModalKey() {
+    return `${this.dbName}_${this.getModalName()}`;
   }
 
-  addToFirebase(data) {
-    return addDoc(this.firebaseDb, data);
+  setFirebasedb(db) {
+    this.firebaseDb = db;
+    this.firebaseCollection = collection(db, this.getModalKey());
+  }
+
+  setToFirebase(data) {
+    return setDoc(doc(this.firebaseDb, this.getModalKey(), data.id), data);
   }
 
   getAllFirebase() {
-    return getDocs(this.firebaseDb);
+    return getDocs(this.firebaseCollection);
+  }
+
+  async getAllUpdatedFirebase(timeFrom, timeTo) {
+    const querySnapshot = await getDocs(
+      query(
+        this.firebaseCollection,
+        where("writeAt", ">", timeFrom),
+        where("writeAt", "<=", timeTo),
+      ),
+    );
+
+    const dataList = [];
+
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      data.serverId = doc.id;
+      dataList.push(data);
+    });
+
+    return dataList;
+  }
+
+  getAllUpdatedLocal(timeFrom, timeTo) {
+    return this.db.where("writeAt").between(timeFrom, timeTo).toArray();
   }
 
   async add(data) {

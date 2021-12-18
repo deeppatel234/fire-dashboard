@@ -1,46 +1,76 @@
+/* global chrome */
+
 import firebaseService from "./firebase";
+import _uniq from "lodash/uniq";
+import _keyBy from "lodash/keyBy";
 
 import { initStorage, initWorkpaceStorage } from "./initService";
+import { localGet, localSet } from "../utils/chromeStorage";
 
 class Sync {
-  async syncNewAddedFromServer(modal) {
-    const querySnapshot = await modal.getAllFirebase();
+  async syncFromServer(modal) {
+    const lastSyncTime = (await localGet(modal.getModalKey())) || 1577817000000;
+    const currentTime = new Date().getTime();
 
-    const dataToSave = [];
+    const updatedServerRecords = await modal.getAllUpdatedFirebase(
+      lastSyncTime,
+      currentTime,
+    );
 
-    querySnapshot.forEach((doc) => {
-      const data = doc.data();
-      data.serverId = doc.id;
-      dataToSave.push(data);
+    const updatedLocalRecords = await modal.getAllUpdatedLocal(
+      lastSyncTime,
+      currentTime,
+    );
+
+    const idsToCheck = _uniq([
+      ...updatedServerRecords.map((d) => d.id),
+      ...updatedLocalRecords.map((d) => d.id),
+    ]);
+
+    const keyByUpdatedServerRecords = _keyBy(updatedServerRecords, "id");
+    const keyByUpdatedLocalRecords = _keyBy(updatedLocalRecords, "id");
+
+    const localRecordUpdateList = [];
+    const serverRecordUpdateList = [];
+
+    idsToCheck.forEach((id) => {
+      if (!keyByUpdatedLocalRecords[id]) {
+        localRecordUpdateList.push(keyByUpdatedServerRecords[id]);
+        return;
+      }
+
+      if (!keyByUpdatedServerRecords[id]) {
+        serverRecordUpdateList.push(keyByUpdatedLocalRecords[id]);
+        return;
+      }
+
+      if (
+        keyByUpdatedServerRecords[id].writeAt >
+        keyByUpdatedLocalRecords[id].writeAt
+      ) {
+        localRecordUpdateList.push(keyByUpdatedLocalRecords[id]);
+      } else {
+        serverRecordUpdateList.push(keyByUpdatedServerRecords[id]);
+      }
     });
 
-    await modal.bulkPut(dataToSave);
-  }
+    if (localRecordUpdateList.length) {
+      await modal.bulkPut(localRecordUpdateList);
+    }
 
-  async syncNewAddedFromLocal(modal) {
-    const modalDb = modal.getDb();
+    if (serverRecordUpdateList.length) {
+      await Promise.all(
+        serverRecordUpdateList.map((data) => modal.setToFirebase(data)),
+      );
+    }
 
-    const allNotSyncRecords = await modalDb
-      .where("serverId")
-      .equals("0")
-      .toArray();
-
-    await Promise.allSettled(
-      allNotSyncRecords.map(async (record) => {
-        const ref = await modal.addToFirebase(record);
-
-        record.serverId = ref.id;
-
-        return modal.update(record);
-      }),
-    );
+    await localSet({ [modal.getModalKey()]: currentTime });
   }
 
   async syncModal(modal) {
     modal.setFirebasedb(firebaseService.getDb());
 
-    await this.syncNewAddedFromServer(modal);
-    await this.syncNewAddedFromLocal(modal);
+    await this.syncFromServer(modal);
   }
 
   async syncWorkspaceDb(workspace) {
