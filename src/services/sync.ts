@@ -3,9 +3,21 @@ import firebaseService from "./firebase";
 import { initStorage, initWorkpaceStorage } from "./initService";
 
 class Sync {
-  async syncModal(modal) {
-    modal.setFirebasedb(firebaseService.getDb());
+  async syncNewAddedFromServer(modal) {
+    const querySnapshot = await modal.getAllFirebase();
 
+    const dataToSave = [];
+
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      data.serverId = doc.id;
+      dataToSave.push(data);
+    });
+
+    await modal.bulkPut(dataToSave);
+  }
+
+  async syncNewAddedFromLocal(modal) {
     const modalDb = modal.getDb();
 
     const allNotSyncRecords = await modalDb
@@ -22,6 +34,13 @@ class Sync {
         return modal.update(record);
       }),
     );
+  }
+
+  async syncModal(modal) {
+    modal.setFirebasedb(firebaseService.getDb());
+
+    await this.syncNewAddedFromServer(modal);
+    await this.syncNewAddedFromLocal(modal);
   }
 
   async syncWorkspaceDb(workspace) {
@@ -44,9 +63,12 @@ class Sync {
 
       const workspaces = await workspaceModal.getAll();
 
-      await Promise.allSettled(
-        workspaces.map((workspace) => this.syncWorkspaceDb(workspace)),
-      );
+      for (let i = 0; i < workspaces.length; i++) {
+        try {
+          const workspace = workspaces[i];
+          await this.syncWorkspaceDb(workspace);
+        } catch (err) {}
+      }
     } catch (err) {
       console.log(err);
     }

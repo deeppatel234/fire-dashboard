@@ -10,7 +10,7 @@ class WorkspaceModal extends BaseModal {
   add(data) {
     return super.add({
       settings: {},
-      collectionKey: `${data.name}-${this.getUniqId()}`,
+      collectionKey: `${data.name.replace(/ /g, "-")}-${this.getUniqId()}`,
       ...data,
     });
   }

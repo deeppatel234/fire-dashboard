@@ -1,4 +1,4 @@
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, getDocs } from "firebase/firestore";
 
 const createUUID = () => {
   // Decent solution from http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript
@@ -42,10 +42,21 @@ class BaseModal {
     db.hook("creating", (primKey, obj) => {
       const epoc = this.getTime();
 
-      obj.id = this.getUniqId();
-      obj.createAt = epoc;
-      obj.writeAt = epoc;
-      obj.serverId = "0";
+      if (!obj.id) {
+        obj.id = this.getUniqId();
+      }
+
+      if (!obj.createAt) {
+        obj.createAt = epoc;
+      }
+
+      if (!obj.writeAt) {
+        obj.writeAt = epoc;
+      }
+
+      if (!obj.serverId) {
+        obj.serverId = "0";
+      }
 
       return obj.id;
     });
@@ -63,8 +74,12 @@ class BaseModal {
     this.firebaseDb = collection(db, `${this.dbName}_${this.getModalName()}`);
   }
 
-  async addToFirebase(data) {
+  addToFirebase(data) {
     return addDoc(this.firebaseDb, data);
+  }
+
+  getAllFirebase() {
+    return getDocs(this.firebaseDb);
   }
 
   async add(data) {
