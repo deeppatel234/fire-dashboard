@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { MemoryRouter as Router } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
-import firebaseService from "./services/firebase";
 import { initWorkpaceStorage } from "./services/initService";
 
 import App from "./App";
@@ -17,7 +16,6 @@ const Main = (): JSX.Element => {
 
   const load = async () => {
     try {
-      firebaseService.init();
       await initWorkpaceStorage();
       setIsLoading(false);
     } catch (err) {

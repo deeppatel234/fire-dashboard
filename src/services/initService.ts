@@ -16,11 +16,13 @@ export const initWorkpaceStorage = () => {
     [WorkspaceModal.getModalName()]: WorkspaceModal.getModalIndexes().join(","),
   });
 
-  WorkspaceModal.setDb(db[WorkspaceModal.getModalName()]);
+  WorkspaceModal.setDb(db[WorkspaceModal.getModalName()], workspaceDBName);
+
+  return WorkspaceModal;
 };
 
 export const initStorage = (workspace) => {
-  const modalList = [BookmarkModal, BookmarkGroupModal];
+  const modalList = [BookmarkGroupModal, BookmarkModal];
   const db = new Dexie(workspace.collectionKey);
 
   db.version(appDbVersion).stores(
@@ -33,6 +35,8 @@ export const initStorage = (workspace) => {
   );
 
   modalList.forEach((modal) => {
-    modal.setDb(db[modal.getModalName()]);
+    modal.setDb(db[modal.getModalName()], workspace.collectionKey);
   });
+
+  return modalList;
 };

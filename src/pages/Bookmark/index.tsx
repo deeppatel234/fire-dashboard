@@ -94,10 +94,9 @@ const Bookmark = (): JSX.Element => {
       updateGroupData(
         newData.groupIds.map((i, index) => {
           const [, groupId] = i.split("-");
-          const intGroupId = parseInt(groupId, 10);
 
           return {
-            ...groups[intGroupId],
+            ...groups[groupId],
             position: index,
           };
         }),
@@ -106,15 +105,13 @@ const Bookmark = (): JSX.Element => {
       const oldItems = originalData.items;
       const newItems = newData.items;
       Object.keys(newItems).forEach((key) => {
-        const [, strGroupId] = key.split("-");
-        const groupId = parseInt(strGroupId, 10);
+        const [, groupId] = key.split("-");
 
         if (!_isEqual(newItems[key], oldItems[key])) {
           updateBookmarkData(
             newItems[key].map((i, index) => {
               const [type, tabId, bookmarkId] = i.split("-");
-              const intBookmarkId = parseInt(bookmarkId, 10);
-              let dataToSave = bookmarks[intBookmarkId];
+              let dataToSave = bookmarks[bookmarkId];
 
               if (type === "tab") {
                 const tab = tabData[tabId];
@@ -149,10 +146,9 @@ const Bookmark = (): JSX.Element => {
       await updateGroupData(
         [`Group-${groupResponse.id}`, ...data.groupIds].map((id, index) => {
           const [, groupId] = id.split("-");
-          const intGroupId = parseInt(groupId, 10);
 
           return {
-            ...(intGroupId === groupResponse.id ? groupResponse : groups[intGroupId]),
+            ...(groupId === groupResponse.id ? groupResponse : groups[groupId]),
             position: index,
           };
         }),

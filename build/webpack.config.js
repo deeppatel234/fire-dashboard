@@ -22,7 +22,7 @@ module.exports = ({ mode, distPath } = {}) => {
     devtool: isDevelopment ? "cheap-module-source-map" : false,
     entry: {
       "newtab/index": `${PATHS.SRC_DIR}/newtab.index.tsx`,
-      background: `${PATHS.EXTENSION_DIR}/core/background.ts`,
+      background: `${PATHS.SRC_DIR}/background/index.ts`,
     },
     output: {
       path: distPath,

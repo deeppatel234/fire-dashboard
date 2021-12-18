@@ -26,8 +26,7 @@ const GroupCard = ({
   const onClickOpenTabs = () => {
     const tabList = dataList.map((id) => {
       const [, , bookmarkId] = id.split("-");
-      const intBookmarkId = parseInt(bookmarkId, 10);
-      const bookmark = bookmarks[intBookmarkId];
+      const bookmark = bookmarks[bookmarkId];
 
       return {
         url: bookmark.url,
@@ -48,8 +47,6 @@ const GroupCard = ({
       <Sortable id={`Bookmarks-${groupId}`} dataList={dataList}>
         {dataList.map?.((id) => {
           const [type, groupId, bookmarkId] = id.split("-");
-          const intGroupId = parseInt(groupId, 10);
-          const intBookmarkId = parseInt(bookmarkId, 10);
 
           return (
             <Sortable.Item
@@ -58,15 +55,15 @@ const GroupCard = ({
               disabled={isSortingContainer}
               componentProps={{
                 type,
-                groupId: intGroupId,
-                bookmarkId: intBookmarkId,
+                groupId,
+                bookmarkId,
                 tabId: groupId,
               }}
               sortableProps={{
                 data: {
                   type: "bookmark",
-                  groupId: intGroupId,
-                  bookmarkId: intBookmarkId,
+                  groupId,
+                  bookmarkId,
                 },
               }}
               isDragComponent={type === "tab"}
@@ -81,15 +78,13 @@ const GroupCard = ({
   const renderDragData = () => {
     return data.items[`Group-${groupId}`]?.map?.((id) => {
       const [, groupId, bookmarkId] = id.split("-");
-      const intGroupId = parseInt(groupId, 10);
-      const intBookmarkId = parseInt(bookmarkId, 10);
 
       return (
         <BookmarkCard
           key={id}
           type="bookmark"
-          groupId={intGroupId}
-          bookmarkId={intBookmarkId}
+          groupId={groupId}
+          bookmarkId={bookmarkId}
         />
       );
     });

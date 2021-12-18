@@ -15,13 +15,17 @@ class FirebaseService {
     this.db = null;
   }
 
+  getDb() {
+    return this.db;
+  }
+
   getConfig(config) {
     const projectId = config
       ? config.projectId
-      : window.localStorage.getItem("firebase-projectId") || "";
+      : window.localStorage.getItem("firebase-projectId") || "bookmark-deep";
     const apiKey = config
       ? config.apiKey
-      : window.localStorage.getItem("firebase-apiKey") || "";
+      : window.localStorage.getItem("firebase-apiKey") || "AIzaSyBiR3cSTGYJwrofRphFtWwl7wuYj-TWgaM";
 
     return {
       projectId,

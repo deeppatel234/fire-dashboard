@@ -24,20 +24,19 @@ const BookmarkCards = ({ isSortingContainer }): JSX.Element => {
       >
         {data.groupIds?.map?.((id) => {
           const [, groupId] = id.split("-");
-          const intGroupId = parseInt(groupId, 10);
 
           return (
             <Sortable.Item
               key={id}
               id={id}
               componentProps={{
-                groupId: intGroupId,
+                groupId,
                 isSortingContainer,
               }}
               sortableProps={{
                 data: {
                   type: "group",
-                  groupId: intGroupId,
+                  groupId,
                 },
                 animateLayoutChanges,
               }}

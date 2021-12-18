@@ -21,7 +21,7 @@ const App = (): JSX.Element => {
   const history = useHistory();
   const [workspaceList, setWorkspaceList] = useState([]);
   const [workspaceId, setWorkSpaceId] = useState(() => {
-    return parseInt(localStorage.getItem("workspaceId") || 1, 10);
+    return localStorage.getItem("workspaceId");
   });
   const [isLoading, setIsLoading] = useState(true);
   const [bgImageUrl, setBgImageUrl] = useState();
