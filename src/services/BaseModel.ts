@@ -108,7 +108,11 @@ class BaseModal {
       ),
     );
 
-    return querySnapshot.map((doc) => doc.data());
+    const dataToUpdate = [];
+
+    querySnapshot.forEach((doc) => dataToUpdate.push(doc.data()));
+
+    return dataToUpdate;
   }
 
   getAllUpdatedLocal(timeFrom, timeTo) {

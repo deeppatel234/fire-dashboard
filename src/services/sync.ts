@@ -4,8 +4,8 @@ import firebaseService from "./firebase";
 import _uniq from "lodash/uniq";
 import _keyBy from "lodash/keyBy";
 
+import { localGet, localSet } from "utils/chromeStorage";
 import { initStorage, initWorkpaceStorage } from "./initService";
-import { localGet, localSet } from "../utils/chromeStorage";
 
 class Sync {
   async syncFromServer(modal) {
@@ -87,11 +87,11 @@ class Sync {
   }
 
   async start() {
-    firebaseService.init();
-
-    const workspaceModal = initWorkpaceStorage();
-
     try {
+      await firebaseService.init();
+
+      const workspaceModal = initWorkpaceStorage();
+
       await this.syncModal(workspaceModal);
 
       const workspaces = await workspaceModal.getAll();

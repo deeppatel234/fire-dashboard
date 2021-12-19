@@ -3,6 +3,7 @@ import { initializeApp } from "firebase/app";
 import { initializeFirestore } from "firebase/firestore";
 
 import { collection, addDoc, deleteDoc } from "firebase/firestore";
+import { localGet, localSet } from "utils/chromeStorage";
 
 interface FirebaseConfig {
   apiKey: string;
@@ -19,33 +20,32 @@ class FirebaseService {
     return this.db;
   }
 
-  getConfig(config) {
+  async getConfig(config) {
     const projectId = config
       ? config.projectId
-      : window.localStorage.getItem("firebase-projectId") || "bookmark-deep";
-    const apiKey = config
-      ? config.apiKey
-      : window.localStorage.getItem("firebase-apiKey") || "AIzaSyBiR3cSTGYJwrofRphFtWwl7wuYj-TWgaM";
+      : await localGet("firebase-projectId");
+    const apiKey = config ? config.apiKey : await localGet("firebase-apiKey");
 
     return {
       projectId,
       apiKey,
-      authDomain: `${projectId}.firebaseapp.com`,
     };
   }
 
-  setConfig(config) {
-    window.localStorage.setItem("firebase-projectId", config.projectId);
-    window.localStorage.setItem("firebase-apiKey", config.apiKey);
+  async setConfig(config) {
+    await localSet({
+      "firebase-projectId": config.projectId,
+      "firebase-apiKey": config.apiKey,
+    });
   }
 
-  init() {
-    const localConfig = this.getConfig();
+  async init() {
+    const localConfig = await this.getConfig();
 
     if (localConfig.apiKey && localConfig.projectId) {
       const firebaseConfig: FirebaseConfig = {
         apiKey: localConfig.apiKey,
-        authDomain: localConfig.authDomain,
+        authDomain: `${localConfig.projectId}.firebaseapp.com`,
         projectId: localConfig.projectId,
       };
 
@@ -56,11 +56,11 @@ class FirebaseService {
   }
 
   async test(config) {
-    const localConfig = this.getConfig(config);
+    const localConfig = await this.getConfig(config);
 
     const firebaseConfig: FirebaseConfig = {
       apiKey: localConfig.apiKey,
-      authDomain: localConfig.authDomain,
+      authDomain: `${localConfig.projectId}.firebaseapp.com`,
       projectId: localConfig.projectId,
     };
 

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
@@ -24,10 +24,6 @@ const FirebaseSetup = () => {
     return params?.mode === "edit";
   }, [params]);
 
-  const initialValues = useMemo(() => {
-    return firebase.getConfig();
-  }, []);
-
   const goToHome = () => {
     if (isEditMode) {
       history.goBack();
@@ -40,8 +36,7 @@ const FirebaseSetup = () => {
     setIsLoading(true);
     try {
       await firebase.test(data);
-      firebase.setConfig(data);
-      firebase.init();
+      await firebase.setConfig(data);
       goToHome();
     } catch (err) {
       toast.error("Please verify your firebase account data");
@@ -50,9 +45,17 @@ const FirebaseSetup = () => {
   };
 
   const formik = useFormik({
-    initialValues,
     onSubmit: onSubmitData,
   });
+
+  const setInitConfig = async () => {
+    const config = await firebase.getConfig();
+    formik.setValues(config);
+  };
+
+  useEffect(() => {
+    setInitConfig();
+  }, []);
 
   return (
     <div className="firebase-setup-wrapper">
