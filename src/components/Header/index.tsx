@@ -6,6 +6,7 @@ import AppContext from "src/AppContext";
 import Modal from "components/Modal";
 import Popover from "components/Popover";
 import WorkspaceModal from "components/WorkspaceModal";
+import SyncOptions from "components/SyncOptions";
 
 import "./index.scss";
 
@@ -116,9 +117,7 @@ const Header = (): JSX.Element => {
           <a onClick={(event) => onClickSettings(event, workspace)}>
             <i className="ri-settings-3-line" />
           </a>
-          <NavLink to="/firebase/edit">
-            <i className="ri-refresh-line" />
-          </NavLink>
+          <SyncOptions />
         </div>
       </div>
     </div>
