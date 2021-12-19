@@ -1,4 +1,11 @@
-import { collection, setDoc, getDocs, query, where, doc } from "firebase/firestore";
+import {
+  collection,
+  setDoc,
+  getDocs,
+  query,
+  where,
+  doc,
+} from "firebase/firestore";
 
 const createUUID = () => {
   // Decent solution from http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript
@@ -27,7 +34,7 @@ class BaseModal {
   }
 
   getModalIndexes() {
-    return ["id", "serverId", "writeAt", ...(this.modalIndexes || [])];
+    return ["id", "writeAt", ...(this.modalIndexes || [])];
   }
 
   onModalCreate() {}
@@ -55,8 +62,8 @@ class BaseModal {
         obj.writeAt = epoc;
       }
 
-      if (!obj.serverId) {
-        obj.serverId = "0";
+      if (obj.syncAt) {
+        delete obj.syncAt;
       }
 
       return obj.id;
@@ -65,7 +72,11 @@ class BaseModal {
     db.hook("updating", (modifications) => {
       const epoc = this.getTime();
 
-      modifications.writeAt = epoc;
+      if (modifications.syncAt) {
+        modifications.syncAt = null;
+      } else {
+        modifications.writeAt = epoc;
+      }
 
       return modifications;
     });
@@ -92,20 +103,12 @@ class BaseModal {
     const querySnapshot = await getDocs(
       query(
         this.firebaseCollection,
-        where("writeAt", ">", timeFrom),
-        where("writeAt", "<=", timeTo),
+        where("syncAt", ">", timeFrom),
+        where("syncAt", "<=", timeTo),
       ),
     );
 
-    const dataList = [];
-
-    querySnapshot.forEach((doc) => {
-      const data = doc.data();
-      data.serverId = doc.id;
-      dataList.push(data);
-    });
-
-    return dataList;
+    return querySnapshot.map((doc) => doc.data());
   }
 
   getAllUpdatedLocal(timeFrom, timeTo) {

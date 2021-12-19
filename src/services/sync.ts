@@ -48,9 +48,9 @@ class Sync {
         keyByUpdatedServerRecords[id].writeAt >
         keyByUpdatedLocalRecords[id].writeAt
       ) {
-        localRecordUpdateList.push(keyByUpdatedLocalRecords[id]);
+        localRecordUpdateList.push(keyByUpdatedServerRecords[id]);
       } else {
-        serverRecordUpdateList.push(keyByUpdatedServerRecords[id]);
+        serverRecordUpdateList.push(keyByUpdatedLocalRecords[id]);
       }
     });
 
@@ -59,8 +59,11 @@ class Sync {
     }
 
     if (serverRecordUpdateList.length) {
+      const syncAt = new Date().getTime();
       await Promise.all(
-        serverRecordUpdateList.map((data) => modal.setToFirebase(data)),
+        serverRecordUpdateList.map((data) =>
+          modal.setToFirebase({ ...data, syncAt }),
+        ),
       );
     }
 
