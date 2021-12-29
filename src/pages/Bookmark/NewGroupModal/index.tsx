@@ -9,14 +9,23 @@ import "./index.scss";
 
 const DEFAULT_ICON = "ri-folder-line";
 
-const NewGroupModal = ({ isOpen, onClose, onConfirm }) => {
+const NewGroupModal = ({ isOpen, onClose, onConfirm, dataToUpdate }) => {
   const [name, setName] = useState("");
   const [icon, setIcon] = useState(DEFAULT_ICON);
 
   const reset = () => {
-    setName("");
-    setIcon(DEFAULT_ICON);
+    if (dataToUpdate) {
+      setName(dataToUpdate.name || "");
+      setIcon(dataToUpdate.icon || DEFAULT_ICON);
+    } else {
+      setName("");
+      setIcon(DEFAULT_ICON);
+    }
   };
+
+  useState(() => {
+    reset();
+  }, [dataToUpdate]);
 
   const close = () => {
     onClose();
@@ -34,7 +43,9 @@ const NewGroupModal = ({ isOpen, onClose, onConfirm }) => {
       open={isOpen}
       onClose={close}
     >
-      <Modal.Header>Create a new collection</Modal.Header>
+      <Modal.Header>
+        {dataToUpdate ? "Update Collection Title" : "Create a new collection"}
+      </Modal.Header>
       <Modal.Body>
         <div className="content">
           <IconSelector selectedIcon={icon} setSelectedIcon={setIcon} />
@@ -42,7 +53,7 @@ const NewGroupModal = ({ isOpen, onClose, onConfirm }) => {
         </div>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={onSubmit}>Create</Button>
+        <Button onClick={onSubmit}>{dataToUpdate ? "Update" : "Create"}</Button>
         <Button type="default" onClick={close}>
           Cancel
         </Button>

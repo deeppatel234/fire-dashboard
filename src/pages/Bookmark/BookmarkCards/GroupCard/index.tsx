@@ -7,6 +7,7 @@ import useChromeTabs from "utils/useChromeTabs";
 import Sortable from "../../../../components/DragAndDrop/Sortable";
 import BookmarkContext from "../../BookmarkContext";
 import BookmarkCard from "../BookmarkCard";
+import NewGroupModal from "../../NewGroupModal";
 
 import "./index.scss";
 
@@ -15,13 +16,26 @@ const GroupCard = ({
   isDragComponent,
   isSortingContainer,
 }): JSX.Element => {
-  const { groups, data, bookmarks, updateGroupData } = useContext(BookmarkContext);
+  const {
+    groups,
+    data,
+    bookmarks,
+    updateGroupData,
+    updateBookmarkData,
+    tabIds,
+    getActiveTabsList,
+  } = useContext(BookmarkContext);
   const { removeAllTabs, createTabs } = useChromeTabs();
   const [isOpenOptionPopper, setIsOpenOptionPopper] = useState(false);
+  const [showUpdateTitleModal, setShowUpdateTitleModal] = useState(false);
 
   const groupData = groups[groupId] || {};
 
   const dataList = data.items[`Group-${groupId}`] || [];
+
+  const toggleUpdateTitleModal = () => {
+    setShowUpdateTitleModal(!showUpdateTitleModal);
+  };
 
   const onClickOpenTabs = () => {
     const tabList = dataList.map((id) => {
@@ -40,6 +54,77 @@ const GroupCard = ({
   const onClickCloseOpenTabs = async () => {
     await removeAllTabs();
     onClickOpenTabs();
+  };
+
+  const onClickUpdateGroup = (newDate) => {
+    toggleUpdateTitleModal();
+    updateGroupData({
+      ...groupData,
+      ...newDate,
+    });
+  };
+
+  const deleteGroup = () => {
+    updateGroupData({
+      ...groupData,
+      isDeleted: 1,
+    });
+    if (dataList?.length) {
+      updateBookmarkData(
+        dataList.map((id) => {
+          const [, , bookmarkId] = id.split("-");
+          const bookmark = bookmarks[bookmarkId];
+
+          return { ...bookmark, isDeleted: 1 };
+        }),
+      );
+    }
+  };
+
+  const moveToTop = () => {
+    const newPosData = [];
+    let counter = 1;
+
+    data.groupIds.forEach((id) => {
+      const [, groupId] = id.split("-");
+
+      if (groupId === groupData.id) {
+        newPosData.unshift({
+          ...groups[groupId],
+          position: 0,
+        });
+      } else {
+        newPosData.push({
+          ...groups[groupId],
+          position: counter,
+        });
+        counter += 1;
+      }
+    });
+
+    updateGroupData(newPosData);
+  };
+
+  const importOpenTabs = () => {
+    const bookmarkList = getActiveTabsList().map((b, index) => ({
+      ...b,
+      groupId: groupData.id,
+      position: dataList.length + index,
+    }));
+
+    updateBookmarkData(bookmarkList);
+  };
+
+  const onSelectOption = (option) => {
+    if (option.key === "DELETE") {
+      deleteGroup();
+    } else if (option.key === "EDIT_TITLE") {
+      toggleUpdateTitleModal();
+    } else if (option.key === "MOVE_TO_TOP") {
+      moveToTop();
+    } else if (option.key === "IMPORT_OPEN_TABS") {
+      importOpenTabs();
+    }
   };
 
   const toggleCollapse = () => {
@@ -137,6 +222,7 @@ const GroupCard = ({
           <PopoverDropdown
             isOpen={isOpenOptionPopper}
             setIsOpen={setIsOpenOptionPopper}
+            onSelect={onSelectOption}
             options={[
               {
                 key: "EDIT_TITLE",
@@ -149,22 +235,10 @@ const GroupCard = ({
                 label: "Move to Top",
               },
               {
-                key: "LINE",
-              },
-              {
-                key: "MERGE_COLLECTION",
-                icon: "ri-folder-transfer-line",
-                label: "Merge Collection",
-              },
-              {
-                key: "IMPORT_OPENED TABS",
+                key: "IMPORT_OPEN_TABS",
                 icon: "ri-folder-add-line",
-                label: "Import Opened Tabs",
-              },
-              {
-                key: "MOVE_TO_TOP",
-                icon: "ri-layout-top-2-line",
-                label: "Move to Top",
+                label: "Import Open Tabs",
+                disabled: !tabIds.length,
               },
               {
                 key: "LINE",
@@ -181,7 +255,6 @@ const GroupCard = ({
               link
               iconLeft="ri-arrow-down-s-line"
               size="small"
-              disabled={!dataList.length}
               onClick={onClickCloseOpenTabs}
             >
               Options
@@ -197,6 +270,12 @@ const GroupCard = ({
           ) : null}
         </div>
       ) : null}
+      <NewGroupModal
+        dataToUpdate={groupData}
+        isOpen={showUpdateTitleModal}
+        onConfirm={onClickUpdateGroup}
+        onClose={toggleUpdateTitleModal}
+      />
     </div>
   );
 };

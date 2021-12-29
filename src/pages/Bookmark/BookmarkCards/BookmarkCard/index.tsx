@@ -12,7 +12,7 @@ const BookmarkCard = ({
   bookmarkId,
   isDragComponent,
 }): JSX.Element => {
-  const { bookmarks, tabData } = useContext(BookmarkContext);
+  const { bookmarks, tabData, updateBookmarkData } = useContext(BookmarkContext);
   const [isOpenOptionPopper, setIsOpenOptionPopper] = useState(false);
 
   const bookmark =
@@ -20,6 +20,15 @@ const BookmarkCard = ({
 
   const onClickBookmark = () => {
     window.open(bookmark.url, "_self");
+  };
+
+  const onSelectOption = (option) => {
+    if (option.key === "DELETE") {
+      updateBookmarkData({
+        ...bookmark,
+        isDeleted: 1,
+      });
+    }
   };
 
   return (
@@ -38,6 +47,7 @@ const BookmarkCard = ({
           placement="bottom-end"
           isOpen={isOpenOptionPopper}
           setIsOpen={setIsOpenOptionPopper}
+          onSelect={onSelectOption}
           options={[
             {
               key: "EDIT_TITLE",

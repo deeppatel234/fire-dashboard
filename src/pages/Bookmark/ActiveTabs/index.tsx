@@ -11,7 +11,7 @@ import TabCard from "./TabCard";
 import "./index.scss";
 
 const ActiveTabs = ({ isSortingContainer }): JSX.Element => {
-  const { createGroupAndAddBookmark, dataTabIds, tabData } =
+  const { createGroupAndAddBookmark, tabIds, getActiveTabsList } =
     useContext(BookmarkContext);
   const [showCreateModal, setShowCreateModal] = useState(false);
 
@@ -23,14 +23,7 @@ const ActiveTabs = ({ isSortingContainer }): JSX.Element => {
     try {
       await createGroupAndAddBookmark({
         groupData: data,
-        bookmarkList: dataTabIds.map((id) => {
-          const tab = tabData[id];
-          return {
-            favIconUrl: tab.favIconUrl,
-            url: tab.url,
-            title: tab.title,
-          };
-        }),
+        bookmarkList: getActiveTabsList(),
       });
       toggleCreateModal();
     } catch (err) {
@@ -47,8 +40,8 @@ const ActiveTabs = ({ isSortingContainer }): JSX.Element => {
         </Button>
       </div>
       <div className="current-tab-list">
-        <Sortable id="ActiveTabs" dataList={dataTabIds}>
-          {dataTabIds.map((id) => {
+        <Sortable id="ActiveTabs" dataList={tabIds}>
+          {tabIds.map((id) => {
             return (
               <Sortable.Item
                 key={id}
