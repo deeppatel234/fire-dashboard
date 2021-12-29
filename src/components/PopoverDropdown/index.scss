@@ -16,6 +16,10 @@
         line-height: 0;
       }
 
+      &.disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
     }
     .line {
       border-top: 1px solid var(--border-primary);

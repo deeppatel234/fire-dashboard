@@ -4,7 +4,14 @@ import Popover from "components/Popover";
 
 import "./index.scss";
 
-const PopoverDropdown = ({ isOpen, setIsOpen, children, options, placement }) => {
+const PopoverDropdown = ({
+  isOpen,
+  setIsOpen,
+  children,
+  options,
+  placement,
+  onSelect,
+}) => {
   const renderOptionPopover = () => {
     if (Array.isArray(options)) {
       return (
@@ -17,7 +24,10 @@ const PopoverDropdown = ({ isOpen, setIsOpen, children, options, placement }) =>
             return (
               <div
                 key={op.key}
-                className={`dropdown-item ${op.className || ""}`}
+                className={`dropdown-item ${op.className || ""} ${
+                  op.disabled ? "disabled" : ""
+                }`}
+                onClick={() => onSelect(op)}
               >
                 <i className={`icon ${op.icon}`} />
                 <div>{op.label}</div>
