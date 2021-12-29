@@ -13,17 +13,17 @@ import {
 } from "@dnd-kit/core";
 import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 
-import ActiveTabs from "./ActiveTabs";
-import BookmarkCards from "./BookmarkCards";
-import Collections from "./Collections";
-import GroupCard from "./BookmarkCards/GroupCard";
-import BookmarkCard from "./BookmarkCards/BookmarkCard";
-import TabCard from "./ActiveTabs/TabCard";
+import ActiveTabs from "../ActiveTabs";
+import BookmarkCards from "../BookmarkCards";
+import Collections from "../Collections";
+import GroupCard from "../BookmarkCards/GroupCard";
+import BookmarkCard from "../BookmarkCards/BookmarkCard";
+import TabCard from "../ActiveTabs/TabCard";
 
-import BookmarkContext from "./BookmarkContext";
-import NewGroupDrop from "./NewGroupDrop";
-import NewGroupModal from "./NewGroupModal";
-import ImportBookmark from "./ImportBookmark";
+import BookmarkContext from "../BookmarkContext";
+import NewGroupDrop from "../NewGroupDrop";
+import NewGroupModal from "../NewGroupModal";
+import ImportBookmark from "../ImportBookmark";
 
 import "./index.scss";
 

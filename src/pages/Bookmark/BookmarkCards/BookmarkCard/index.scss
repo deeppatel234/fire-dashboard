@@ -1,0 +1,53 @@
+.bookmark-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 200px;
+  background: var(--gray-700);
+  font-size: 0.9rem;
+  padding: 10px;
+  margin: 7.5px 15px 7.5px 0px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover, &.open {
+    background: var(--gray-600);
+    .option-btn {
+      opacity: 1;
+    }
+  }
+
+  .bookmark-title {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .fav-img {
+    width: 20px;
+    height: 20px;
+    margin-right: 12px;
+  }
+  .fav-img-icon {
+    font-size: 1.3rem;
+    color: var(--text-secondary);
+  }
+
+  .option-btn {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s ease-in;
+    opacity: 0;
+    top: -6px;
+    right: -6px;
+    background: var(--gray-700);
+    border-radius: 50%;
+    height: 15px;
+    width: 15px;
+    border: 1px solid var(--gray-500);
+    font-size: 0.8rem;
+  }
+}

@@ -1,0 +1,24 @@
+.popover-dropdown {
+  .dropdown-item-wrapper {
+    .dropdown-item {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      cursor: pointer;
+      font-size: 0.8rem;
+
+      &:hover {
+        background-color: var(--hover-bg-color);
+      }
+
+      .icon {
+        margin-right: 8px;
+        line-height: 0;
+      }
+
+    }
+    .line {
+      border-top: 1px solid var(--border-primary);
+    }
+  }
+}

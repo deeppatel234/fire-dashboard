@@ -1,0 +1,15 @@
+.bookmark-wrapper {
+  display: flex;
+  height: 100%;
+  position: relative;
+
+  .bookmark-body-wrapper {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+
+    .bookmark-header {
+      padding: 10px 6px;
+    }
+  }
+}

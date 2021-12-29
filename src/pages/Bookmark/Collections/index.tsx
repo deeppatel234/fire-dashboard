@@ -24,6 +24,8 @@ import BookmarkContext from "../BookmarkContext";
 import Sortable from "../../../components/DragAndDrop/Sortable";
 import NewGroupModal from "../NewGroupModal";
 
+import "./index.scss";
+
 const dropAnimation: DropAnimation = {
   ...defaultDropAnimation,
   dragSourceOpacity: 0.5,
@@ -86,7 +88,7 @@ const Collections = (): JSX.Element => {
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
-      <div className="group-wrapper">
+      <div className="collection-group-wrapper">
         <div className="group-header">
           <div className="group-header-title">Collections</div>
           <Button outline size="small" onClick={toggleCreateModal}>

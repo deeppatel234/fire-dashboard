@@ -9,6 +9,8 @@ import BookmarkContext from "../BookmarkContext";
 import GroupCard from "./GroupCard";
 import Sortable from "../../../components/DragAndDrop/Sortable";
 
+import "./index.scss";
+
 const animateLayoutChanges = (args) =>
   args.isSorting || args.wasDragging ? defaultAnimateLayoutChanges(args) : true;
 
@@ -16,7 +18,7 @@ const BookmarkCards = ({ isSortingContainer }): JSX.Element => {
   const { data } = useContext(BookmarkContext);
 
   return (
-    <div className="card-wrapper">
+    <div className="bookmark-cards-wrapper">
       <Sortable
         id="Groups"
         dataList={data.groupIds || []}

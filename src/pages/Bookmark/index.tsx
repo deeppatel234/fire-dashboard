@@ -14,8 +14,6 @@ import BookmarkGroupModal from "../../services/BookmarkGroupModal";
 import BookmarkContext from "./BookmarkContext";
 import BookmarkView from "./BookmarkView";
 
-import "./index.scss";
-
 const sortData = (list) => {
   return _sortBy(list, "position");
 };

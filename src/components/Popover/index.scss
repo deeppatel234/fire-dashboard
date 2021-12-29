@@ -1,9 +1,16 @@
 .popover-wrapper {
-  margin-top: 10px;
   z-index: var(--z-index-popover);
   background-color: var(--popover-bg-color);
   border-radius: var(--popover-border-radius);
   box-shadow: var(--popover-shadow);
+
+  &.bottom, &.bottom-start, &.bottom-end {
+    margin-top: 8px;
+  }
+
+  &.right, &.right-start, &.right-end {
+    margin-left: 8px;
+  }
 
   .arrow {
     z-index: -1;
@@ -23,6 +30,13 @@
       &::before {
         top: -5px;
         left: -6px;
+      }
+    }
+
+    &.right, &.right-start, &.right-end {
+      &::before {
+        top: -5px;
+        left: -4px;
       }
     }
   }

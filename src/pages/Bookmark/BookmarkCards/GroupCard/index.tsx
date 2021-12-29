@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 
 import Button from "components/Button";
-import Popover from "components/Popover";
+import PopoverDropdown from "components/PopoverDropdown";
 import useChromeTabs from "utils/useChromeTabs";
 
 import Sortable from "../../../../components/DragAndDrop/Sortable";
@@ -90,10 +90,6 @@ const GroupCard = ({
     });
   };
 
-  const renderOptionPopover = () => {
-    return <div>hahaha</div>;
-  };
-
   return (
     <div id={`group-${groupData.id}`} className="group-card-wrapper">
       <div className="group-card-title">
@@ -122,12 +118,48 @@ const GroupCard = ({
           >
             Close all open these
           </Button>
-          <Popover
-            className="group-title-option-popover"
-            component={renderOptionPopover()}
+          <PopoverDropdown
             isOpen={isOpenOptionPopper}
             setIsOpen={setIsOpenOptionPopper}
-            closeOnClick
+            options={[
+              {
+                key: "EDIT_TITLE",
+                icon: "ri-pencil-line",
+                label: "Edit Title",
+              },
+              {
+                key: "MOVE_TO_TOP",
+                icon: "ri-layout-top-2-line",
+                label: "Move to Top",
+              },
+              {
+                key: "LINE",
+              },
+              {
+                key: "MERGE_COLLECTION",
+                icon: "ri-folder-transfer-line",
+                label: "Merge Collection",
+              },
+              {
+                key: "IMPORT_OPENED TABS",
+                icon: "ri-folder-add-line",
+                label: "Import Opened Tabs",
+              },
+              {
+                key: "MOVE_TO_TOP",
+                icon: "ri-layout-top-2-line",
+                label: "Move to Top",
+              },
+              {
+                key: "LINE",
+              },
+              {
+                key: "DELETE",
+                icon: "ri-delete-bin-7-line",
+                label: "Delete",
+                className: "error-color",
+              },
+            ]}
           >
             <Button
               link
@@ -138,7 +170,7 @@ const GroupCard = ({
             >
               Options
             </Button>
-          </Popover>
+          </PopoverDropdown>
         </div>
       </div>
       <div className="group-card-content">

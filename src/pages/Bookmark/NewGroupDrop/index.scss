@@ -1,0 +1,19 @@
+.new-group-drop {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  font-size: 14px;
+  position: absolute;
+  width: 230px;
+  background: var(--body-bg-color);
+  height: calc(100% - 20px);
+  color: var(--text-secondary);
+  border: 1px dashed var(--text-secondary);
+  margin: 10px;
+
+  &.highlight {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+  }
+}

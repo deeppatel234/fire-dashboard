@@ -181,6 +181,10 @@ a {
   display: flex;
 }
 
+.error-color {
+  color: var(--danger-color);
+}
+
 $grid-columns: 12;
 
 @mixin calc-grid-column($index, $class) {

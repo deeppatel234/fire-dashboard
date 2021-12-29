@@ -33,7 +33,8 @@ const Popover = ({
     ...rest,
   });
 
-  const onClickElement = () => {
+  const onClickElement = (event) => {
+    event.stopPropagation();
     setOpenToUse(!isOpen);
   };
 
@@ -53,7 +54,9 @@ const Popover = ({
         ? ReactDOM.createPortal(
             <div
               ref={setPopperElement}
-              className={`popover-wrapper ${className || ""}`}
+              className={`popover-wrapper ${className || ""} ${
+                placement || ""
+              }`}
               style={styles.popper}
               {...attributes.popper}
             >

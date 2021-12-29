@@ -1,6 +1,8 @@
 import React from "react";
 import { useDroppable } from "@dnd-kit/core";
 
+import "./index.scss";
+
 const NewGroupDrop = () => {
   const { isOver, setNodeRef } = useDroppable({
     id: "NewGroupDroppable",

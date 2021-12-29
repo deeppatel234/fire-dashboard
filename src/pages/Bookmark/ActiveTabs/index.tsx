@@ -8,6 +8,8 @@ import BookmarkContext from "../BookmarkContext";
 import NewGroupModal from "../NewGroupModal";
 import TabCard from "./TabCard";
 
+import "./index.scss";
+
 const ActiveTabs = ({ isSortingContainer }): JSX.Element => {
   const { createGroupAndAddBookmark, dataTabIds, tabData } =
     useContext(BookmarkContext);
