@@ -72,18 +72,39 @@ const Bookmark = (): JSX.Element => {
 
   const updateGroupData = async (newGroupData) => {
     try {
-      const newGroupResponse = await BookmarkGroupModal.bulkPut(newGroupData);
-      setGroups(_keyBy(newGroupResponse, "id"));
+      if (Array.isArray(newGroupData)) {
+        const newGroupResponse = await BookmarkGroupModal.bulkPut(newGroupData);
+        setGroups(_keyBy(newGroupResponse, "id"));
+      } else {
+        const newGroupResponse = await BookmarkGroupModal.update(newGroupData);
+        setGroups((current) => {
+          return {
+            ...current,
+            [newGroupResponse.id]: newGroupResponse,
+          };
+        });
+      }
     } catch (err) {}
   };
 
   const updateBookmarkData = async (newBookmark) => {
     try {
-      const newBookmarkResponse = await BookmarkModal.bulkPut(newBookmark);
-      setBookmarks((bookmarks) => ({
-        ...bookmarks,
-        ..._keyBy(newBookmarkResponse, "id"),
-      }));
+      if (Array.isArray(newBookmark)) {
+        const newBookmarkResponse = await BookmarkModal.bulkPut(newBookmark);
+        setBookmarks((bookmarks) => ({
+          ...bookmarks,
+          ..._keyBy(newBookmarkResponse, "id"),
+        }));
+      } else {
+        const newBookmarkResponse = await BookmarkModal.update(newBookmark);
+
+        setBookmarks((current) => {
+          return {
+            ...current,
+            [newBookmarkResponse.id]: newBookmarkResponse,
+          };
+        });
+      }
     } catch (err) {}
   };
 
@@ -197,6 +218,8 @@ const Bookmark = (): JSX.Element => {
         setDataTabIds,
         setData,
         updateData,
+        updateGroupData,
+        updateBookmarkData,
         setGroups,
         setBookmarks,
         createNewGroup,

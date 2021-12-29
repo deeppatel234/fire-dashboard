@@ -13,6 +13,8 @@ import {
 } from "@dnd-kit/core";
 import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 
+import Button from "components/Button";
+
 import ActiveTabs from "../ActiveTabs";
 import BookmarkCards from "../BookmarkCards";
 import Collections from "../Collections";
@@ -47,7 +49,10 @@ const BookmarkView = (): JSX.Element => {
     createGroupAndAddBookmark,
     tabData,
     resetData,
+    groups,
+    updateGroupData,
   } = useContext(BookmarkContext);
+
   const sensors = useSensors(
     useSensor(MouseSensor, {
       activationConstraint: {
@@ -304,6 +309,40 @@ const BookmarkView = (): JSX.Element => {
     return confirmed === false;
   };
 
+  const onClickExpandAll = () => {
+    const groupsToUpdate = [];
+
+    Object.values(groups).forEach((group) => {
+      if (group.collapse) {
+        groupsToUpdate.push({
+          ...group,
+          collapse: false,
+        });
+      }
+    });
+
+    if (groupsToUpdate.length) {
+      updateGroupData(groupsToUpdate);
+    }
+  };
+
+  const onClickCollapseAll = () => {
+    const groupsToUpdate = [];
+
+    Object.values(groups).forEach((group) => {
+      if (!group.collapse) {
+        groupsToUpdate.push({
+          ...group,
+          collapse: true,
+        });
+      }
+    });
+
+    if (groupsToUpdate.length) {
+      updateGroupData(groupsToUpdate);
+    }
+  };
+
   const renderActiveDrag = () => {
     const Component = DragElements[activeDrag.type];
 
@@ -328,6 +367,20 @@ const BookmarkView = (): JSX.Element => {
         <Collections />
         <div className="bookmark-body-wrapper">
           <div className="bookmark-header">
+            <Button
+              link
+              iconLeft="ri-arrow-down-s-line"
+              onClick={onClickExpandAll}
+            >
+              Expand All
+            </Button>
+            <Button
+              link
+              iconLeft="ri-arrow-up-s-line"
+              onClick={onClickCollapseAll}
+            >
+              Collapse All
+            </Button>
             <ImportBookmark />
           </div>
           <BookmarkCards isSortingContainer={isSortingContainer} />

@@ -32,6 +32,20 @@
       }
     }
   }
+
+  .group-name {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+
+    .icon-collapse {
+      font-size: 1.4rem;
+      line-height: 0;
+      padding: 10px;
+      color: var(--primary-color);
+    }
+  }
+
   .group-card-content {
     display: flex;
     flex-wrap: wrap;

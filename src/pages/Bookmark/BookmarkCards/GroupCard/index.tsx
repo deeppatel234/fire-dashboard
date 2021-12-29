@@ -15,7 +15,7 @@ const GroupCard = ({
   isDragComponent,
   isSortingContainer,
 }): JSX.Element => {
-  const { groups, data, bookmarks } = useContext(BookmarkContext);
+  const { groups, data, bookmarks, updateGroupData } = useContext(BookmarkContext);
   const { removeAllTabs, createTabs } = useChromeTabs();
   const [isOpenOptionPopper, setIsOpenOptionPopper] = useState(false);
 
@@ -40,6 +40,13 @@ const GroupCard = ({
   const onClickCloseOpenTabs = async () => {
     await removeAllTabs();
     onClickOpenTabs();
+  };
+
+  const toggleCollapse = () => {
+    updateGroupData({
+      ...groupData,
+      collapse: !groupData.collapse,
+    });
   };
 
   const renderData = () => {
@@ -98,7 +105,16 @@ const GroupCard = ({
           <i className="ri-more-2-fill hover first" />
           <i className="ri-more-2-fill hover" />
         </div>
-        {groupData.name}
+        <div className="group-name" onClick={toggleCollapse}>
+          {groupData.name}
+          <i
+            className={`icon-collapse ${
+              groupData?.collapse
+                ? "ri-arrow-up-s-line"
+                : "ri-arrow-down-s-line"
+            }`}
+          />
+        </div>
         <div className={`options-block ${isOpenOptionPopper ? "show" : ""}`}>
           <Button
             link
@@ -173,12 +189,14 @@ const GroupCard = ({
           </PopoverDropdown>
         </div>
       </div>
-      <div className="group-card-content">
-        {isDragComponent ? renderDragData() : renderData()}
-        {!dataList.length ? (
-          <div className="empty-block">Drag bookmark here</div>
-        ) : null}
-      </div>
+      {!groupData?.collapse ? (
+        <div className="group-card-content">
+          {isDragComponent ? renderDragData() : renderData()}
+          {!dataList.length ? (
+            <div className="empty-block">Drag bookmark here</div>
+          ) : null}
+        </div>
+      ) : null}
     </div>
   );
 };
