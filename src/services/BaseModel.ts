@@ -34,7 +34,7 @@ class BaseModal {
   }
 
   getModalIndexes() {
-    return ["id", "writeAt", ...(this.modalIndexes || [])];
+    return ["id", "writeAt", "isDeleted", ...(this.modalIndexes || [])];
   }
 
   onModalCreate() {}
@@ -60,6 +60,10 @@ class BaseModal {
 
       if (!obj.writeAt) {
         obj.writeAt = epoc;
+      }
+
+      if (typeof obj.isDeleted === "undefined") {
+        obj.isDeleted = 0;
       }
 
       if (obj.syncAt) {
@@ -161,7 +165,7 @@ class BaseModal {
   }
 
   getAll() {
-    return this.db.toArray();
+    return this.db.where("isDeleted").notEqual(1).toArray();
   }
 
   getTime() {
