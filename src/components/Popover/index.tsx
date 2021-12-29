@@ -38,7 +38,8 @@ const Popover = ({
     setOpenToUse(!isOpen);
   };
 
-  const onClickComponent = () => {
+  const onClickComponent = (event) => {
+    event.stopPropagation();
     if (closeOnClick) {
       setOpenToUse(false);
     }
