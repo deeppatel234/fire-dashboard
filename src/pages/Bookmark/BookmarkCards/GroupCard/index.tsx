@@ -8,6 +8,7 @@ import Sortable from "../../../../components/DragAndDrop/Sortable";
 import BookmarkContext from "../../BookmarkContext";
 import BookmarkCard from "../BookmarkCard";
 import NewGroupModal from "../../NewGroupModal";
+import MergeCollectionModal from "../../MergeCollectionModal";
 
 import "./index.scss";
 
@@ -28,6 +29,7 @@ const GroupCard = ({
   const { removeAllTabs, createTabs } = useChromeTabs();
   const [isOpenOptionPopper, setIsOpenOptionPopper] = useState(false);
   const [showUpdateTitleModal, setShowUpdateTitleModal] = useState(false);
+  const [showMergeGroupModal, setShowMergeGroupModal] = useState(false);
 
   const groupData = groups[groupId] || {};
 
@@ -35,6 +37,10 @@ const GroupCard = ({
 
   const toggleUpdateTitleModal = () => {
     setShowUpdateTitleModal(!showUpdateTitleModal);
+  };
+
+  const toggleMergeGroupModal = () => {
+    setShowMergeGroupModal(!showMergeGroupModal);
   };
 
   const onClickOpenTabs = () => {
@@ -124,6 +130,8 @@ const GroupCard = ({
       moveToTop();
     } else if (option.key === "IMPORT_OPEN_TABS") {
       importOpenTabs();
+    } else if (option.key === "MERGE_COLLECTION") {
+      toggleMergeGroupModal();
     }
   };
 
@@ -235,6 +243,15 @@ const GroupCard = ({
                 label: "Move to Top",
               },
               {
+                key: "LINE",
+              },
+              {
+                key: "MERGE_COLLECTION",
+                icon: "ri-folder-transfer-line",
+                label: "Merge Collection",
+                disabled: !dataList.length,
+              },
+              {
                 key: "IMPORT_OPEN_TABS",
                 icon: "ri-folder-add-line",
                 label: "Import Open Tabs",
@@ -275,6 +292,11 @@ const GroupCard = ({
         isOpen={showUpdateTitleModal}
         onConfirm={onClickUpdateGroup}
         onClose={toggleUpdateTitleModal}
+      />
+      <MergeCollectionModal
+        groupToMerge={groupData}
+        isOpen={showMergeGroupModal}
+        onClose={toggleMergeGroupModal}
       />
     </div>
   );

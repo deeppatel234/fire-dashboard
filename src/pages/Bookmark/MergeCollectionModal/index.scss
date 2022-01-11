@@ -1,0 +1,15 @@
+.merge-group-modal {
+  .content {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+
+    .title {
+      margin-bottom: 12px;
+      font-size: 0.9rem;
+    }
+  }
+  .react-responsive-modal-modal {
+    min-width: 400px;
+  }
+}
