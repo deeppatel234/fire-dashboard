@@ -382,6 +382,20 @@ const BookmarkView = (): JSX.Element => {
               Collapse All
             </Button>
             <ImportBookmark />
+            <Button
+              link
+              iconLeft="ri-search-line"
+              // onClick={onClickCollapseAll}
+            >
+              Search
+            </Button>
+            <Button
+              link
+              iconLeft="ri-checkbox-multiple-line"
+              // onClick={onClickCollapseAll}
+            >
+              Bulk Actions
+            </Button>
           </div>
           <BookmarkCards isSortingContainer={isSortingContainer} />
         </div>

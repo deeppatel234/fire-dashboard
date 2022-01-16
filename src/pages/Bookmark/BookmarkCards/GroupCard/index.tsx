@@ -3,6 +3,7 @@ import React, { useContext, useState } from "react";
 import Button from "components/Button";
 import PopoverDropdown from "components/PopoverDropdown";
 import useChromeTabs from "utils/useChromeTabs";
+import { exportFile } from "utils/download";
 
 import Sortable from "../../../../components/DragAndDrop/Sortable";
 import BookmarkContext from "../../BookmarkContext";
@@ -121,6 +122,27 @@ const GroupCard = ({
     updateBookmarkData(bookmarkList);
   };
 
+  const exportCollection = () => {
+    const bookmarkToExport = dataList.map((id) => {
+      const [, , bookmarkId] = id.split("-");
+
+      return bookmarks[bookmarkId];
+    });
+
+    const dataToExport = {
+      bookmark: {
+        bookmarkGroup: [
+          {
+            data: groupData,
+            bookmarkList: bookmarkToExport,
+          },
+        ],
+      },
+    };
+
+    exportFile(dataToExport, `bookmark-group-${Date.now()}.json`);
+  };
+
   const onSelectOption = (option) => {
     if (option.key === "DELETE") {
       deleteGroup();
@@ -132,6 +154,8 @@ const GroupCard = ({
       importOpenTabs();
     } else if (option.key === "MERGE_COLLECTION") {
       toggleMergeGroupModal();
+    } else if (option.key === "EXPORT_COLLECTION") {
+      exportCollection();
     }
   };
 
@@ -256,6 +280,12 @@ const GroupCard = ({
                 icon: "ri-folder-add-line",
                 label: "Import Open Tabs",
                 disabled: !tabIds.length,
+              },
+              {
+                key: "EXPORT_COLLECTION",
+                icon: "ri-download-line",
+                label: "Export Collection",
+                disabled: !dataList.length,
               },
               {
                 key: "LINE",
