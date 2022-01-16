@@ -8,6 +8,7 @@ import {
 import BookmarkContext from "../BookmarkContext";
 import GroupCard from "./GroupCard";
 import Sortable from "../../../components/DragAndDrop/Sortable";
+import { getId } from "../utils";
 
 import "./index.scss";
 
@@ -25,7 +26,7 @@ const BookmarkCards = ({ isSortingContainer }): JSX.Element => {
         strategy={verticalListSortingStrategy}
       >
         {data.groupIds?.map?.((id) => {
-          const [, groupId] = id.split("-");
+          const { groupId } = getId(id);
 
           return (
             <Sortable.Item

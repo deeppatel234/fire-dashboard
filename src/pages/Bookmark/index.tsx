@@ -13,6 +13,7 @@ import BookmarkGroupModal from "../../services/BookmarkGroupModal";
 
 import BookmarkContext from "./BookmarkContext";
 import BookmarkView from "./BookmarkView";
+import { getId } from "./utils";
 
 const sortData = (list) => {
   return _sortBy(list, "position");
@@ -141,8 +142,8 @@ const Bookmark = (): JSX.Element => {
   const updateData = (containerId, newData) => {
     if (containerId === "group") {
       updateGroupData(
-        newData.groupIds.map((i, index) => {
-          const [, groupId] = i.split("-");
+        newData.groupIds.map((id, index) => {
+          const { groupId } = getId(id);
 
           return {
             ...groups[groupId],
@@ -154,12 +155,12 @@ const Bookmark = (): JSX.Element => {
       const oldItems = originalData.items;
       const newItems = newData.items;
       Object.keys(newItems).forEach((key) => {
-        const [, groupId] = key.split("-");
+        const { groupId } = getId(key);
 
         if (!_isEqual(newItems[key], oldItems[key])) {
           updateBookmarkData(
-            newItems[key].map((i, index) => {
-              const [type, tabId, bookmarkId] = i.split("-");
+            newItems[key].map((id, index) => {
+              const { type, groupId: tabId, bookmarkId } = getId(id);
               let dataToSave = bookmarks[bookmarkId];
 
               if (type === "tab") {
@@ -194,7 +195,7 @@ const Bookmark = (): JSX.Element => {
       });
       await updateGroupData(
         [`Group-${groupResponse.id}`, ...data.groupIds].map((id, index) => {
-          const [, groupId] = id.split("-");
+          const { groupId } = getId(id);
 
           return {
             ...(groupId === groupResponse.id ? groupResponse : groups[groupId]),

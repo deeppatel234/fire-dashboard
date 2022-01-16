@@ -9,7 +9,7 @@ import BookmarkContext from "../../BookmarkContext";
 import BookmarkCard from "../BookmarkCard";
 import NewGroupModal from "../../NewGroupModal";
 import MergeCollectionModal from "../../MergeCollectionModal";
-import { exportBookmark } from "../../utils";
+import { exportBookmark, getId } from "../../utils";
 
 import "./index.scss";
 
@@ -46,7 +46,8 @@ const GroupCard = ({
 
   const onClickOpenTabs = () => {
     const tabList = dataList.map((id) => {
-      const [, , bookmarkId] = id.split("-");
+      const { bookmarkId } = getId(id);
+
       const bookmark = bookmarks[bookmarkId];
 
       return {
@@ -79,7 +80,7 @@ const GroupCard = ({
     if (dataList?.length) {
       updateBookmarkData(
         dataList.map((id) => {
-          const [, , bookmarkId] = id.split("-");
+          const { bookmarkId } = getId(id);
           const bookmark = bookmarks[bookmarkId];
 
           return { ...bookmark, isDeleted: 1 };
@@ -93,7 +94,7 @@ const GroupCard = ({
     let counter = 1;
 
     data.groupIds.forEach((id) => {
-      const [, groupId] = id.split("-");
+      const { groupId } = getId(id);
 
       if (groupId === groupData.id) {
         newPosData.unshift({
@@ -124,7 +125,7 @@ const GroupCard = ({
 
   const exportCollection = () => {
     const bookmarkToExport = dataList.map((id) => {
-      const [, , bookmarkId] = id.split("-");
+      const { bookmarkId } = getId(id);
 
       return bookmarks[bookmarkId];
     });
@@ -159,7 +160,7 @@ const GroupCard = ({
     return (
       <Sortable id={`Bookmarks-${groupId}`} dataList={dataList}>
         {dataList.map?.((id) => {
-          const [type, groupId, bookmarkId] = id.split("-");
+          const { type, groupId, bookmarkId } = getId(id);
 
           return (
             <Sortable.Item
@@ -190,7 +191,7 @@ const GroupCard = ({
 
   const renderDragData = () => {
     return data.items[`Group-${groupId}`]?.map?.((id) => {
-      const [, groupId, bookmarkId] = id.split("-");
+      const { groupId, bookmarkId } = getId(id);
 
       return (
         <BookmarkCard

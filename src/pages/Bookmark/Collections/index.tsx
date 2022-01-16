@@ -23,6 +23,7 @@ import CollectionCard from "./CollectionCard";
 import BookmarkContext from "../BookmarkContext";
 import Sortable from "../../../components/DragAndDrop/Sortable";
 import NewGroupModal from "../NewGroupModal";
+import { getId } from "../utils";
 
 import "./index.scss";
 
@@ -102,7 +103,7 @@ const Collections = (): JSX.Element => {
             strategy={verticalListSortingStrategy}
           >
             {data?.groupIds?.map?.((id) => {
-              const [, groupId] = id.split("-");
+              const { groupId } = getId(id);
 
               return (
                 <Sortable.Item
