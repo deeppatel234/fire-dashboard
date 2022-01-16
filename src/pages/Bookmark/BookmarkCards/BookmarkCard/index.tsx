@@ -1,8 +1,10 @@
 import React, { useContext, useState } from "react";
 
 import PopoverDropdown from "components/PopoverDropdown";
+import useChromeTabs from "utils/useChromeTabs";
 
 import BookmarkContext from "../../BookmarkContext";
+import BookmarkEditModal from "../../BookmarkEditModal";
 
 import "./index.scss";
 
@@ -12,6 +14,7 @@ const BookmarkCard = ({
   bookmarkId,
   isDragComponent,
 }): JSX.Element => {
+  const { createTabs } = useChromeTabs({ listnerTabs: false });
   const {
     bookmarks,
     tabData,
@@ -21,10 +24,16 @@ const BookmarkCard = ({
     setBulkActionIds,
   } = useContext(BookmarkContext);
   const [isOpenOptionPopper, setIsOpenOptionPopper] = useState(false);
+  const [isOpenEditModal, setIsOpenEditModal] = useState(false);
+
   const isBulkSelected = bulkActionIds.includes(bookmarkId);
 
   const bookmark =
     type === "tab" ? tabData[tabId] : bookmarks[bookmarkId] || {};
+
+  const toggleEditModal = () => {
+    setIsOpenEditModal(!isOpenEditModal);
+  };
 
   const onClickBookmark = () => {
     if (enableBulkAction) {
@@ -34,7 +43,7 @@ const BookmarkCard = ({
         setBulkActionIds((ids) => [...ids, bookmarkId]);
       }
     } else {
-      window.open(bookmark.url, "_self");
+      createTabs([{ url: bookmark.url, pinned: bookmark.pinned }]);
     }
   };
 
@@ -44,51 +53,66 @@ const BookmarkCard = ({
         ...bookmark,
         isDeleted: 1,
       });
+    } else if (option.key === "EDIT") {
+      toggleEditModal();
     }
   };
 
+  const onEdit = (newData) => {
+    updateBookmarkData(newData);
+    setIsOpenEditModal(false);
+  };
+
   return (
-    <div
-      className={`bookmark-card ${isOpenOptionPopper ? "open" : ""} ${
-        enableBulkAction ? "bulk-action" : ""
-      } ${isBulkSelected ? "bulk-selected" : ""}`}
-      onClick={onClickBookmark}
-    >
-      {bookmark.favIconUrl ? (
-        <img className="fav-img" src={bookmark.favIconUrl} />
-      ) : (
-        <i className="ri-window-line fav-img fav-img-icon" />
-      )}
-      <span className="bookmark-title">{bookmark.title}</span>
-      {!isDragComponent && !enableBulkAction ? (
-        <PopoverDropdown
-          placement="bottom-end"
-          isOpen={isOpenOptionPopper}
-          setIsOpen={setIsOpenOptionPopper}
-          onSelect={onSelectOption}
-          options={[
-            {
-              key: "EDIT_TITLE",
-              icon: "ri-pencil-line",
-              label: "Edit",
-            },
-            {
-              key: "LINE",
-            },
-            {
-              key: "DELETE",
-              icon: "ri-delete-bin-7-line",
-              label: "Delete",
-              className: "error-color",
-            },
-          ]}
-        >
-          <div className="option-btn">
-            <i className="icon ri-arrow-down-s-line" />
-          </div>
-        </PopoverDropdown>
-      ) : null}
-    </div>
+    <>
+      <div
+        className={`bookmark-card ${isOpenOptionPopper ? "open" : ""} ${
+          enableBulkAction ? "bulk-action" : ""
+        } ${isBulkSelected ? "bulk-selected" : ""}`}
+        onClick={onClickBookmark}
+      >
+        {bookmark.favIconUrl ? (
+          <img className="fav-img" src={bookmark.favIconUrl} />
+        ) : (
+          <i className="ri-window-line fav-img fav-img-icon" />
+        )}
+        <span className="bookmark-title">{bookmark.title}</span>
+        {!isDragComponent && !enableBulkAction ? (
+          <PopoverDropdown
+            placement="bottom-end"
+            isOpen={isOpenOptionPopper}
+            setIsOpen={setIsOpenOptionPopper}
+            onSelect={onSelectOption}
+            options={[
+              {
+                key: "EDIT",
+                icon: "ri-pencil-line",
+                label: "Edit",
+              },
+              {
+                key: "LINE",
+              },
+              {
+                key: "DELETE",
+                icon: "ri-delete-bin-7-line",
+                label: "Delete",
+                className: "error-color",
+              },
+            ]}
+          >
+            <div className="option-btn">
+              <i className="icon ri-arrow-down-s-line" />
+            </div>
+          </PopoverDropdown>
+        ) : null}
+      </div>
+      <BookmarkEditModal
+        isOpen={isOpenEditModal}
+        dataToUpdate={bookmark}
+        onClose={toggleEditModal}
+        onConfirm={onEdit}
+      />
+    </>
   );
 };
 

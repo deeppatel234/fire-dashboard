@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import _keyBy from "lodash/keyBy";
 
-const useChromeTabs = ({ ignoreUrls } = {}) => {
+const useChromeTabs = ({ ignoreUrls, listnerTabs = true } = {}) => {
   const [tabs, setTabs] = useState([]);
 
   const tabIds = useMemo(() => {
@@ -39,8 +39,10 @@ const useChromeTabs = ({ ignoreUrls } = {}) => {
   };
 
   useEffect(() => {
-    addListeners();
-  }, []);
+    if (listnerTabs) {
+      addListeners();
+    }
+  }, [listnerTabs]);
 
   const removeAllTabs = () => {
     return new Promise((resolve) => {

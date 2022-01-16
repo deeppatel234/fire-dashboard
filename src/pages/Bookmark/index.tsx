@@ -243,6 +243,7 @@ const Bookmark = (): JSX.Element => {
         favIconUrl: tab.favIconUrl,
         url: tab.url,
         title: tab.title,
+        pinned: tab.pinned,
       };
     });
   };
