@@ -4,12 +4,21 @@
   align-items: center;
   width: 200px;
   background: var(--gray-700);
+  border: 1px solid var(--gray-700);
   font-size: 0.9rem;
   padding: 10px;
   margin: 7.5px 15px 7.5px 0px;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+
+  &.bulk-action {
+    border: 1px dashed var(--primary-color);
+
+    &.bulk-selected {
+      background-color: var(--primary-color);
+    }
+  }
 
   &:hover, &.open {
     background: var(--gray-600);

@@ -1,0 +1,23 @@
+.bulk-action-panel-wrapper {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+
+  .selected-text {
+    border-right: 1px solid var(--border-primary);
+    margin-right: 8px;
+    padding-right: 20px;
+  }
+
+  .bulk-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex: 1;
+
+    .left, .right {
+      display: flex;
+      align-items: center;
+    }
+  }
+}

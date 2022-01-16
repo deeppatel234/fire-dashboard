@@ -26,6 +26,7 @@ import BookmarkContext from "../BookmarkContext";
 import NewGroupDrop from "../NewGroupDrop";
 import NewGroupModal from "../NewGroupModal";
 import ImportBookmark from "../ImportBookmark";
+import BulkActionPanel from "../BulkActionPanel";
 
 import "./index.scss";
 
@@ -51,6 +52,8 @@ const BookmarkView = (): JSX.Element => {
     resetData,
     groups,
     updateGroupData,
+    enableBulkAction,
+    setEnableBulkAction,
   } = useContext(BookmarkContext);
 
   const sensors = useSensors(
@@ -343,6 +346,10 @@ const BookmarkView = (): JSX.Element => {
     }
   };
 
+  const toggleBulkAction = () => {
+    setEnableBulkAction(!enableBulkAction);
+  };
+
   const renderActiveDrag = () => {
     const Component = DragElements[activeDrag.type];
 
@@ -366,37 +373,41 @@ const BookmarkView = (): JSX.Element => {
         {showNewGroupDrop ? <NewGroupDrop /> : null}
         <Collections />
         <div className="bookmark-body-wrapper">
-          <div className="bookmark-header">
-            <Button
-              link
-              iconLeft="ri-arrow-down-s-line"
-              onClick={onClickExpandAll}
-            >
-              Expand All
-            </Button>
-            <Button
-              link
-              iconLeft="ri-arrow-up-s-line"
-              onClick={onClickCollapseAll}
-            >
-              Collapse All
-            </Button>
-            <ImportBookmark />
-            <Button
-              link
-              iconLeft="ri-search-line"
-              // onClick={onClickCollapseAll}
-            >
-              Search
-            </Button>
-            <Button
-              link
-              iconLeft="ri-checkbox-multiple-line"
-              // onClick={onClickCollapseAll}
-            >
-              Bulk Actions
-            </Button>
-          </div>
+          {enableBulkAction ? (
+            <BulkActionPanel />
+          ) : (
+            <div className="bookmark-header">
+              <Button
+                link
+                iconLeft="ri-arrow-down-s-line"
+                onClick={onClickExpandAll}
+              >
+                Expand All
+              </Button>
+              <Button
+                link
+                iconLeft="ri-arrow-up-s-line"
+                onClick={onClickCollapseAll}
+              >
+                Collapse All
+              </Button>
+              <ImportBookmark />
+              <Button
+                link
+                iconLeft="ri-search-line"
+                // onClick={onClickCollapseAll}
+              >
+                Search
+              </Button>
+              <Button
+                link
+                iconLeft="ri-checkbox-multiple-line"
+                onClick={toggleBulkAction}
+              >
+                Bulk Actions
+              </Button>
+            </div>
+          )}
           <BookmarkCards isSortingContainer={isSortingContainer} />
         </div>
         <ActiveTabs isSortingContainer={isSortingContainer} />

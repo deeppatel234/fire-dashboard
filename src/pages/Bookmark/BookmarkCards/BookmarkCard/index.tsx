@@ -12,14 +12,30 @@ const BookmarkCard = ({
   bookmarkId,
   isDragComponent,
 }): JSX.Element => {
-  const { bookmarks, tabData, updateBookmarkData } = useContext(BookmarkContext);
+  const {
+    bookmarks,
+    tabData,
+    updateBookmarkData,
+    enableBulkAction,
+    bulkActionIds,
+    setBulkActionIds,
+  } = useContext(BookmarkContext);
   const [isOpenOptionPopper, setIsOpenOptionPopper] = useState(false);
+  const isBulkSelected = bulkActionIds.includes(bookmarkId);
 
   const bookmark =
     type === "tab" ? tabData[tabId] : bookmarks[bookmarkId] || {};
 
   const onClickBookmark = () => {
-    window.open(bookmark.url, "_self");
+    if (enableBulkAction) {
+      if (isBulkSelected) {
+        setBulkActionIds(bulkActionIds.filter((id) => id !== bookmarkId));
+      } else {
+        setBulkActionIds((ids) => [...ids, bookmarkId]);
+      }
+    } else {
+      window.open(bookmark.url, "_self");
+    }
   };
 
   const onSelectOption = (option) => {
@@ -33,7 +49,9 @@ const BookmarkCard = ({
 
   return (
     <div
-      className={`bookmark-card ${isOpenOptionPopper ? "open" : ""}`}
+      className={`bookmark-card ${isOpenOptionPopper ? "open" : ""} ${
+        enableBulkAction ? "bulk-action" : ""
+      } ${isBulkSelected ? "bulk-selected" : ""}`}
       onClick={onClickBookmark}
     >
       {bookmark.favIconUrl ? (
@@ -42,7 +60,7 @@ const BookmarkCard = ({
         <i className="ri-window-line fav-img fav-img-icon" />
       )}
       <span className="bookmark-title">{bookmark.title}</span>
-      {!isDragComponent ? (
+      {!isDragComponent && !enableBulkAction ? (
         <PopoverDropdown
           placement="bottom-end"
           isOpen={isOpenOptionPopper}

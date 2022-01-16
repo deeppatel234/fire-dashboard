@@ -3,13 +3,13 @@ import React, { useContext, useState } from "react";
 import Button from "components/Button";
 import PopoverDropdown from "components/PopoverDropdown";
 import useChromeTabs from "utils/useChromeTabs";
-import { exportFile } from "utils/download";
 
 import Sortable from "../../../../components/DragAndDrop/Sortable";
 import BookmarkContext from "../../BookmarkContext";
 import BookmarkCard from "../BookmarkCard";
 import NewGroupModal from "../../NewGroupModal";
 import MergeCollectionModal from "../../MergeCollectionModal";
+import { exportBookmark } from "../../utils";
 
 import "./index.scss";
 
@@ -129,18 +129,7 @@ const GroupCard = ({
       return bookmarks[bookmarkId];
     });
 
-    const dataToExport = {
-      bookmark: {
-        bookmarkGroup: [
-          {
-            data: groupData,
-            bookmarkList: bookmarkToExport,
-          },
-        ],
-      },
-    };
-
-    exportFile(dataToExport, `bookmark-group-${Date.now()}.json`);
+    exportBookmark(bookmarkToExport);
   };
 
   const onSelectOption = (option) => {
@@ -327,6 +316,7 @@ const GroupCard = ({
         groupToMerge={groupData}
         isOpen={showMergeGroupModal}
         onClose={toggleMergeGroupModal}
+        onDone={toggleMergeGroupModal}
       />
     </div>
   );

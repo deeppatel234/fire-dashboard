@@ -27,6 +27,8 @@ const Bookmark = (): JSX.Element => {
   const [bookmarks, setBookmarks] = useState({});
   const [data, setData] = useState({});
   const [originalData, setOriginalData] = useState({});
+  const [enableBulkAction, setEnableBulkAction] = useState(true);
+  const [bulkActionIds, setBulkActionIds] = useState([]);
 
   const loadData = async () => {
     try {
@@ -112,7 +114,7 @@ const Bookmark = (): JSX.Element => {
 
           Object.values(dataToReturn).forEach((data) => {
             if (data.isDeleted) {
-              delete data[data.id];
+              delete dataToReturn[data.id];
             }
           });
 
@@ -253,6 +255,10 @@ const Bookmark = (): JSX.Element => {
         data,
         tabIds,
         tabData,
+        enableBulkAction,
+        bulkActionIds,
+        setEnableBulkAction,
+        setBulkActionIds,
         setData,
         updateData,
         updateGroupData,
