@@ -27,7 +27,7 @@ const Bookmark = (): JSX.Element => {
   const [bookmarks, setBookmarks] = useState({});
   const [data, setData] = useState({});
   const [originalData, setOriginalData] = useState({});
-  const [enableBulkAction, setEnableBulkAction] = useState(true);
+  const [enableBulkAction, setEnableBulkAction] = useState(false);
   const [bulkActionIds, setBulkActionIds] = useState([]);
 
   const loadData = async () => {
