@@ -127,7 +127,12 @@ const GroupCard = ({
     const bookmarkToExport = dataList.map((id) => {
       const { bookmarkId } = getId(id);
 
-      return bookmarks[bookmarkId];
+      return {
+        title: bookmarks[bookmarkId].title,
+        url: bookmarks[bookmarkId].url,
+        pinned: bookmarks[bookmarkId].pinned,
+        favIconUrl: bookmarks[bookmarkId].favIconUrl,
+      };
     });
 
     exportBookmark(bookmarkToExport);

@@ -41,10 +41,16 @@ const BulkActionPanel = () => {
 
   const exportData = () => {
     const bookmarkToExport = bulkActionIds.map((id) => {
-      return bookmarks[id];
+      return {
+        title: bookmarks[id].title,
+        url: bookmarks[id].url,
+        pinned: bookmarks[id].pinned,
+        favIconUrl: bookmarks[id].favIconUrl,
+      };
     });
 
     exportBookmark(bookmarkToExport);
+    onClose();
   };
 
   const deleteBookmarks = () => {
@@ -56,6 +62,7 @@ const BulkActionPanel = () => {
     });
 
     updateBookmarkData(bookmarkToDelete);
+    onClose();
   };
 
   const onClickCreate = (newGroupData) => {

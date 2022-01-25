@@ -14,10 +14,10 @@ const BookmarkTree = ({ onClose }) => {
   const [tree, setTree] = useState([]);
   const [checked, setChecked] = useState([]);
   const [expanded, setExpanded] = useState([]);
-  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [showCreateModal, setShowCreateModal] = useState(false);
 
-  const toggleConfirmation = () => {
-    setShowConfirmation(!showConfirmation);
+  const toggleCreateGroup = () => {
+    setShowCreateModal(!showCreateModal);
   };
 
   const prepareData = (data) => {
@@ -59,7 +59,7 @@ const BookmarkTree = ({ onClose }) => {
   }, []);
 
   const onSubmit = (data) => {
-    toggleConfirmation();
+    toggleCreateGroup();
     chrome.bookmarks.get(checked, async (bookmarks) => {
       console.log(data, bookmarks);
       try {
@@ -103,15 +103,15 @@ const BookmarkTree = ({ onClose }) => {
         />
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={toggleConfirmation}>Import</Button>
+        <Button onClick={toggleCreateGroup}>Import</Button>
         <Button type="default" onClick={onClose}>
           Cancel
         </Button>
       </Modal.Footer>
       <NewGroupModal
-        isOpen={showConfirmation}
+        isOpen={showCreateModal}
         onConfirm={onSubmit}
-        onClose={toggleConfirmation}
+        onClose={toggleCreateGroup}
       />
     </>
   );

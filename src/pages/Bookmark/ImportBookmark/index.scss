@@ -46,3 +46,14 @@
     }
   }
 }
+
+.import-from-file-wrapper {
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-primary);
+    padding-bottom: 14px;
+    margin-bottom: 8px;
+  }
+}

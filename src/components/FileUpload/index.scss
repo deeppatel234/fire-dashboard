@@ -1,0 +1,31 @@
+.file-upload-block-wrapper {
+  .file-upload-block {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+    width: 500px;
+    border: 1px dashed var(--gray-100);
+    border-radius: 4px;
+    position: relative;
+    background: var(--gray-700);
+
+    &:hover {
+      border-color: var(--primary-color);
+    }
+
+    input {
+      position: absolute;
+      top: 0;
+      height: 100%;
+      width: 100%;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .title {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+  }
+}
