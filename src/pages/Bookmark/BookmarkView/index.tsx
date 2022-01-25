@@ -27,6 +27,7 @@ import NewGroupDrop from "../NewGroupDrop";
 import NewGroupModal from "../NewGroupModal";
 import ImportBookmark from "../ImportBookmark";
 import BulkActionPanel from "../BulkActionPanel";
+import SearchBookmark from "../SearchBookmark";
 
 import "./index.scss";
 
@@ -392,13 +393,7 @@ const BookmarkView = (): JSX.Element => {
                 Collapse All
               </Button>
               <ImportBookmark />
-              <Button
-                link
-                iconLeft="ri-search-line"
-                // onClick={onClickCollapseAll}
-              >
-                Search
-              </Button>
+              <SearchBookmark />
               <Button
                 link
                 iconLeft="ri-checkbox-multiple-line"
