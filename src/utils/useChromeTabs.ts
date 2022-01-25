@@ -62,7 +62,13 @@ const useChromeTabs = ({ ignoreUrls, listnerTabs = true } = {}) => {
     });
   };
 
-  return { tabs, tabIds, tabData, removeAllTabs, createTabs };
+  const updateCurrentTab = (dataToUpdate) => {
+    chrome.tabs.getCurrent((tabData) => {
+      chrome.tabs.update(tabData.id, dataToUpdate);
+    });
+  };
+
+  return { tabs, tabIds, tabData, removeAllTabs, createTabs, updateCurrentTab };
 };
 
 export default useChromeTabs;

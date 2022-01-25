@@ -32,6 +32,9 @@ const defaultSettings = {
         unsplashRendom: true,
       },
     },
+    bookmark: {
+      openInNewTab: true,
+    },
   },
 };
 
@@ -152,10 +155,18 @@ const WorkspaceModal = ({
               ) : null}
             </div>
           </div>
-          {/* <div className="setting-block">
+          <div className="setting-block">
             <div className="title">Bookmark</div>
-            <div className="setting-content">Bookmark settings</div>
-          </div> */}
+            <div className="setting-content">
+              <FormItem
+                formKey="settings.bookmark.openInNewTab"
+                label="Open url in new tab"
+                componentType="switch"
+              >
+                <Switch />
+              </FormItem>
+            </div>
+          </div>
         </FormGroup>
       </Modal.Body>
       <Modal.Footer>

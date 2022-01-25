@@ -14,7 +14,7 @@ const BookmarkCard = ({
   bookmarkId,
   isDragComponent,
 }): JSX.Element => {
-  const { createTabs } = useChromeTabs({ listnerTabs: false });
+  const { createTabs, updateCurrentTab } = useChromeTabs({ listnerTabs: false });
   const {
     bookmarks,
     tabData,
@@ -22,6 +22,7 @@ const BookmarkCard = ({
     enableBulkAction,
     bulkActionIds,
     setBulkActionIds,
+    workspace,
   } = useContext(BookmarkContext);
   const [isOpenOptionPopper, setIsOpenOptionPopper] = useState(false);
   const [isOpenEditModal, setIsOpenEditModal] = useState(false);
@@ -43,7 +44,11 @@ const BookmarkCard = ({
         setBulkActionIds((ids) => [...ids, bookmarkId]);
       }
     } else {
-      createTabs([{ url: bookmark.url, pinned: bookmark.pinned }]);
+      if (workspace?.settings?.bookmark?.openInNewTab) {
+        createTabs([{ url: bookmark.url, pinned: bookmark.pinned }]);
+      } else {
+        updateCurrentTab({ url: bookmark.url, pinned: bookmark.pinned });
+      }
     }
   };
 

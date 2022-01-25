@@ -259,6 +259,7 @@ const Bookmark = (): JSX.Element => {
         tabData,
         enableBulkAction,
         bulkActionIds,
+        workspace,
         setEnableBulkAction,
         setBulkActionIds,
         setData,
