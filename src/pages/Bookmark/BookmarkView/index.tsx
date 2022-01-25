@@ -43,9 +43,9 @@ const DragElements = {
 
 const BookmarkView = (): JSX.Element => {
   const {
-    data,
-    setData,
-    updateData,
+    positions,
+    setPositions,
+    updatePositions,
     bookmarks,
     createGroupAndAddBookmark,
     tabData,
@@ -75,11 +75,11 @@ const BookmarkView = (): JSX.Element => {
   const isSortingContainer = activeDrag ? activeDrag.type === "group" : false;
 
   const findContainer = (id) => {
-    if (id in data.items) {
+    if (id in positions.items) {
       return id;
     }
 
-    return Object.keys(data.items).find((key) => data.items[key].includes(id));
+    return Object.keys(positions.items).find((key) => positions.items[key].includes(id));
   };
 
   const handleDragStart = (dragState) => {
@@ -129,7 +129,7 @@ const BookmarkView = (): JSX.Element => {
       return;
     }
 
-    setData((prev) => {
+    setPositions((prev) => {
       const overItems = prev.items[overContainer];
 
       // Find the indexes for the items
@@ -244,12 +244,12 @@ const BookmarkView = (): JSX.Element => {
         cleanOnEnd();
         return;
       }
-      updateData(type, {
-        ...data,
+      updatePositions(type, {
+        ...positions,
         groupIds: arrayMove(
-          data.groupIds,
-          data.groupIds.indexOf(activeContainer),
-          data.groupIds.indexOf(overContainer),
+          positions.groupIds,
+          positions.groupIds.indexOf(activeContainer),
+          positions.groupIds.indexOf(overContainer),
         ),
       });
     } else if (type === "tab") {
@@ -258,8 +258,8 @@ const BookmarkView = (): JSX.Element => {
         return;
       }
 
-      updateData(type, {
-        ...data,
+      updatePositions(type, {
+        ...positions,
       });
     } else {
       if (
@@ -271,16 +271,16 @@ const BookmarkView = (): JSX.Element => {
         return;
       }
 
-      const activeIndex = data.items[activeContainer].indexOf(activeId);
-      const overIndex = data.items[overContainer].indexOf(overId);
+      const activeIndex = positions.items[activeContainer].indexOf(activeId);
+      const overIndex = positions.items[overContainer].indexOf(overId);
 
       if (activeIndex !== overIndex) {
-        updateData(type, {
-          ...data,
+        updatePositions(type, {
+          ...positions,
           items: {
-            ...data.items,
+            ...positions.items,
             [overContainer]: arrayMove(
-              data.items[overContainer],
+              positions.items[overContainer],
               activeIndex,
               overIndex,
             ),

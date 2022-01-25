@@ -16,16 +16,16 @@ const animateLayoutChanges = (args) =>
   args.isSorting || args.wasDragging ? defaultAnimateLayoutChanges(args) : true;
 
 const BookmarkCards = ({ isSortingContainer }): JSX.Element => {
-  const { data } = useContext(BookmarkContext);
+  const { positions } = useContext(BookmarkContext);
 
   return (
     <div className="bookmark-cards-wrapper">
       <Sortable
         id="Groups"
-        dataList={data.groupIds || []}
+        dataList={positions.groupIds || []}
         strategy={verticalListSortingStrategy}
       >
-        {data.groupIds?.map?.((id) => {
+        {positions.groupIds?.map?.((id) => {
           const { groupId } = getId(id);
 
           return (

@@ -20,7 +20,7 @@ const GroupCard = ({
 }): JSX.Element => {
   const {
     groups,
-    data,
+    positions,
     bookmarks,
     updateGroupData,
     updateBookmarkData,
@@ -34,7 +34,7 @@ const GroupCard = ({
 
   const groupData = groups[groupId] || {};
 
-  const dataList = data.items[`Group-${groupId}`] || [];
+  const dataList = positions.items[`Group-${groupId}`] || [];
 
   const toggleUpdateTitleModal = () => {
     setShowUpdateTitleModal(!showUpdateTitleModal);
@@ -93,7 +93,7 @@ const GroupCard = ({
     const newPosData = [];
     let counter = 1;
 
-    data.groupIds.forEach((id) => {
+    positions.groupIds.forEach((id) => {
       const { groupId } = getId(id);
 
       if (groupId === groupData.id) {
@@ -190,7 +190,7 @@ const GroupCard = ({
   };
 
   const renderDragData = () => {
-    return data.items[`Group-${groupId}`]?.map?.((id) => {
+    return positions.items[`Group-${groupId}`]?.map?.((id) => {
       const { groupId, bookmarkId } = getId(id);
 
       return (

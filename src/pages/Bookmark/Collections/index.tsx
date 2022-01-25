@@ -33,7 +33,7 @@ const dropAnimation: DropAnimation = {
 };
 
 const Collections = (): JSX.Element => {
-  const { createNewGroup, data, updateData } = useContext(BookmarkContext);
+  const { createNewGroup, positions, updatePositions } = useContext(BookmarkContext);
   const [activeDrag, setActiveDrag] = useState(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
 
@@ -65,19 +65,19 @@ const Collections = (): JSX.Element => {
   const handleDragStart = (dragState) => {
     const { active } = dragState;
 
-    setActiveDrag(active?.data?.current?.groupId);
+    setActiveDrag(active?.positions?.current?.groupId);
   };
 
   const handleDragEnd = (event) => {
     const { active, over } = event;
 
     if (active.id !== over.id) {
-      updateData("group", {
-        ...data,
+      updatePositions("group", {
+        ...positions,
         groupIds: arrayMove(
-          data.groupIds,
-          data.groupIds.indexOf(active.id),
-          data.groupIds.indexOf(over.id),
+          positions.groupIds,
+          positions.groupIds.indexOf(active.id),
+          positions.groupIds.indexOf(over.id),
         ),
       });
     }
@@ -99,10 +99,10 @@ const Collections = (): JSX.Element => {
         <div className="group-list">
           <Sortable
             id="Uber-CollectionCards"
-            dataList={data.groupIds || []}
+            dataList={positions.groupIds || []}
             strategy={verticalListSortingStrategy}
           >
-            {data?.groupIds?.map?.((id) => {
+            {positions?.groupIds?.map?.((id) => {
               const { groupId } = getId(id);
 
               return (
