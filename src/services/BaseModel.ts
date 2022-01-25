@@ -82,6 +82,14 @@ class BaseModal {
         modifications.writeAt = epoc;
       }
 
+      if (!modifications.createAt) {
+        modifications.createAt = epoc;
+      }
+
+      if (typeof modifications.isDeleted === "undefined") {
+        modifications.isDeleted = 0;
+      }
+
       return modifications;
     });
   }
@@ -150,6 +158,18 @@ class BaseModal {
 
     if (isUpdated) {
       return this.db.get(data.id);
+    }
+
+    return Promise.reject();
+  }
+
+  async put(data) {
+    const id = await this.db.put({
+      ...data,
+    });
+
+    if (id) {
+      return this.db.get(id);
     }
 
     return Promise.reject();
