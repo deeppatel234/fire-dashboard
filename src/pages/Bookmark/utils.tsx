@@ -17,3 +17,25 @@ export const getId = (id) => {
     bookmarkId,
   };
 };
+
+export const getGroupId = (id) => {
+  const { groupId } = getId(id);
+
+  return groupId;
+};
+
+export const appendGroupId = (id) => {
+  return `Group-${id}`;
+};
+
+export const appendBookmarkId = (groupId) => {
+  return (id) => {
+    return `Bookmark-${groupId}-${id}`;
+  };
+};
+
+export const getBookmarkId = (id) => {
+  const { bookmarkId } = getId(id);
+
+  return bookmarkId;
+};
