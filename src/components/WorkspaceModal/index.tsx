@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 
 import { useFormik, FormikProvider } from "formik";
 
@@ -38,6 +38,21 @@ const defaultSettings = {
   },
 };
 
+const menuItems = [
+  {
+    key: "GENERAL",
+    label: "General",
+  },
+  {
+    key: "HOME",
+    label: "Home",
+  },
+  {
+    key: "BOOKMARK",
+    label: "Bookmark",
+  },
+];
+
 const WorkspaceModal = ({
   dataToEdit,
   onClose,
@@ -46,6 +61,7 @@ const WorkspaceModal = ({
   showHeader,
 }) => {
   const { updateWorkspace, setWorkSpace } = useContext(AppContext);
+  const [activeTab, setActiveTab] = useState("GENERAL");
 
   const onSubmitData = async (dataToSave) => {
     const { imageUrls } = dataToSave.settings.home.bgConfig;
@@ -78,13 +94,98 @@ const WorkspaceModal = ({
     onSubmit: onSubmitData,
   });
 
+  const renderGeneral = () => {
+    return (
+      <FormItem formKey="settings.defaultApp" label="Default App">
+        <RadioGroup name="defaultApp">
+          <Radio value={routes.HOME.key} label={routes.HOME.title} />
+          <Radio value={routes.BOOKMARK.key} label={routes.BOOKMARK.title} />
+        </RadioGroup>
+      </FormItem>
+    );
+  };
+
+  const renderHome = () => {
+    return (
+      <>
+        <FormItem
+          formKey="settings.home.userName"
+          label="Your Name"
+          componentType="input"
+        >
+          <Input />
+        </FormItem>
+        <FormItem formKey="settings.home.clockType" label="Clock Type">
+          <RadioGroup name="clockType">
+            <Radio value="12hr" label="12 Hr" />
+            <Radio value="24hr" label="24 Hr" />
+          </RadioGroup>
+        </FormItem>
+        <FormItem
+          formKey="settings.home.showGreeting"
+          label="Show Greeting"
+          componentType="switch"
+        >
+          <Switch />
+        </FormItem>
+        <FormItem
+          formKey="settings.home.showBgImage"
+          label="Show Image"
+          componentType="switch"
+        >
+          <Switch />
+        </FormItem>
+        {formik.values?.settings?.home?.showBgImage ? (
+          <>
+            <FormItem
+              formKey="settings.home.bgConfig.unsplashRendom"
+              label="Rendom Image from Unsplash"
+              componentType="switch"
+            >
+              <Switch />
+            </FormItem>
+            <FormikProvider value={formik}>
+              <MultiImage
+                formKey="settings.home.bgConfig.imageUrls"
+                value={formik.values.settings.home.bgConfig.imageUrls}
+                setValue={formik.setFieldValue}
+              />
+            </FormikProvider>
+          </>
+        ) : null}
+      </>
+    );
+  };
+
+  const renderBookmark = () => {
+    return (
+      <FormItem
+        formKey="settings.bookmark.openInNewTab"
+        label="Open url in new tab"
+        componentType="switch"
+      >
+        <Switch />
+      </FormItem>
+    );
+  };
+
+  const rendereds = {
+    GENERAL: renderGeneral,
+    HOME: renderHome,
+    BOOKMARK: renderBookmark,
+  };
+
   return (
     <>
       {showHeader ? (
         <Modal.Header>{dataToEdit ? "Settings" : "Add Workspace"}</Modal.Header>
       ) : null}
       <Modal.Body className="workspace-modal-wrapper">
-        <FormGroup values={formik.values} setValue={formik.setFieldValue}>
+        <FormGroup
+          values={formik.values}
+          setValue={formik.setFieldValue}
+          labelWidth={3}
+        >
           <div className="workspace-basic">
             <IconSelector
               selectedIcon={formik.values.icon}
@@ -96,76 +197,21 @@ const WorkspaceModal = ({
               onChangeValue={(val) => formik.setFieldValue("name", val)}
             />
           </div>
-          <FormItem formKey="settings.defaultApp" label="Default App">
-            <RadioGroup name="defaultApp">
-              <Radio value={routes.HOME.key} label={routes.HOME.title} />
-              <Radio
-                value={routes.BOOKMARK.key}
-                label={routes.BOOKMARK.title}
-              />
-            </RadioGroup>
-          </FormItem>
-          <div className="setting-block">
-            <div className="title">Home</div>
-            <div className="setting-content">
-              <FormItem
-                formKey="settings.home.userName"
-                label="Your Name"
-                componentType="input"
-              >
-                <Input />
-              </FormItem>
-              <FormItem formKey="settings.home.clockType" label="Clock Type">
-                <RadioGroup name="clockType">
-                  <Radio value="12hr" label="12 Hr" />
-                  <Radio value="24hr" label="24 Hr" />
-                </RadioGroup>
-              </FormItem>
-              <FormItem
-                formKey="settings.home.showGreeting"
-                label="Show Greeting"
-                componentType="switch"
-              >
-                <Switch />
-              </FormItem>
-              <FormItem
-                formKey="settings.home.showBgImage"
-                label="Show Image"
-                componentType="switch"
-              >
-                <Switch />
-              </FormItem>
-              {formik.values?.settings?.home?.showBgImage ? (
-                <>
-                  <FormItem
-                    formKey="settings.home.bgConfig.unsplashRendom"
-                    label="Rendom Image from Unsplash"
-                    componentType="switch"
+          <div className="setting-body-wrapper">
+            <div className="setting-sidebar">
+              {menuItems.map((item) => {
+                return (
+                  <div
+                    key={item.key}
+                    className={`item ${item.key === activeTab ? "active" : ""}`}
+                    onClick={() => setActiveTab(item.key)}
                   >
-                    <Switch />
-                  </FormItem>
-                  <FormikProvider value={formik}>
-                    <MultiImage
-                      formKey="settings.home.bgConfig.imageUrls"
-                      value={formik.values.settings.home.bgConfig.imageUrls}
-                      setValue={formik.setFieldValue}
-                    />
-                  </FormikProvider>
-                </>
-              ) : null}
+                    {item.label}
+                  </div>
+                );
+              })}
             </div>
-          </div>
-          <div className="setting-block">
-            <div className="title">Bookmark</div>
-            <div className="setting-content">
-              <FormItem
-                formKey="settings.bookmark.openInNewTab"
-                label="Open url in new tab"
-                componentType="switch"
-              >
-                <Switch />
-              </FormItem>
-            </div>
+            <div className="setting-body">{rendereds[activeTab]()}</div>
           </div>
         </FormGroup>
       </Modal.Body>
