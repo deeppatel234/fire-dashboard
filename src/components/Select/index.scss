@@ -16,7 +16,7 @@
     }
 
     &:focus {
-      box-shadow: var(--state-focus-shadow);
+      box-shadow: var(--primary-color-focus-shadow);
     }
 
     &:disabled {

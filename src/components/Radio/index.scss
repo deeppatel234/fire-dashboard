@@ -19,7 +19,7 @@
   }
 
   [type="radio"]:focus ~ .radio-inner::before {
-    box-shadow: var(--state-focus-shadow);
+    box-shadow: var(--primary-color-focus-shadow);
   }
   .radio-checker {
     padding-top: 10px;
