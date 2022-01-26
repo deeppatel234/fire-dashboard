@@ -41,6 +41,15 @@
       }
     }
 
+    .select__multi-value {
+      background: var(--gray-600);
+
+      .select__multi-value__label {
+        color: var(--white-color);
+        font-size: 0.8rem;
+      }
+    }
+
     .select__indicator-separator {
       display: none;
     }
