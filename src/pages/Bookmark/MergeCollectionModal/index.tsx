@@ -41,12 +41,12 @@ const MergeCollectionModal = ({
     }
 
     const bookmarkToMoveIn = Object.values(bookmarks).filter(
-      (b) => b.groupId === selected.value,
+      (b) => b.groupId === selected,
     );
 
     const bookmarkList = bookmarkToMove.map((b, index) => ({
       ...b,
-      groupId: selected.value,
+      groupId: selected,
       position: bookmarkToMoveIn.length + index,
     }));
 

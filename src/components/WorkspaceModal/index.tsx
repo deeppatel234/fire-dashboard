@@ -7,6 +7,7 @@ import Button from "components/Button";
 import Input from "components/Input";
 import Switch from "components/Switch";
 import Radio from "components/Radio";
+import Select from "components/Select";
 import RadioGroup from "components/RadioGroup";
 import FormGroup from "components/FormGroup";
 import FormItem from "components/FormItem";
@@ -28,11 +29,13 @@ const defaultSettings = {
       color: "color-1",
     },
     home: {
+      userName: "",
       clockType: "12hr",
       showGreeting: true,
-      showBgImage: true,
-      bgConfig: {
-        unsplashRendom: true,
+      imageType: "DEFAULT",
+      imageConfig: {
+        customImageUrls: [],
+        unsplashCategories: ["nature"],
       },
     },
     bookmark: {
@@ -56,6 +59,49 @@ const menuItems = [
   },
 ];
 
+const unsplashCategories = [
+  { label: "3D Renders", value: "3d-renders" },
+  { label: "Textures Patterns", value: "textures-patterns" },
+  { label: "Architecture", value: "architecture" },
+  { label: "Experimental", value: "experimental" },
+  { label: "Nature", value: "nature" },
+  { label: "Business Work", value: "business-work" },
+  { label: "Fashion", value: "fashion" },
+  { label: "Film", value: "film" },
+  { label: "Food Drink", value: "food-drink" },
+  { label: "Health", value: "health" },
+  { label: "People", value: "people" },
+  { label: "Interiors", value: "interiors" },
+  { label: "Street Photography", value: "street-photography" },
+  { label: "Travel", value: "travel" },
+  { label: "Animals", value: "animals" },
+  { label: "Spirituality", value: "spirituality" },
+  { label: "Arts Culture", value: "arts-culture" },
+  { label: "History", value: "history" },
+  { label: "Athletics", value: "athletics" },
+  { label: "Water", value: "water" },
+  { label: "Travel", value: "travel" },
+];
+
+const imageTypes = [
+  {
+    label: "Default",
+    value: "DEFAULT",
+  },
+  {
+    label: "No Image",
+    value: "NO_IMAGE",
+  },
+  {
+    label: "Rendom Image from Unsplash",
+    value: "UNSPLASH",
+  },
+  {
+    label: "Custom Images",
+    value: "CUSTOM",
+  },
+];
+
 const WorkspaceModal = ({
   dataToEdit,
   onClose,
@@ -68,8 +114,9 @@ const WorkspaceModal = ({
   const [activeTab, setActiveTab] = useState("GENERAL");
 
   const onSubmitData = async (dataToSave) => {
-    const { imageUrls } = dataToSave.settings.home.bgConfig;
-    dataToSave.settings.home.bgConfig.imageUrls = imageUrls.filter((i) => !!i);
+    const { customImageUrls } = dataToSave.settings.home.imageConfig;
+    dataToSave.settings.home.imageConfig.customImageUrls =
+      customImageUrls.filter((i) => !!i);
 
     try {
       let response = null;
@@ -166,30 +213,25 @@ const WorkspaceModal = ({
         >
           <Switch />
         </FormItem>
-        <FormItem
-          formKey="settings.home.showBgImage"
-          label="Show Image"
-          componentType="switch"
-        >
-          <Switch />
+        <FormItem formKey="settings.home.imageType" label="Background Image">
+          <Select options={imageTypes} />
         </FormItem>
-        {formik.values?.settings?.home?.showBgImage ? (
-          <>
-            <FormItem
-              formKey="settings.home.bgConfig.unsplashRendom"
-              label="Rendom Image from Unsplash"
-              componentType="switch"
-            >
-              <Switch />
-            </FormItem>
-            <FormikProvider value={formik}>
-              <MultiImage
-                formKey="settings.home.bgConfig.imageUrls"
-                value={formik.values.settings.home.bgConfig.imageUrls}
-                setValue={formik.setFieldValue}
-              />
-            </FormikProvider>
-          </>
+        {formik.values?.settings?.home?.imageType === "CUSTOM" ? (
+          <FormikProvider value={formik}>
+            <MultiImage
+              formKey="settings.home.imageConfig.customImageUrls"
+              value={formik.values.settings.home.imageConfig.customImageUrls}
+              setValue={formik.setFieldValue}
+            />
+          </FormikProvider>
+        ) : null}
+        {formik.values?.settings?.home?.imageType === "UNSPLASH" ? (
+          <FormItem
+            formKey="settings.home.imageConfig.unsplashCategories"
+            label="Image Categories"
+          >
+            <Select isMulti options={unsplashCategories} />
+          </FormItem>
         ) : null}
       </>
     );
