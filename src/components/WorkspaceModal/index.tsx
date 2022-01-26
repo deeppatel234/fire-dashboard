@@ -23,7 +23,10 @@ const defaultSettings = {
   name: "",
   icon: "ri-user-line",
   settings: {
-    defaultApp: routes.HOME.key,
+    general: {
+      defaultApp: routes.HOME.key,
+      color: "color-1",
+    },
     home: {
       clockType: "12hr",
       showGreeting: true,
@@ -96,12 +99,36 @@ const WorkspaceModal = ({
 
   const renderGeneral = () => {
     return (
-      <FormItem formKey="settings.defaultApp" label="Default App">
-        <RadioGroup name="defaultApp">
-          <Radio value={routes.HOME.key} label={routes.HOME.title} />
-          <Radio value={routes.BOOKMARK.key} label={routes.BOOKMARK.title} />
-        </RadioGroup>
-      </FormItem>
+      <>
+        <FormItem formKey="settings.general.defaultApp" label="Default App">
+          <RadioGroup name="defaultApp">
+            <Radio value={routes.HOME.key} label={routes.HOME.title} />
+            <Radio value={routes.BOOKMARK.key} label={routes.BOOKMARK.title} />
+          </RadioGroup>
+        </FormItem>
+        <FormItem formKey="settings.general.color" label="Theme">
+          <div className="theme-picker">
+            {[1, 2, 3, 4, 5, 6, 7].map((index) => (
+              <div
+                key={index}
+                className={`picker-block color-${index}-block ${
+                  formik.values?.settings?.general?.color === `color-${index}`
+                    ? "active"
+                    : ""
+                }`}
+                onClick={() =>
+                  formik.setFieldValue(
+                    "settings.general.color",
+                    `color-${index}`,
+                  )
+                }
+              >
+                <i className="icon ri-check-line" />
+              </div>
+            ))}
+          </div>
+        </FormItem>
+      </>
     );
   };
 
@@ -211,7 +238,18 @@ const WorkspaceModal = ({
                 );
               })}
             </div>
-            <div className="setting-body">{rendereds[activeTab]()}</div>
+            {Object.keys(rendereds).map((key) => {
+              return (
+                <div
+                  key={key}
+                  className={`setting-body ${
+                    key === activeTab ? "active" : ""
+                  }`}
+                >
+                  {rendereds[key]()}
+                </div>
+              );
+            })}
           </div>
         </FormGroup>
       </Modal.Body>

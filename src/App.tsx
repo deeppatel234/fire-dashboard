@@ -79,6 +79,16 @@ const App = (): JSX.Element => {
 
   useEffect(() => {
     loadImage();
+
+    document.body.classList.forEach((name) => {
+      if (name.includes("color-")) {
+        document.body.classList.remove(name);
+      }
+    });
+
+    document.body.classList.add(
+      workspace?.settings?.general?.color || "color-1",
+    );
   }, [workspace]);
 
   const loadWorkspaceDb = async (newWorkspace) => {
@@ -86,7 +96,7 @@ const App = (): JSX.Element => {
       initStorage(newWorkspace);
       setWorkSpaceId(newWorkspace.id);
       setIsLoading(false);
-      history.push(routes[newWorkspace.settings.defaultApp].path);
+      history.push(routes[newWorkspace.settings.general.defaultApp].path);
     } catch (err) {
       console.log(err);
     }

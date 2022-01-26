@@ -6,7 +6,7 @@
   box-sizing: border-box;
 }
 
-:root {
+body {
   --gray-50: #e9ebf0;
   --gray-100: #cbced4;
   --gray-200: #a4a9b3;
@@ -23,9 +23,47 @@
   --text-color: var(--gray-50);
   --text-secondary: var(--gray-200);
   --text-disabled: var(--gray-500);
+
   --primary-color: #2196f3;
-  --primary-color-hover:  #25b3f5;
+  --primary-color-hover: #25b3f5;
   --primary-color-focus-shadow: 0 0 0 3px rgba(52, 195, 255, 0.25);
+
+  &.color-2 {
+    --primary-color: #57a19d;
+    --primary-color-hover: #77a6a3;
+    --primary-color-focus-shadow: 0 0 0 3px rgba(119, 166, 163, 0.25);
+  }
+
+  &.color-3 {
+    --primary-color: #b88048;
+    --primary-color-hover: #cca27c;
+    --primary-color-focus-shadow: 0 0 0 3px rgba(190, 142, 98, 0.25);
+  }
+
+  &.color-4 {
+    --primary-color: #9979ca;
+    --primary-color-hover: #a98ed4;
+    --primary-color-focus-shadow: 0 0 0 3px rgba(153, 121, 202, 0.25);
+  }
+
+  &.color-5 {
+    --primary-color: #d6496b;
+    --primary-color-hover: #de6684;
+    --primary-color-focus-shadow: 0 0 0 3px rgba(214, 73, 107, 0.25);
+  }
+
+  &.color-6 {
+    --primary-color: #1361aa;
+    --primary-color-hover: #357dbd;
+    --primary-color-focus-shadow: 0 0 0 3px rgba(19, 97, 170, 0.25);
+  }
+
+  &.color-7 {
+    --primary-color: #2487c2;
+    --primary-color-hover: #469fcf;
+    --primary-color-focus-shadow: 0 0 0 3px rgba(36, 135, 194, 0.25);
+  }
+
   --danger-color: #d12f1d;
   --danger-color-hover: #d12f1d;
   --success-color: #27a12e;
@@ -85,6 +123,28 @@
   --toggle-hover-bg: var(--gray-300);
   --toggle-checked-bg: var(--primary-color);
   --toggle-checked-hover-bg: var(--primary-color-hover);
+}
+
+.color-1-block {
+  background-color: #2196f3;
+}
+.color-2-block {
+  background-color: #57a19d;
+}
+.color-3-block {
+  background-color: #b88048;
+}
+.color-4-block {
+  background-color: #9979ca;
+}
+.color-5-block {
+  background-color: #d6496b;
+}
+.color-6-block {
+  background-color: #1361aa;
+}
+.color-6-block {
+  background-color: #2487c2;
 }
 
 *::-webkit-scrollbar {
@@ -175,7 +235,6 @@ a {
   text-decoration: none;
   color: inherit;
 }
-
 
 .d-flex {
   display: flex;

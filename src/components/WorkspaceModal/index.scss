@@ -35,6 +35,11 @@
       flex: 1;
       overflow: auto;
       padding: 0 40px;
+      display: none;
+
+      &.active {
+        display: block;
+      }
 
       .form-item {
         &:first-child {
@@ -44,6 +49,34 @@
 
       .url-textarea {
         max-height: 150px;
+      }
+
+      .theme-picker {
+        display: flex;
+        flex-wrap: wrap;
+
+        .picker-block {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1.5rem;
+          height: 40px;
+          width: 40px;
+          border-radius: 2px;
+          margin-right: 15px;
+          cursor: pointer;
+
+          .icon {
+            transition: opacity 0.2s ease-in;
+            opacity: 0;
+          }
+
+          &:hover, &.active {
+            .icon {
+              opacity: 1;
+            }
+          }
+        }
       }
 
       .mutli-image-wrapper {
