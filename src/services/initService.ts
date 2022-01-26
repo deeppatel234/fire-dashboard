@@ -40,3 +40,7 @@ export const initStorage = (workspace) => {
 
   return modalList;
 };
+
+export const deleteWorkspaceDb = (workspace) => {
+  Dexie.delete(workspace.collectionKey);
+};

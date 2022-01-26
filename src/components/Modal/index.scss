@@ -21,8 +21,23 @@
       display: flex;
       justify-content: end;
 
+      &.space {
+        justify-content: space-between;
+      }
+
       .btn {
         margin-left: 12px;
+      }
+
+      .left, .right {
+        display: flex;
+        align-items: center;
+      }
+
+      .left {
+        .btn:first-child {
+          margin-left: 0;
+        }
       }
     }
 

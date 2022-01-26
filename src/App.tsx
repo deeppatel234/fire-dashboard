@@ -11,7 +11,7 @@ import Header from "components/Header";
 import Loading from "components/Loading";
 import { routes } from "src/constants/routes";
 
-import { initStorage } from "./services/initService";
+import { initStorage, deleteWorkspaceDb } from "./services/initService";
 import WorkspaceModal from "./services/WorkspaceModal";
 
 const DEFAULT_IMAGE = "/assets/bg.jpg";
@@ -146,6 +146,29 @@ const App = (): JSX.Element => {
     setWorkspaceList([...workspaceList, updatedData]);
   };
 
+  const removeWorkspace = async (workspaceToRemove) => {
+    try {
+      await WorkspaceModal.update({
+        ...workspaceToRemove,
+        isDeleted: 1,
+      });
+
+      deleteWorkspaceDb(workspaceToRemove);
+
+      const newList = workspaceList.filter(
+        (w) => w.id !== workspaceToRemove.id,
+      );
+
+      if (workspaceToRemove.id === workspace.id) {
+        onChangeWorkspace(newList[0]);
+      }
+
+      setWorkspaceList(newList);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   if (isLoading) {
     return <div>Loading</div>;
   }
@@ -161,6 +184,7 @@ const App = (): JSX.Element => {
         workspaceList,
         workspace,
         setWorkSpace: onChangeWorkspace,
+        removeWorkspace,
         updateWorkspace,
       }}
     >

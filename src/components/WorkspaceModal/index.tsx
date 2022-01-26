@@ -63,7 +63,8 @@ const WorkspaceModal = ({
   onSuccess,
   showHeader,
 }) => {
-  const { updateWorkspace, setWorkSpace } = useContext(AppContext);
+  const { updateWorkspace, setWorkSpace, workspaceList, removeWorkspace } =
+    useContext(AppContext);
   const [activeTab, setActiveTab] = useState("GENERAL");
 
   const onSubmitData = async (dataToSave) => {
@@ -89,6 +90,16 @@ const WorkspaceModal = ({
       }
     } catch (err) {
       console.log("err", err);
+    }
+  };
+
+  const onClickDelete = () => {
+    removeWorkspace(dataToEdit);
+    if (onSuccess) {
+      onSuccess();
+    }
+    if (onClose) {
+      onClose();
     }
   };
 
@@ -253,15 +264,29 @@ const WorkspaceModal = ({
           </div>
         </FormGroup>
       </Modal.Body>
-      <Modal.Footer>
-        <Button onClick={formik.handleSubmit}>
-          {dataToEdit ? "Save" : "Create"}
-        </Button>
-        {showClose ? (
-          <Button type="default" onClick={onClose}>
-            Cancel
+      <Modal.Footer className="space">
+        <div className="left">
+          {dataToEdit && workspaceList?.length > 1 ? (
+            <Button
+              iconLeft="ri-delete-bin-7-line"
+              type="danger"
+              onClick={onClickDelete}
+              outline
+            >
+              Delete
+            </Button>
+          ) : null}
+        </div>
+        <div className="right">
+          <Button onClick={formik.handleSubmit}>
+            {dataToEdit ? "Save" : "Create"}
           </Button>
-        ) : null}
+          {showClose ? (
+            <Button type="default" onClick={onClose}>
+              Cancel
+            </Button>
+          ) : null}
+        </div>
       </Modal.Footer>
     </>
   );
