@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import _isEqual from "lodash/isEqual";
 
 import { useFormik, FormikProvider } from "formik";
 
@@ -15,6 +16,7 @@ import Tabs from "components/Tabs";
 import IconSelector from "components/IconSelector";
 import AppContext from "src/AppContext";
 import { routes } from "src/constants/routes";
+import EventManager from "utils/EventManager";
 
 import WorkspaceService from "../../services/WorkspaceModal";
 import MultiImage from "./MultiImage";
@@ -169,7 +171,20 @@ const WorkspaceModal = ({
       } else {
         response = await WorkspaceService.add(dataToSave);
       }
+
       updateWorkspace(response);
+
+      if (
+        response.settings.home.imageType !==
+          dataToEdit.settings.home.imageType ||
+        !_isEqual(
+          response.settings.home.imageConfig,
+          dataToEdit.settings.home.imageConfig,
+        )
+      ) {
+        EventManager.emit("refreshImage", response);
+      }
+
       if (!dataToSave.id) {
         setWorkSpace(response);
       }

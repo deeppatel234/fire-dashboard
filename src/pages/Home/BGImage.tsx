@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
-import { add } from "date-fns/esm";
+import { add, compareAsc } from "date-fns/esm";
 
 import Loading from "components/Loading";
 
 import AppContext from "src/AppContext";
 
 import { localGet, localSet } from "utils/chromeStorage";
-import { compareAsc } from "date-fns/esm";
+import EventManager from "utils/EventManager";
 
 const timeMapping = {
   "MIN-1": {
@@ -61,11 +61,12 @@ const BGImage = () => {
     setIsBgLoading(false);
   };
 
-  const loadImage = async (forceUpdate) => {
-    const { imageType, imageConfig } = workspace?.settings?.home || {};
+  const loadImage = async ({ newWorkspace, forceUpdate }) => {
+    const { imageType, imageConfig } = (newWorkspace || workspace)?.settings?.home || {};
 
     const { lastUpdateDate, lastUpdateImage } =
-      (await localGet(["lastUpdateDate", "lastUpdateImage"], workspace.id)) || {};
+      (await localGet(["lastUpdateDate", "lastUpdateImage"], workspace.id)) ||
+      {};
 
     if (
       !forceUpdate &&
@@ -131,7 +132,17 @@ const BGImage = () => {
   };
 
   useEffect(() => {
-    loadImage();
+    loadImage({});
+
+    const refreshImage = (newWorkspace) => {
+      loadImage({ newWorkspace, forceUpdate: true });
+    };
+
+    EventManager.on("refreshImage", refreshImage);
+
+    return () => {
+      EventManager.off("refreshImage", refreshImage);
+    };
   }, [workspace]);
 
   useEffect(() => {
