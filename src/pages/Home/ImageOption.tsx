@@ -1,15 +1,37 @@
-import React, { useState } from "react";
+import React, { useContext, useMemo, useState } from "react";
 
+import AppContext from "src/AppContext";
 import PopoverDropdown from "components/PopoverDropdown";
 import EventManager from "utils/EventManager";
 
 const ImageOptions = () => {
+  const { workspace } = useContext(AppContext);
   const [isOpenOptionPopper, setIsOpenOptionPopper] = useState(false);
 
-  const onSelectOption = (options) => {
-    if (options.key === "REFRESH") {
+  const options = useMemo(() => {
+    const op = [
+      {
+        key: "REFRESH",
+        icon: "ri-refresh-line",
+        label: "Refresh Image",
+      },
+    ];
+
+    if (workspace?.settings?.home?.imageType === "UNSPLASH") {
+      op.push({
+        key: "SAVE_CUSTOM",
+        icon: "ri-link-m",
+        label: "Save as Custom URL",
+      });
+    }
+
+    return op;
+  }, [workspace]);
+
+  const onSelectOption = (option) => {
+    if (option.key === "REFRESH") {
       EventManager.emit("refreshImage");
-    } else if (options.key === "SAVE_CUSTOM") {
+    } else if (option.key === "SAVE_CUSTOM") {
       EventManager.emit("saveToCustomUrl");
     }
   };
@@ -20,18 +42,7 @@ const ImageOptions = () => {
       isOpen={isOpenOptionPopper}
       setIsOpen={setIsOpenOptionPopper}
       onSelect={onSelectOption}
-      options={[
-        {
-          key: "REFRESH",
-          icon: "ri-refresh-line",
-          label: "Refresh Image",
-        },
-        {
-          key: "SAVE_CUSTOM",
-          icon: "ri-link-m",
-          label: "Save as Custom URL",
-        },
-      ]}
+      options={options}
     >
       <div className="image-options">
         <i className="ri-image-line" />
