@@ -15,4 +15,12 @@
       font-size: 2rem;
     }
   }
+  .image-options {
+    display: flex;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    font-size: 1.8rem;
+    cursor: pointer;
+  }
 }

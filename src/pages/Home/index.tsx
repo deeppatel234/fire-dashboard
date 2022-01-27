@@ -4,6 +4,7 @@ import AppContext from "src/AppContext";
 
 import Timer from "./Timer";
 import BGImage from "./BGImage";
+import ImageOptions from "./ImageOption";
 
 import "./index.scss";
 
@@ -34,10 +35,15 @@ const Home = (): JSX.Element => {
       <div className="home-wrapper">
         <div className="info-text">
           <Timer />
-          {workspace.settings?.home?.showGreeting ? (
+          {workspace?.settings?.home?.showGreeting ? (
             <div className="greeting">{greetingsString}</div>
           ) : null}
         </div>
+        {["UNSPLASH", "CUSTOM"].includes(
+          workspace?.settings?.home?.imageType,
+        ) ? (
+          <ImageOptions />
+        ) : null}
       </div>
     </>
   );

@@ -42,7 +42,7 @@ const timeMapping = {
 };
 
 const BGImage = () => {
-  const { workspace } = useContext(AppContext);
+  const { workspace, updateWorkspace } = useContext(AppContext);
   const [bgImageUrl, setBgImageUrl] = useState();
   const [isBgLoading, setIsBgLoading] = useState(false);
 
@@ -91,7 +91,7 @@ const BGImage = () => {
     } else if (imageType === "CUSTOM") {
       const imageLength = imageConfig?.customImageUrls?.length;
       if (imageLength) {
-        const currentIndex = await localGet("customImageIndex");
+        const currentIndex = await localGet("customImageIndex", workspace.id);
         const newIndex = currentIndex < imageLength ? currentIndex : 0;
         loadImageFromUrl(imageConfig.customImageUrls[newIndex]);
         localSet(
@@ -144,6 +144,19 @@ const BGImage = () => {
       EventManager.off("refreshImage", refreshImage);
     };
   }, [workspace]);
+
+  useEffect(() => {
+    const saveToCustomUrl = () => {
+      workspace.settings.home.imageConfig.customImageUrls.push(bgImageUrl);
+      updateWorkspace(workspace);
+    };
+
+    EventManager.on("saveToCustomUrl", saveToCustomUrl);
+
+    return () => {
+      EventManager.off("saveToCustomUrl", saveToCustomUrl);
+    };
+  }, [workspace, bgImageUrl]);
 
   useEffect(() => {
     document.getElementById("main-bg").style.backgroundImage = bgImageUrl
