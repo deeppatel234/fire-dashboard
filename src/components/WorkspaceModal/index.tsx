@@ -11,6 +11,7 @@ import Select from "components/Select";
 import RadioGroup from "components/RadioGroup";
 import FormGroup from "components/FormGroup";
 import FormItem from "components/FormItem";
+import Tabs from "components/Tabs";
 import IconSelector from "components/IconSelector";
 import AppContext from "src/AppContext";
 import { routes } from "src/constants/routes";
@@ -46,16 +47,19 @@ const defaultSettings = {
 
 const menuItems = [
   {
-    key: "GENERAL",
+    value: "GENERAL",
     label: "General",
+    icon: "ri-user-settings-line",
   },
   {
-    key: "HOME",
+    value: "HOME",
     label: "Home",
+    icon: "ri-home-line",
   },
   {
-    key: "BOOKMARK",
+    value: "BOOKMARK",
     label: "Bookmark",
+    icon: "ri-bookmark-line",
   },
 ];
 
@@ -278,19 +282,7 @@ const WorkspaceModal = ({
             />
           </div>
           <div className="setting-body-wrapper">
-            <div className="setting-sidebar">
-              {menuItems.map((item) => {
-                return (
-                  <div
-                    key={item.key}
-                    className={`item ${item.key === activeTab ? "active" : ""}`}
-                    onClick={() => setActiveTab(item.key)}
-                  >
-                    {item.label}
-                  </div>
-                );
-              })}
-            </div>
+            <Tabs list={menuItems} value={activeTab} onChange={setActiveTab} />
             {Object.keys(rendereds).map((key) => {
               return (
                 <div

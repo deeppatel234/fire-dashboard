@@ -1,5 +1,5 @@
 .workspace-modal-wrapper {
-  min-width: 850px;
+  min-width: 800px;
 
   .workspace-basic {
     display: flex;
@@ -12,39 +12,18 @@
 
   .setting-body-wrapper {
     display: flex;
-    min-height: 400px;
+    flex-direction: column;
+    height: 400px;
 
-    .setting-sidebar {
-      min-height: 100%;
-      background: var(--gray-700);
-      border-radius: 2px;
-      .item {
-        padding: 10px;
-        min-width: 130px;
-        border-bottom: 1px solid var(--border-primary);
-        font-size: 0.9rem;
-        cursor: pointer;
-
-        &:hover,
-        &.active {
-          background: var(--gray-600);
-        }
-      }
-    }
     .setting-body {
       flex: 1;
       overflow: auto;
-      padding: 0 40px;
+      padding-top: 20px;
+      padding-right: 15px;
       display: none;
 
       &.active {
         display: block;
-      }
-
-      .form-item {
-        &:first-child {
-          margin-top: 0;
-        }
       }
 
       .url-textarea {
