@@ -168,13 +168,14 @@ body {
 body {
   font-family: "Nunito", sans-serif;
   color: var(--text-color);
+  background-color: var(--body-bg-color);
 }
 
 #newtabRoot {
   height: 100%;
 }
 
-.main-bg {
+#main-bg {
   position: absolute;
   top: 0px;
   width: 100%;

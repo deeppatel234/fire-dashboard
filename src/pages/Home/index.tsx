@@ -3,6 +3,7 @@ import React, { useContext, useMemo } from "react";
 import AppContext from "src/AppContext";
 
 import Timer from "./Timer";
+import BGImage from "./BGImage";
 
 import "./index.scss";
 
@@ -28,14 +29,17 @@ const Home = (): JSX.Element => {
   }, [workspace]);
 
   return (
-    <div className="home-wrapper">
-      <div className="info-text">
-        <Timer />
-        {workspace.settings?.home?.showGreeting ? (
-          <div className="greeting">{greetingsString}</div>
-        ) : null}
+    <>
+      <BGImage />
+      <div className="home-wrapper">
+        <div className="info-text">
+          <Timer />
+          {workspace.settings?.home?.showGreeting ? (
+            <div className="greeting">{greetingsString}</div>
+          ) : null}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

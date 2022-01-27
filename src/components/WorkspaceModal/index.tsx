@@ -37,6 +37,7 @@ const defaultSettings = {
       imageConfig: {
         customImageUrls: [],
         unsplashCategories: ["nature"],
+        updateInterval: "DAY-1",
       },
     },
     bookmark: {
@@ -103,6 +104,45 @@ const imageTypes = [
   {
     label: "Custom Images",
     value: "CUSTOM",
+  },
+];
+
+const updateIntervalOptions = [
+  {
+    value: "MIN-30",
+    label: "30 Min",
+  },
+  {
+    value: "HR-1",
+    label: "1 Hr",
+  },
+  {
+    value: "HR-3",
+    label: "3 Hr",
+  },
+  {
+    value: "HR-6",
+    label: "6 Hr",
+  },
+  {
+    value: "HR-9",
+    label: "9 Hr",
+  },
+  {
+    value: "HR-12",
+    label: "12 Hr",
+  },
+  {
+    value: "DAY-1",
+    label: "Every Day",
+  },
+  {
+    value: "WEEK-1",
+    label: "Every Week",
+  },
+  {
+    value: "MONTH-1",
+    label: "Every Month",
   },
 ];
 
@@ -235,6 +275,16 @@ const WorkspaceModal = ({
             label="Image Categories"
           >
             <Select isMulti options={unsplashCategories} />
+          </FormItem>
+        ) : null}
+        {["UNSPLASH", "CUSTOM"].includes(
+          formik.values?.settings?.home?.imageType,
+        ) ? (
+          <FormItem
+            formKey="settings.home.imageConfig.updateInterval"
+            label="Image Update Interval"
+          >
+            <Select options={updateIntervalOptions} />
           </FormItem>
         ) : null}
       </>
