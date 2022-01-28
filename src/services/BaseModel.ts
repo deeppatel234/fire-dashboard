@@ -73,7 +73,7 @@ class BaseModal {
       return obj.id;
     });
 
-    db.hook("updating", (modifications) => {
+    db.hook("updating", (modifications, primKey, obj) => {
       const epoc = this.getTime();
 
       if (modifications.syncAt) {
@@ -82,11 +82,11 @@ class BaseModal {
         modifications.writeAt = epoc;
       }
 
-      if (!modifications.createAt) {
+      if (!obj.createAt) {
         modifications.createAt = epoc;
       }
 
-      if (typeof modifications.isDeleted === "undefined") {
+      if (typeof obj.isDeleted === "undefined") {
         modifications.isDeleted = 0;
       }
 
