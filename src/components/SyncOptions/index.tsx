@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 
 import PopoverDropdown from "components/PopoverDropdown";
 import Modal from "components/Modal";
 
 import useChromeSync from "utils/useChromeSync";
+import { localGet } from "utils/chromeStorage";
 import SyncSettingModal from "./SyncSettingModal";
 
 import "./index.scss";
@@ -14,6 +15,17 @@ const SyncOptions = () => {
   const { isSyncInProgress, startSync } = useChromeSync();
   const [isOpenOptionPopper, setIsOpenOptionPopper] = useState(false);
   const [showSettingModal, setShowSettingModal] = useState(false);
+  const [isSyncAllowed, setIsSyncAllowed] = useState(false);
+
+  const checkSyncAllowed = async () => {
+    const config = await localGet(["firebaseProjectId", "firebaseApiKey"]);
+
+    setIsSyncAllowed(!!config?.firebaseProjectId && !!config?.firebaseApiKey);
+  };
+
+  useEffect(() => {
+    checkSyncAllowed();
+  }, []);
 
   const toggleSettingModal = () => {
     setShowSettingModal(!showSettingModal);
@@ -41,11 +53,19 @@ const SyncOptions = () => {
             key: "SYNC_NOW",
             icon: "ri-refresh-line",
             label: "Sync Now",
+            disabled: !isSyncAllowed,
+            disableTooltip:
+              "Please add firebase config for enable this feature",
+            tooltipPlacement: "left",
           },
           {
             key: "SYNC_SETTING",
             icon: "ri-settings-3-line",
             label: "Sync Settings",
+            disabled: !isSyncAllowed,
+            disableTooltip:
+              "Please add firebase config for enable this feature",
+            tooltipPlacement: "left",
           },
           {
             key: "FIREBASE_CONFIGURATION",

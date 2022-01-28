@@ -53,7 +53,7 @@ const SyncSettingModal = ({ onClose }) => {
 
   const loadData = async () => {
     const settings = await localGet("syncSetting");
-    formik.setValues(settings);
+    formik.setValues(settings || {});
   };
 
   useEffect(() => {

@@ -22,7 +22,7 @@ const Home = (): JSX.Element => {
       greetings = "Good Afternoon";
     }
 
-    if (workspace.settings.home.userName) {
+    if (workspace?.settings?.home?.userName) {
       greetings += `, ${workspace.settings.home.userName}`;
     }
 

@@ -21,6 +21,8 @@ const App = (): JSX.Element => {
     return localStorage.getItem("workspaceId");
   });
   const [isLoading, setIsLoading] = useState(true);
+  const [newWorkspaceIcon, setNewWorkspaceIcon] = useState("ri-user-line");
+  const [newWorkspaceName, setNewWorkspaceName] = useState("");
 
   const workspace = useMemo(() => {
     return workspaceList.find((w) => w.id === workspaceId) || {};
@@ -120,6 +122,17 @@ const App = (): JSX.Element => {
     }
   };
 
+  const createAndLoadFirstWorkspace = async () => {
+    const response = await WorkspaceModal.add({
+      ...WorkspaceModal.getInitialValues(),
+      name: newWorkspaceName || "Your Workspace",
+      icon: newWorkspaceIcon,
+    });
+
+    updateWorkspace(response);
+    setWorkSpaceId(response.id);
+  };
+
   const renderHeader = () => {
     if (
       location.pathname.startsWith("/firebase") ||
@@ -143,6 +156,11 @@ const App = (): JSX.Element => {
         setWorkSpace: onChangeWorkspace,
         removeWorkspace,
         updateWorkspace,
+        createAndLoadFirstWorkspace,
+        newWorkspaceIcon,
+        setNewWorkspaceIcon,
+        newWorkspaceName,
+        setNewWorkspaceName,
       }}
     >
       <div id="main-bg" />

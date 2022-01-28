@@ -14,6 +14,33 @@ class WorkspaceModal extends BaseModal {
       ...data,
     });
   }
+
+  getInitialValues() {
+    return {
+      name: "",
+      icon: "ri-user-line",
+      settings: {
+        general: {
+          defaultApp: "HOME",
+          color: "color-1",
+        },
+        home: {
+          userName: "",
+          clockType: "12hr",
+          showGreeting: true,
+          imageType: "DEFAULT",
+          imageConfig: {
+            customImageUrls: [],
+            unsplashCategories: ["nature"],
+            updateInterval: "DAY-1",
+          },
+        },
+        bookmark: {
+          openInNewTab: true,
+        },
+      },
+    };
+  }
 }
 
 export default new WorkspaceModal();

@@ -7,6 +7,7 @@ import { initWorkpaceStorage } from "./services/initService";
 import App from "./App";
 
 import "react-toastify/dist/ReactToastify.css";
+import "tippy.js/dist/tippy.css";
 
 import "./styles/remixicon.css";
 import "./styles/app.scss";

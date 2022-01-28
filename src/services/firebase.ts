@@ -23,8 +23,8 @@ class FirebaseService {
   async getConfig(config) {
     const projectId = config
       ? config.projectId
-      : await localGet("firebase-projectId");
-    const apiKey = config ? config.apiKey : await localGet("firebase-apiKey");
+      : await localGet("firebaseProjectId");
+    const apiKey = config ? config.apiKey : await localGet("firebaseApiKey");
 
     return {
       projectId,
@@ -34,8 +34,8 @@ class FirebaseService {
 
   async setConfig(config) {
     await localSet({
-      "firebase-projectId": config.projectId,
-      "firebase-apiKey": config.apiKey,
+      firebaseProjectId: config.projectId,
+      firebaseApiKey: config.apiKey,
     });
   }
 
@@ -69,7 +69,7 @@ class FirebaseService {
     const db = initializeFirestore(firebaseApp, {});
 
     try {
-      const response = await addDoc(collection(db, "test-bookmark-app"), {
+      const response = await addDoc(collection(db, "test-fire-dashboard-app"), {
         hello: "world",
       });
       await deleteDoc(response);

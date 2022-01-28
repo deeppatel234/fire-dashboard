@@ -23,31 +23,6 @@ import MultiImage from "./MultiImage";
 
 import "./index.scss";
 
-const defaultSettings = {
-  name: "",
-  icon: "ri-user-line",
-  settings: {
-    general: {
-      defaultApp: routes.HOME.key,
-      color: "color-1",
-    },
-    home: {
-      userName: "",
-      clockType: "12hr",
-      showGreeting: true,
-      imageType: "DEFAULT",
-      imageConfig: {
-        customImageUrls: [],
-        unsplashCategories: ["nature"],
-        updateInterval: "DAY-1",
-      },
-    },
-    bookmark: {
-      openInNewTab: true,
-    },
-  },
-};
-
 const menuItems = [
   {
     value: "GENERAL",
@@ -210,7 +185,7 @@ const WorkspaceModal = ({
   };
 
   const formik = useFormik({
-    initialValues: dataToEdit || defaultSettings,
+    initialValues: dataToEdit || WorkspaceService.getInitialValues(),
     onSubmit: onSubmitData,
   });
 

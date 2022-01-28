@@ -1,4 +1,5 @@
 import React from "react";
+import Tippy from "@tippyjs/react";
 
 import Popover from "components/Popover";
 
@@ -21,7 +22,7 @@ const PopoverDropdown = ({
               return <div key={`LINE-${index}`} className="line" />;
             }
 
-            return (
+            const content = (
               <div
                 key={op.key}
                 className={`dropdown-item ${op.className || ""} ${
@@ -33,6 +34,30 @@ const PopoverDropdown = ({
                 <div>{op.label}</div>
               </div>
             );
+
+            if (op.tooltip) {
+              return (
+                <Tippy
+                  placement={op.tooltipPlacement || "auto"}
+                  content={op.tooltip}
+                >
+                  {content}
+                </Tippy>
+              );
+            }
+
+            if (op.disableTooltip && op.disabled) {
+              return (
+                <Tippy
+                  placement={op.tooltipPlacement || "auto"}
+                  content={op.disableTooltip}
+                >
+                  {content}
+                </Tippy>
+              );
+            }
+
+            return content;
           })}
         </div>
       );
