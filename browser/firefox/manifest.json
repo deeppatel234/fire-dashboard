@@ -1,7 +1,7 @@
 {
-  "name": "Bookmark",
+  "name": "Fire Dashboard",
   "version": "1.0",
-  "description": "Bookmark Manager",
+  "description": "New Tab Dashboard and Bookmark Manager",
   "manifest_version": 2,
   "icons": {
     "16": "assets/icons/icon16.png",
