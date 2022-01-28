@@ -13,7 +13,7 @@ const SyncOptions = () => {
   const history = useHistory();
   const { isSyncInProgress, startSync } = useChromeSync();
   const [isOpenOptionPopper, setIsOpenOptionPopper] = useState(false);
-  const [showSettingModal, setShowSettingModal] = useState(true);
+  const [showSettingModal, setShowSettingModal] = useState(false);
 
   const toggleSettingModal = () => {
     setShowSettingModal(!showSettingModal);
