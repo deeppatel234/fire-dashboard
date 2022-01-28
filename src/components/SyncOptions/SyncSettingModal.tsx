@@ -12,32 +12,32 @@ import { localGet, localSet } from "utils/chromeStorage";
 
 const updateIntervalOptions = [
   {
-    value: "MIN-15",
     label: "15 Min",
+    value: 15 * 60 * 1000,
   },
   {
-    value: "MIN-30",
     label: "30 Min",
+    value: 30 * 60 * 1000,
   },
   {
-    value: "HR-1",
-    label: "1 Hr",
+    label: "1 Hour",
+    value: 1 * 60 * 60 * 1000,
   },
   {
-    value: "HR-3",
-    label: "3 Hr",
+    label: "3 Hours",
+    value: 3 * 60 * 60 * 1000,
   },
   {
-    value: "HR-6",
-    label: "6 Hr",
+    label: "6 Hours",
+    value: 6 * 60 * 60 * 1000,
   },
   {
-    value: "HR-9",
-    label: "9 Hr",
+    label: "9 Hours",
+    value: 9 * 60 * 60 * 1000,
   },
   {
-    value: "HR-12",
-    label: "12 Hr",
+    label: "12 Hours",
+    value: 12 * 60 * 60 * 1000,
   },
 ];
 

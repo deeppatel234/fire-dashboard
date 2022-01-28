@@ -9,7 +9,7 @@ import { initStorage, initWorkpaceStorage } from "./initService";
 
 class Sync {
   async syncFromServer(modal) {
-    const lastSyncTime = (await localGet(modal.getModalKey())) || 1577817000000;
+    const lastSyncTime = (await localGet(modal.getModalKey()), "modalSyncTime") || 1577817000000;
     const currentTime = new Date().getTime();
 
     const updatedServerRecords = await modal.getAllUpdatedFirebase(
@@ -67,7 +67,7 @@ class Sync {
       );
     }
 
-    await localSet({ [modal.getModalKey()]: currentTime });
+    await localSet({ [modal.getModalKey()]: currentTime }, "modalSyncTime");
   }
 
   async syncModal(modal) {

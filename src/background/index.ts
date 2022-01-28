@@ -9,7 +9,6 @@ const SYNC_NOW = "SYNC_NOW";
 const SYNC_STARTED = "SYNC_STARTED";
 const SYNC_COMPLETED = "SYNC_COMPLETED";
 
-const SYNC_INTERVAL_TIME = 15 * 60 * 1000;
 let timeoutId = null;
 
 const triggerSync = async () => {
@@ -29,6 +28,8 @@ const triggerSync = async () => {
 };
 
 const startSync = async (syncOnStart) => {
+  const syncSetting = await localGet("syncSetting");
+
   if (timeoutId) {
     clearTimeout(timeoutId);
   }
@@ -37,19 +38,20 @@ const startSync = async (syncOnStart) => {
     await triggerSync();
   }
 
-  timeoutId = setTimeout(async () => {
-    const isAutoSyncEnabled = await localGet("autoSyncEnabled");
-    if (isAutoSyncEnabled) {
-      await triggerSync();
-      startSync();
-    }
-  }, SYNC_INTERVAL_TIME);
+  if (syncSetting?.syncInterval) {
+    timeoutId = setTimeout(async () => {
+      if (syncSetting?.autoSync) {
+        await triggerSync();
+        startSync();
+      }
+    }, syncSetting?.syncInterval);
+  }
 };
 
 const init = async () => {
-  const isAutoSyncEnabled = await localGet("autoSyncEnabled");
+  const syncSetting = await localGet("syncSetting");
 
-  if (isAutoSyncEnabled) {
+  if (syncSetting?.autoSync) {
     startSync(true);
   }
 };
