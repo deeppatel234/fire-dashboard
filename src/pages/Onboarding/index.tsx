@@ -23,7 +23,10 @@ const Onboarding = () => {
   const createAndLoadDashboard = () => {
     createAndLoadFirstWorkspace();
     history.push("/");
-    // history.push("/firebase/create");
+  };
+
+  const onClickSyncNow = () => {
+    history.push("/firebase/create");
   };
 
   const nextStep = () => {
@@ -79,7 +82,7 @@ const Onboarding = () => {
         <div className="sub-title">
           Add your firebase credentials to load current data or sync new data
         </div>
-        <Button size="large" onClick={nextStep}>
+        <Button size="large" onClick={onClickSyncNow}>
           Do it now
         </Button>
         <Button

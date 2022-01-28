@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
@@ -7,6 +7,7 @@ import Button from "components/Button";
 import Input from "components/Input";
 import FormGroup from "components/FormGroup";
 import FormItem from "components/FormItem";
+import AppContext from "src/AppContext";
 
 import firebase from "../../services/firebase";
 
@@ -15,6 +16,7 @@ import ServerSvg from "./ServerSvg";
 import "./index.scss";
 
 const FirebaseSetup = () => {
+  const { createAndLoadFirstWorkspace } = useContext(AppContext);
   const history = useHistory();
   const params = useParams();
 
@@ -28,6 +30,7 @@ const FirebaseSetup = () => {
     if (isEditMode) {
       history.goBack();
     } else {
+      createAndLoadFirstWorkspace();
       history.push("/");
     }
   };
