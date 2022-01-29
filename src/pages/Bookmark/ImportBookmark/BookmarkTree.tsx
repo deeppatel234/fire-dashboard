@@ -61,7 +61,6 @@ const BookmarkTree = ({ onClose }) => {
   const onSubmit = (data) => {
     toggleCreateGroup();
     chrome.bookmarks.get(checked, async (bookmarks) => {
-      console.log(data, bookmarks);
       try {
         await createGroupAndAddBookmark({
           groupData: data,

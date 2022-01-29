@@ -5,7 +5,7 @@ const SYNC_NOW = "SYNC_NOW";
 const SYNC_STARTED = "SYNC_STARTED";
 const SYNC_COMPLETED = "SYNC_COMPLETED";
 
-const useChromeSync = () => {
+const useChromeSync = ({ onSyncComplete } = {}) => {
   const [isSyncInProgress, setIsSyncInProgress] = useState(false);
 
   const listener = useCallback((request) => {
@@ -15,6 +15,9 @@ const useChromeSync = () => {
       }
       if (request.type === SYNC_COMPLETED) {
         setIsSyncInProgress(false);
+        if (onSyncComplete) {
+          onSyncComplete();
+        }
       }
     }
   }, []);

@@ -153,6 +153,7 @@ const App = (): JSX.Element => {
       value={{
         workspaceList,
         workspace,
+        loadWorkspaces: loadData,
         setWorkSpace: onChangeWorkspace,
         removeWorkspace,
         updateWorkspace,

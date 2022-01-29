@@ -8,6 +8,9 @@ import Input from "components/Input";
 import FormGroup from "components/FormGroup";
 import FormItem from "components/FormItem";
 import AppContext from "src/AppContext";
+import useConfirm from "components/Confirm/useConfirm";
+import { localRemoveModalSyncTime, localSet } from "utils/chromeStorage";
+import useChromeSync from "utils/useChromeSync";
 
 import firebase from "../../services/firebase";
 
@@ -16,30 +19,77 @@ import ServerSvg from "./ServerSvg";
 import "./index.scss";
 
 const FirebaseSetup = () => {
-  const { createAndLoadFirstWorkspace } = useContext(AppContext);
+  const { confirm } = useConfirm();
+  const { createAndLoadFirstWorkspace, loadWorkspaces } = useContext(AppContext);
   const history = useHistory();
   const params = useParams();
-
+  const [currentConfig, setCurrentConfig] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+
+  const onSyncComplete = () => {
+    goToHome(true);
+  };
+
+  const { isSyncInProgress, startSync } = useChromeSync({ onSyncComplete });
 
   const isEditMode = useMemo(() => {
     return params?.mode === "edit";
   }, [params]);
 
-  const goToHome = () => {
+  const goToHome = (refreshWorkspace) => {
+    if (refreshWorkspace) {
+      loadWorkspaces();
+    }
     if (isEditMode) {
       history.goBack();
     } else {
-      createAndLoadFirstWorkspace();
+      if (!refreshWorkspace) {
+        createAndLoadFirstWorkspace();
+      }
       history.push("/");
     }
   };
 
   const onSubmitData = async (data) => {
+    if (
+      currentConfig.projectId === data.projectId &&
+      currentConfig.apiKey === data.apiKey
+    ) {
+      goToHome();
+      return;
+    }
+
     setIsLoading(true);
     try {
       await firebase.test(data);
+
+      await localRemoveModalSyncTime();
+
       await firebase.setConfig(data);
+
+      await localSet({
+        syncSetting: {
+          autoSync: true,
+          syncInterval: 6 * 60 * 60 * 1000, // 6 hr
+        },
+      });
+
+      const hasBackup = firebase.hasBackup(data);
+
+      if (hasBackup) {
+        const isConfirmed = await confirm({
+          title: "Backup Found",
+          message: "Are you sure want to use this backup data?",
+        });
+
+        if (isConfirmed) {
+          startSync();
+          return;
+        }
+      }
+
+      await firebase.deleteAllWorkspace();
+
       goToHome();
     } catch (err) {
       toast.error("Please verify your firebase account data");
@@ -53,6 +103,7 @@ const FirebaseSetup = () => {
 
   const setInitConfig = async () => {
     const config = await firebase.getConfig();
+    setCurrentConfig(config);
     formik.setValues(config);
   };
 
@@ -96,18 +147,27 @@ const FirebaseSetup = () => {
                 <div className="account-info">
                   Your firebase account data is stored in your browser only.
                 </div>
+                {isSyncInProgress ? (
+                  <div className="account-info">
+                    Please do not close this window while sync.
+                  </div>
+                ) : null}
               </div>
             </div>
           </FormGroup>
           <div className="footer">
             <Button
               onClick={formik.handleSubmit}
-              isLoading={isLoading}
-              disabled={isLoading}
+              isLoading={isLoading || isSyncInProgress}
+              disabled={isLoading || isSyncInProgress}
             >
-              Save
+              {isSyncInProgress ? "Sync Data" : "Save"}
             </Button>
-            <Button onClick={goToHome} link disabled={isLoading}>
+            <Button
+              onClick={() => goToHome()}
+              link
+              disabled={isLoading || isSyncInProgress}
+            >
               {isEditMode ? "Close" : "Skip"}
             </Button>
           </div>

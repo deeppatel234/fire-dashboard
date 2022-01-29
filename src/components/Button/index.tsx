@@ -27,6 +27,7 @@ const Button = React.forwardRef(
         type={btnType}
         {...props}
         ref={ref}
+        disabled={disabled}
         className={classNames(
           `btn`,
           {

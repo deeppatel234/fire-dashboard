@@ -3,6 +3,7 @@ import { MemoryRouter as Router } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
 import { initWorkpaceStorage } from "./services/initService";
+import ConfirmModal from "components/Confirm/ConfirmModal";
 
 import App from "./App";
 
@@ -45,7 +46,9 @@ const Main = (): JSX.Element => {
         draggable
         pauseOnHover
       />
-      <App />
+      <ConfirmModal>
+        <App />
+      </ConfirmModal>
     </Router>
   );
 };
