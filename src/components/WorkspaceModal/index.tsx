@@ -140,14 +140,7 @@ const WorkspaceModal = ({
       customImageUrls.filter((i) => !!i);
 
     try {
-      let response = null;
-      if (dataToSave.id) {
-        response = await WorkspaceService.update(dataToSave);
-      } else {
-        response = await WorkspaceService.add(dataToSave);
-      }
-
-      updateWorkspace(response);
+      const response = updateWorkspace(dataToSave);
 
       if (
         response.settings.home.imageType !==

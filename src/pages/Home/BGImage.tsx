@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { add, compareAsc } from "date-fns/esm";
+import { toast } from "react-toastify";
 
 import Loading from "components/Loading";
 
@@ -62,7 +63,8 @@ const BGImage = () => {
   };
 
   const loadImage = async ({ newWorkspace, forceUpdate }) => {
-    const { imageType, imageConfig } = (newWorkspace || workspace)?.settings?.home || {};
+    const { imageType, imageConfig } =
+      (newWorkspace || workspace)?.settings?.home || {};
 
     const { lastUpdateDate, lastUpdateImage } =
       (await localGet(["lastUpdateDate", "lastUpdateImage"], workspace.id)) ||
@@ -146,9 +148,14 @@ const BGImage = () => {
   }, [workspace]);
 
   useEffect(() => {
-    const saveToCustomUrl = () => {
+    const saveToCustomUrl = async () => {
       workspace.settings.home.imageConfig.customImageUrls.push(bgImageUrl);
-      updateWorkspace(workspace);
+      try {
+        await updateWorkspace(workspace);
+        toast.success("Url added successfully");
+      } catch (err) {
+        toast.error("Failed to set custom url");
+      }
     };
 
     EventManager.on("saveToCustomUrl", saveToCustomUrl);

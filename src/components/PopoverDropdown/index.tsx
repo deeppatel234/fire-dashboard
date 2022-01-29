@@ -40,6 +40,7 @@ const PopoverDropdown = ({
                 <Tippy
                   placement={op.tooltipPlacement || "auto"}
                   content={op.tooltip}
+                  key={op.key}
                 >
                   {content}
                 </Tippy>
@@ -51,6 +52,7 @@ const PopoverDropdown = ({
                 <Tippy
                   placement={op.tooltipPlacement || "auto"}
                   content={op.disableTooltip}
+                  key={op.key}
                 >
                   {content}
                 </Tippy>

@@ -81,12 +81,20 @@ const App = (): JSX.Element => {
     localStorage.setItem("workspaceId", newWorkspace.id);
   };
 
-  const updateWorkspace = (updatedData) => {
-    if (workspaceList.find((w) => w.id === updatedData.id)) {
+  const updateWorkspace = async (updatedData) => {
+    let response = null;
+
+    if (updatedData.id) {
+      response = await WorkspaceModal.update(updatedData);
+    } else {
+      response = await WorkspaceModal.add(updatedData);
+    }
+
+    if (workspaceList.find((w) => w.id === response.id)) {
       setWorkspaceList(
         workspaceList.map((w) => {
-          if (w.id === updatedData.id) {
-            return updatedData;
+          if (w.id === response.id) {
+            return response;
           }
 
           return w;
@@ -96,7 +104,9 @@ const App = (): JSX.Element => {
       return;
     }
 
-    setWorkspaceList([...workspaceList, updatedData]);
+    setWorkspaceList([...workspaceList, response]);
+
+    return response;
   };
 
   const removeWorkspace = async (workspaceToRemove) => {
