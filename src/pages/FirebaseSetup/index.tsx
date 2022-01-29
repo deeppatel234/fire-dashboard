@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useMemo, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
+import { object, string } from "yup";
 
 import Button from "components/Button";
 import Input from "components/Input";
@@ -11,6 +12,7 @@ import AppContext from "src/AppContext";
 import useConfirm from "components/Confirm/useConfirm";
 import { localRemoveModalSyncTime, localSet } from "utils/chromeStorage";
 import useChromeSync from "utils/useChromeSync";
+import useFormError from "utils/useFormError";
 
 import firebase from "../../services/firebase";
 
@@ -18,11 +20,17 @@ import ServerSvg from "./ServerSvg";
 
 import "./index.scss";
 
+const validationSchema = object({
+  projectId: string().required("Project Id is required field"),
+  apiKey: string().required("API Key is required field"),
+});
+
 const FirebaseSetup = () => {
   const { confirm } = useConfirm();
   const { createAndLoadFirstWorkspace, loadWorkspaces } = useContext(AppContext);
   const history = useHistory();
   const params = useParams();
+  const { onSubmitForm, showError } = useFormError();
   const [currentConfig, setCurrentConfig] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
@@ -98,7 +106,12 @@ const FirebaseSetup = () => {
   };
 
   const formik = useFormik({
+    initialValues: {
+      projectId: "",
+      apiKey: "",
+    },
     onSubmit: onSubmitData,
+    validationSchema,
   });
 
   const setInitConfig = async () => {
@@ -125,7 +138,9 @@ const FirebaseSetup = () => {
         <div className="setup-modal">
           <FormGroup
             values={formik.values}
+            errors={formik.errors}
             setValue={formik.setFieldValue}
+            showError={showError}
             labelWidth={3}
           >
             <div className="setting-block">
@@ -157,7 +172,7 @@ const FirebaseSetup = () => {
           </FormGroup>
           <div className="footer">
             <Button
-              onClick={formik.handleSubmit}
+              onClick={onSubmitForm(formik.handleSubmit)}
               isLoading={isLoading || isSyncInProgress}
               disabled={isLoading || isSyncInProgress}
             >

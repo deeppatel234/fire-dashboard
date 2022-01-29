@@ -34,8 +34,8 @@ class FirebaseService {
     const apiKey = config ? config.apiKey : await localGet("firebaseApiKey");
 
     return {
-      projectId,
-      apiKey,
+      projectId: projectId || "",
+      apiKey: apiKey || "",
     };
   }
 
@@ -71,11 +71,11 @@ class FirebaseService {
       projectId: localConfig.projectId,
     };
 
-    const firebaseApp = initializeApp(firebaseConfig);
-
-    const db = initializeFirestore(firebaseApp, {});
-
     try {
+      const firebaseApp = initializeApp(firebaseConfig);
+
+      const db = initializeFirestore(firebaseApp, {});
+
       const response = await addDoc(collection(db, "test-fire-dashboard-app"), {
         hello: "world",
       });
@@ -94,11 +94,11 @@ class FirebaseService {
       projectId: localConfig.projectId,
     };
 
-    const firebaseApp = initializeApp(firebaseConfig);
-
-    const db = initializeFirestore(firebaseApp, {});
-
     try {
+      const firebaseApp = initializeApp(firebaseConfig);
+
+      const db = initializeFirestore(firebaseApp, {});
+
       const querySnapshot = await getDocs(
         query(
           collection(db, "workspace_workspace"),
@@ -125,11 +125,11 @@ class FirebaseService {
       projectId: localConfig.projectId,
     };
 
-    const firebaseApp = initializeApp(firebaseConfig);
-
-    const db = initializeFirestore(firebaseApp, {});
-
     try {
+      const firebaseApp = initializeApp(firebaseConfig);
+
+      const db = initializeFirestore(firebaseApp, {});
+
       const querySnapshot = await getDocs(
         query(
           collection(db, "workspace_workspace"),
