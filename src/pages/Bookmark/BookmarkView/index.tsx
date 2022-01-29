@@ -373,38 +373,40 @@ const BookmarkView = (): JSX.Element => {
       <div className="bookmark-wrapper">
         {showNewGroupDrop ? <NewGroupDrop /> : null}
         <Collections />
-        <div className="bookmark-body-wrapper">
-          {enableBulkAction ? (
-            <BulkActionPanel />
-          ) : (
-            <div className="bookmark-header">
-              <Button
-                link
-                iconLeft="ri-arrow-down-s-line"
-                onClick={onClickExpandAll}
-              >
-                Expand All
-              </Button>
-              <Button
-                link
-                iconLeft="ri-arrow-up-s-line"
-                onClick={onClickCollapseAll}
-              >
-                Collapse All
-              </Button>
-              <ImportBookmark />
-              <SearchBookmark />
-              <Button
-                link
-                iconLeft="ri-checkbox-multiple-line"
-                onClick={toggleBulkAction}
-              >
-                Bulk Actions
-              </Button>
-            </div>
-          )}
-          <BookmarkCards isSortingContainer={isSortingContainer} />
-        </div>
+        {data?.groupIds?.length ? (
+          <div className="bookmark-body-wrapper">
+            {enableBulkAction ? (
+              <BulkActionPanel />
+            ) : (
+              <div className="bookmark-header">
+                <Button
+                  link
+                  iconLeft="ri-arrow-down-s-line"
+                  onClick={onClickExpandAll}
+                >
+                  Expand All
+                </Button>
+                <Button
+                  link
+                  iconLeft="ri-arrow-up-s-line"
+                  onClick={onClickCollapseAll}
+                >
+                  Collapse All
+                </Button>
+                <ImportBookmark />
+                <SearchBookmark />
+                <Button
+                  link
+                  iconLeft="ri-checkbox-multiple-line"
+                  onClick={toggleBulkAction}
+                >
+                  Bulk Actions
+                </Button>
+              </div>
+            )}
+            <BookmarkCards isSortingContainer={isSortingContainer} />
+          </div>
+        ) : null}
         <ActiveTabs isSortingContainer={isSortingContainer} />
       </div>
       {createPortal(

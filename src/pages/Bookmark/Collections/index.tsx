@@ -36,6 +36,7 @@ const Collections = (): JSX.Element => {
   const { createNewGroup, data, updateData } = useContext(BookmarkContext);
   const [activeDrag, setActiveDrag] = useState(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const isEmpty = !data?.groupIds?.length;
 
   const toggleCreateModal = () => {
     setShowCreateModal(!showCreateModal);
@@ -89,41 +90,57 @@ const Collections = (): JSX.Element => {
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
-      <div className="collection-group-wrapper">
-        <div className="group-header">
-          <div className="group-header-title">Collections</div>
-          <Button outline size="small" onClick={toggleCreateModal}>
-            Create
-          </Button>
-        </div>
-        <div className="group-list">
-          <Sortable
-            id="Uber-CollectionCards"
-            dataList={data.groupIds || []}
-            strategy={verticalListSortingStrategy}
-          >
-            {data?.groupIds?.map?.((id) => {
-              const { groupId } = getId(id);
+      <div className={`collection-group-wrapper ${isEmpty ? "empty" : ""}`}>
+        {!isEmpty ? (
+          <>
+            <div className="group-header">
+              <div className="group-header-title">Collections</div>
+              <Button outline size="small" onClick={toggleCreateModal}>
+                Create
+              </Button>
+            </div>
+            <div className="group-list">
+              <Sortable
+                id="Uber-CollectionCards"
+                dataList={data.groupIds || []}
+                strategy={verticalListSortingStrategy}
+              >
+                {data?.groupIds?.map?.((id) => {
+                  const { groupId } = getId(id);
 
-              return (
-                <Sortable.Item
-                  key={id}
-                  id={id}
-                  componentProps={{
-                    groupId,
-                  }}
-                  sortableProps={{
-                    data: {
-                      type: "group",
-                      groupId,
-                    },
-                  }}
-                  component={CollectionCard}
-                />
-              );
-            })}
-          </Sortable>
-        </div>
+                  return (
+                    <Sortable.Item
+                      key={id}
+                      id={id}
+                      componentProps={{
+                        groupId,
+                      }}
+                      sortableProps={{
+                        data: {
+                          type: "group",
+                          groupId,
+                        },
+                      }}
+                      component={CollectionCard}
+                    />
+                  );
+                })}
+              </Sortable>
+            </div>
+          </>
+        ) : (
+          <div className="empty-block">
+            <i className="icon ri-bookmark-3-line" />
+            <div className="title">No collections added</div>
+            <div className="sub-title">
+              Add collections or save the current session and you will see them
+              here.
+            </div>
+            <Button size="large" onClick={toggleCreateModal}>
+              Add
+            </Button>
+          </div>
+        )}
       </div>
       {createPortal(
         <DragOverlay adjustScale={false} dropAnimation={dropAnimation}>
