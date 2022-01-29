@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import classNames from "classnames";
 
 import BookmarkContext from "../BookmarkContext";
 
@@ -13,7 +14,7 @@ const CollectionCard = ({ groupId, style }): JSX.Element => {
 
   return (
     <div className="group-list-item" onClick={onClickGroup} style={style}>
-      <i className={`group-icon ${groupData.icon}`} />
+      <i className={classNames("group-icon", groupData.icon)} />
       <span className="group-list-title">{groupData.name}</span>
     </div>
   );

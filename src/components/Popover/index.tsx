@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import { usePopper } from "react-popper";
+import classNames from "classnames";
 
 import { useOnClickOutside, useControlled } from "utils/customHooks";
 
@@ -55,16 +56,14 @@ const Popover = ({
         ? ReactDOM.createPortal(
             <div
               ref={setPopperElement}
-              className={`popover-wrapper ${className || ""} ${
-                placement || ""
-              }`}
+              className={classNames("popover-wrapper", className, placement)}
               style={styles.popper}
               {...attributes.popper}
             >
               <div
                 ref={setArrowElement}
                 style={styles.arrow}
-                className={`arrow ${placement}`}
+                className={classNames("arrow", placement)}
               />
               <div ref={innerPopperElementRef} onClick={onClickComponent}>
                 {component}

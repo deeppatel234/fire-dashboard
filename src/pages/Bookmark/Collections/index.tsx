@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { createPortal } from "react-dom";
-
+import classNames from "classnames";
 import {
   DndContext,
   KeyboardSensor,
@@ -90,7 +90,9 @@ const Collections = (): JSX.Element => {
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
-      <div className={`collection-group-wrapper ${isEmpty ? "empty" : ""}`}>
+      <div
+        className={classNames("collection-group-wrapper", { empty: isEmpty })}
+      >
         {!isEmpty ? (
           <>
             <div className="group-header">

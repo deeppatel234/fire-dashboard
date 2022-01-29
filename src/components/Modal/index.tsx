@@ -1,6 +1,6 @@
 import React from "react";
-
 import { Modal } from "react-responsive-modal";
+import classNames from "classnames";
 
 import "react-responsive-modal/styles.css";
 
@@ -17,15 +17,19 @@ const ModalComponent = ({ ...props }) => {
 };
 
 ModalComponent.Header = ({ className, children }) => {
-  return <div className={`modal-header ${className || ""}`}>{children}</div>;
+  return (
+    <div className={classNames("modal-header", className)}>{children}</div>
+  );
 };
 
 ModalComponent.Body = ({ className, children }) => {
-  return <div className={`modal-body ${className || ""}`}>{children}</div>;
+  return <div className={classNames("modal-body", className)}>{children}</div>;
 };
 
 ModalComponent.Footer = ({ className, children }) => {
-  return <div className={`modal-footer ${className || ""}`}>{children}</div>;
+  return (
+    <div className={classNames("modal-footer", className)}>{children}</div>
+  );
 };
 
 export default ModalComponent;

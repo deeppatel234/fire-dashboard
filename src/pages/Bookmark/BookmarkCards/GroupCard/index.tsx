@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import classNames from "classnames";
 
 import Button from "components/Button";
 import PopoverDropdown from "components/PopoverDropdown";
@@ -213,21 +214,24 @@ const GroupCard = ({
     <div id={`group-${groupData.id}`} className="group-card-wrapper">
       <div className="group-card-title">
         <div className="drag-icon">
-          <i className={`hover-revert ${groupData.icon}`} />
+          <i className={classNames("hover-revert", groupData.icon)} />
           <i className="ri-more-2-fill hover first" />
           <i className="ri-more-2-fill hover" />
         </div>
         <div className="group-name" onClick={toggleCollapse}>
           {groupData.name}
           <i
-            className={`icon-collapse ${
-              groupData?.collapse
-                ? "ri-arrow-up-s-line"
-                : "ri-arrow-down-s-line"
-            }`}
+            className={classNames("icon-collapse", {
+              "ri-arrow-up-s-line": groupData?.collapse,
+              "ri-arrow-down-s-line": !groupData?.collapse,
+            })}
           />
         </div>
-        <div className={`options-block ${isOpenOptionPopper ? "show" : ""}`}>
+        <div
+          className={classNames("options-block", {
+            show: isOpenOptionPopper,
+          })}
+        >
           <Button
             link
             iconLeft="ri-window-line"

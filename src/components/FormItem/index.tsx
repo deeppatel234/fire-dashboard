@@ -18,16 +18,23 @@ const FormItem = ({
   formKey,
   errorMsg: pErrorMsg,
   componentType,
+  showError: pShowError,
 }) => {
   const {
     labelWidth: contextLabelWidth,
     values,
     setValue,
+    errors,
+    showError,
   } = useContext(FormGroupContext);
 
   const value = useMemo(() => {
     return _get(values, formKey);
   }, [values, formKey]);
+
+  const error = useMemo(() => {
+    return _get(errors, formKey);
+  }, [errors, formKey]);
 
   const onChangeValue = useCallback(
     (newValue) => {
@@ -39,7 +46,12 @@ const FormItem = ({
   return (
     <div className={classNames(className, "form-item")}>
       {label ? (
-        <div className={`label col-sm-${pLabelWidth || contextLabelWidth}`}>
+        <div
+          className={classNames(
+            "label",
+            `col-sm-${pLabelWidth || contextLabelWidth}`,
+          )}
+        >
           {label}
         </div>
       ) : null}
@@ -63,7 +75,9 @@ const FormItem = ({
                 onChangeValue,
               })}
         </div>
-        <div className="error-msg">{pErrorMsg}</div>
+        <div className="error-msg">
+          {pShowError || showError ? pErrorMsg || error : ""}
+        </div>
       </div>
     </div>
   );

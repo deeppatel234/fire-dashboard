@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import classNames from "classnames";
 
 import PopoverDropdown from "components/PopoverDropdown";
 import useChromeTabs from "utils/useChromeTabs";
@@ -71,9 +72,11 @@ const BookmarkCard = ({
   return (
     <>
       <div
-        className={`bookmark-card ${isOpenOptionPopper ? "open" : ""} ${
-          enableBulkAction ? "bulk-action" : ""
-        } ${isBulkSelected ? "bulk-selected" : ""}`}
+        className={classNames("bookmark-card", {
+          open: isOpenOptionPopper,
+          "bulk-action": enableBulkAction,
+          "bulk-selected": isBulkSelected,
+        })}
         onClick={onClickBookmark}
       >
         {bookmark.favIconUrl ? (

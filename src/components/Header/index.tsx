@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import { NavLink } from "react-router-dom";
+import classNames from "classnames";
 
 import AppContext from "src/AppContext";
 
@@ -38,6 +39,13 @@ const Header = (): JSX.Element => {
 
   const toggleWorkspaceModal = () => {
     setShowWorkspaceModal({
+      ...showWorkspaceModal,
+      open: !showWorkspaceModal.open,
+    });
+  };
+
+  const toggleCreateWorkspaceModal = () => {
+    setShowWorkspaceModal({
       open: !showWorkspaceModal.open,
       dataToEdit: null,
     });
@@ -59,11 +67,13 @@ const Header = (): JSX.Element => {
           return (
             <div
               key={d.id}
-              className={`list-item ${workspace.id === d.id ? "active" : ""}`}
+              className={classNames("list-item", {
+                active: workspace.id === d.id,
+              })}
               onClick={() => setWorkSpace(d)}
             >
               <div className="content">
-                <i className={`workspace-icon ${d.icon}`} />
+                <i className={classNames("workspace-icon", d.icon)} />
                 {d.name}
               </div>
               <div
@@ -75,7 +85,7 @@ const Header = (): JSX.Element => {
             </div>
           );
         })}
-        <div className="list-item add" onClick={toggleWorkspaceModal}>
+        <div className="list-item add" onClick={toggleCreateWorkspaceModal}>
           <div className="content">
             <i className="workspace-icon ri-add-line" /> Add New Workspace
           </div>
@@ -94,7 +104,7 @@ const Header = (): JSX.Element => {
         closeOnClick
       >
         <div className="workspace-block">
-          <i className={`icon workspace ${workspace?.icon}`} />
+          <i className={classNames("icon workspace", workspace?.icon)} />
           {workspace?.name}
           <i className="arrow ri-arrow-down-s-line" />
         </div>

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
+import classNames from "classnames";
 
 import PopoverDropdown from "components/PopoverDropdown";
 import Modal from "components/Modal";
@@ -76,9 +77,9 @@ const SyncOptions = () => {
       >
         <a>
           <i
-            className={`sync-icon-menu ri-refresh-line ${
-              isSyncInProgress ? "spin" : ""
-            }`}
+            className={classNames("sync-icon-menu ri-refresh-line", {
+              spin: isSyncInProgress,
+            })}
           />
         </a>
       </PopoverDropdown>

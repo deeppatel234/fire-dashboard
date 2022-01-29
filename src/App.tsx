@@ -100,36 +100,28 @@ const App = (): JSX.Element => {
           return w;
         }),
       );
-
-      return;
+    } else {
+      setWorkspaceList([...workspaceList, response]);
     }
-
-    setWorkspaceList([...workspaceList, response]);
 
     return response;
   };
 
   const removeWorkspace = async (workspaceToRemove) => {
-    try {
-      await WorkspaceModal.update({
-        ...workspaceToRemove,
-        isDeleted: 1,
-      });
+    await WorkspaceModal.update({
+      ...workspaceToRemove,
+      isDeleted: 1,
+    });
 
-      deleteWorkspaceDb(workspaceToRemove);
+    deleteWorkspaceDb(workspaceToRemove);
 
-      const newList = workspaceList.filter(
-        (w) => w.id !== workspaceToRemove.id,
-      );
+    const newList = workspaceList.filter((w) => w.id !== workspaceToRemove.id);
 
-      if (workspaceToRemove.id === workspace.id) {
-        onChangeWorkspace(newList[0]);
-      }
-
-      setWorkspaceList(newList);
-    } catch (err) {
-      console.log(err);
+    if (workspaceToRemove.id === workspace.id) {
+      onChangeWorkspace(newList[0]);
     }
+
+    setWorkspaceList(newList);
   };
 
   const createAndLoadFirstWorkspace = async () => {

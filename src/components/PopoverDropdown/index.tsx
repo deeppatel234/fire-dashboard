@@ -1,5 +1,6 @@
 import React from "react";
 import Tippy from "@tippyjs/react";
+import classNames from "classnames";
 
 import Popover from "components/Popover";
 
@@ -12,6 +13,7 @@ const PopoverDropdown = ({
   options,
   placement,
   onSelect,
+  className,
 }) => {
   const renderOptionPopover = () => {
     if (Array.isArray(options)) {
@@ -25,12 +27,12 @@ const PopoverDropdown = ({
             const content = (
               <div
                 key={op.key}
-                className={`dropdown-item ${op.className || ""} ${
-                  op.disabled ? "disabled" : ""
-                }`}
+                className={classNames("dropdown-item", op.className, {
+                  disabled: op.disabled,
+                })}
                 onClick={() => onSelect(op)}
               >
-                <i className={`icon ${op.icon}`} />
+                <i className={classNames("icon", op.icon)} />
                 <div>{op.label}</div>
               </div>
             );
@@ -70,7 +72,7 @@ const PopoverDropdown = ({
 
   return (
     <Popover
-      className="popover-dropdown"
+      className={classNames("popover-dropdown", className)}
       component={renderOptionPopover()}
       isOpen={isOpen}
       setIsOpen={setIsOpen}

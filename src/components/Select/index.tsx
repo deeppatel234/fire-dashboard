@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-
+import classNames from "classnames";
 import ReactSelect from "react-select";
 
 import "./index.scss";
@@ -10,6 +10,7 @@ const Select = ({
   value,
   options,
   isMulti,
+  className,
   ...props
 }) => {
   const selectValue = useMemo(() => {
@@ -33,7 +34,7 @@ const Select = ({
   return (
     <ReactSelect
       classNamePrefix="select"
-      className="react-select-wrapper"
+      className={classNames("react-select-wrapper", className)}
       menuPortalTarget={document.body}
       onChange={onChangeData}
       value={selectValue}

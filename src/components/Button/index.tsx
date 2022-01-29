@@ -42,7 +42,7 @@ const Button = React.forwardRef(
           className,
         )}
       >
-        {iconLeft ? <i className={`btn-icon ${iconLeft}`} /> : null}
+        {iconLeft ? <i className={classNames("btn-icon", iconLeft)} /> : null}
         {isLoading ? <i className="loading-icon ri-loader-4-line" /> : null}
         {children}
       </button>

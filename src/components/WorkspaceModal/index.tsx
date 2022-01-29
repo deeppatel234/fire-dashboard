@@ -1,5 +1,8 @@
 import React, { useContext, useState } from "react";
 import _isEqual from "lodash/isEqual";
+import { object, string, array, boolean } from "yup";
+import { toast } from "react-toastify";
+import classNames from "classnames";
 
 import { useFormik, FormikProvider } from "formik";
 
@@ -17,6 +20,8 @@ import IconSelector from "components/IconSelector";
 import AppContext from "src/AppContext";
 import { routes } from "src/constants/routes";
 import EventManager from "utils/EventManager";
+import useFormError from "utils/useFormError";
+import useConfirm from "components/Confirm/useConfirm";
 
 import WorkspaceService from "../../services/WorkspaceModal";
 import MultiImage from "./MultiImage";
@@ -123,6 +128,31 @@ const updateIntervalOptions = [
   },
 ];
 
+const validationSchema = object({
+  name: string().required(),
+  icon: string().required(),
+  settings: object({
+    general: object({
+      defaultApp: string().required(),
+      color: string().required(),
+    }),
+    bookmark: object({
+      openInNewTab: boolean().required(),
+    }),
+    home: object({
+      userName: string(),
+      clockType: string().required(),
+      showGreeting: boolean().required(),
+      imageType: string().required(),
+      imageConfig: object({
+        customImageUrls: array().of(string()),
+        unsplashCategories: array().of(string()),
+        updateInterval: string(),
+      }),
+    }),
+  }),
+});
+
 const WorkspaceModal = ({
   dataToEdit,
   onClose,
@@ -132,7 +162,9 @@ const WorkspaceModal = ({
 }) => {
   const { updateWorkspace, setWorkSpace, workspaceList, removeWorkspace } =
     useContext(AppContext);
+  const { confirm } = useConfirm();
   const [activeTab, setActiveTab] = useState("GENERAL");
+  const { onSubmitForm, showError } = useFormError();
 
   const onSubmitData = async (dataToSave) => {
     const { customImageUrls } = dataToSave.settings.home.imageConfig;
@@ -140,14 +172,14 @@ const WorkspaceModal = ({
       customImageUrls.filter((i) => !!i);
 
     try {
-      const response = updateWorkspace(dataToSave);
+      const response = await updateWorkspace(dataToSave);
 
       if (
         response.settings.home.imageType !==
-          dataToEdit.settings.home.imageType ||
+          dataToEdit?.settings?.home?.imageType ||
         !_isEqual(
           response.settings.home.imageConfig,
-          dataToEdit.settings.home.imageConfig,
+          dataToEdit?.settings?.home?.imageConfig,
         )
       ) {
         EventManager.emit("refreshImage", response);
@@ -163,23 +195,35 @@ const WorkspaceModal = ({
         onClose();
       }
     } catch (err) {
-      console.log("err", err);
+      toast.error("Workspace settings not updated. please try again");
     }
   };
 
-  const onClickDelete = () => {
-    removeWorkspace(dataToEdit);
-    if (onSuccess) {
-      onSuccess();
-    }
-    if (onClose) {
-      onClose();
+  const onClickDelete = async () => {
+    const isConfirmed = await confirm({
+      message: "Are you sure want to delete workspace?",
+    });
+
+    if (isConfirmed) {
+      try {
+        await removeWorkspace(dataToEdit);
+        toast.success("Workspace deleted successfully");
+        if (onSuccess) {
+          onSuccess();
+        }
+        if (onClose) {
+          onClose();
+        }
+      } catch (err) {
+        toast.error("Unable to delete this workspace. please try again");
+      }
     }
   };
 
   const formik = useFormik({
     initialValues: dataToEdit || WorkspaceService.getInitialValues(),
     onSubmit: onSubmitData,
+    validationSchema,
   });
 
   const renderGeneral = () => {
@@ -192,26 +236,27 @@ const WorkspaceModal = ({
           </RadioGroup>
         </FormItem>
         <FormItem formKey="settings.general.color" label="Theme">
-          <div className="theme-picker">
-            {[1, 2, 3, 4, 5, 6, 7].map((index) => (
-              <div
-                key={index}
-                className={`picker-block color-${index}-block ${
-                  formik.values?.settings?.general?.color === `color-${index}`
-                    ? "active"
-                    : ""
-                }`}
-                onClick={() =>
-                  formik.setFieldValue(
-                    "settings.general.color",
-                    `color-${index}`,
-                  )
-                }
-              >
-                <i className="icon ri-check-line" />
+          {({ onChangeValue, value }) => {
+            return (
+              <div className="theme-picker">
+                {[1, 2, 3, 4, 5, 6, 7].map((index) => (
+                  <div
+                    key={index}
+                    className={classNames(
+                      "picker-block",
+                      `color-${index}-block`,
+                      {
+                        active: value === `color-${index}`,
+                      },
+                    )}
+                    onClick={() => onChangeValue(`color-${index}`)}
+                  >
+                    <i className="icon ri-check-line" />
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            );
+          }}
         </FormItem>
       </>
     );
@@ -300,6 +345,8 @@ const WorkspaceModal = ({
       <Modal.Body className="workspace-modal-wrapper">
         <FormGroup
           values={formik.values}
+          errors={formik.errors}
+          showError={showError}
           setValue={formik.setFieldValue}
           labelWidth={3}
         >
@@ -308,11 +355,9 @@ const WorkspaceModal = ({
               selectedIcon={formik.values.icon}
               setSelectedIcon={(val) => formik.setFieldValue("icon", val)}
             />
-            <Input
-              placeholder="Workspace Name"
-              value={formik.values.name}
-              onChangeValue={(val) => formik.setFieldValue("name", val)}
-            />
+            <FormItem formKey="name">
+              <Input placeholder="Workspace Name" />
+            </FormItem>
           </div>
           <div className="setting-body-wrapper">
             <Tabs list={menuItems} value={activeTab} onChange={setActiveTab} />
@@ -320,9 +365,9 @@ const WorkspaceModal = ({
               return (
                 <div
                   key={key}
-                  className={`setting-body ${
-                    key === activeTab ? "active" : ""
-                  }`}
+                  className={classNames("setting-body", {
+                    active: key === activeTab,
+                  })}
                 >
                   {rendereds[key]()}
                 </div>
@@ -345,7 +390,7 @@ const WorkspaceModal = ({
           ) : null}
         </div>
         <div className="right">
-          <Button onClick={formik.handleSubmit}>
+          <Button onClick={onSubmitForm(formik.handleSubmit)}>
             {dataToEdit ? "Save" : "Create"}
           </Button>
           {showClose ? (

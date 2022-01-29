@@ -3,10 +3,23 @@
 
   .workspace-basic {
     display: flex;
-    margin-bottom: 30px;
+    margin-bottom: 5px;
 
     .icon-selector-block {
       margin-right: 15px;
+      height: 47px;
+    }
+
+    .form-item {
+      flex: 1;
+      margin: 0;
+      .component {
+        width: 100%;
+
+        .input-component {
+          height: 47px;
+        }
+      }
     }
   }
 

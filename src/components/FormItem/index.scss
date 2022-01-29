@@ -1,6 +1,6 @@
 .form-item {
   display: flex;
-  margin: 15px 0;
+  margin: 5px 0;
 
   .label {
     margin-top: 8px;
@@ -16,7 +16,10 @@
       padding-top: 6px;
     }
     .error-msg {
-      margin-top: 1px;
+      color: var(--danger-color);
+      margin-top: 3px;
+      font-size: 0.9rem;
+      height: 20px;
     }
   }
 }

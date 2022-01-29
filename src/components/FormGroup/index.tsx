@@ -5,14 +5,24 @@ import FormGroupContext from "./FormGroupContext";
 
 import "./index.scss";
 
-const FormGroup = ({ children, className, values, labelWidth, setValue }) => {
+const FormGroup = ({
+  children,
+  className,
+  values,
+  labelWidth,
+  setValue,
+  errors,
+  showError,
+}) => {
   const contextValues = useMemo(() => {
     return {
       values,
       labelWidth,
       setValue,
+      errors,
+      showError,
     };
-  }, [values, labelWidth, setValue]);
+  }, [values, labelWidth, setValue, errors, showError]);
 
   return (
     <FormGroupContext.Provider value={contextValues}>

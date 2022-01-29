@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import classNames from "classnames";
 
 import Popover from "components/Popover";
 
@@ -51,7 +52,7 @@ const IconSelector = ({ selectedIcon, setSelectedIcon }) => {
                           className="group-icon-block"
                           onClick={() => onSelectIcon(className)}
                         >
-                          <i className={`icon ${className}`} />
+                          <i className={classNames("icon", className)} />
                         </div>
                       );
                     });
@@ -74,7 +75,7 @@ const IconSelector = ({ selectedIcon, setSelectedIcon }) => {
       setIsOpen={setIsOpen}
     >
       <div className="icon-selector-block">
-        <i className={`icon ${selectedIcon}`} />
+        <i className={classNames("icon", selectedIcon)} />
       </div>
     </Popover>
   );
