@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { MemoryRouter as Router } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
-import { initWorkpaceStorage } from "./services/initService";
 import ConfirmModal from "components/Confirm/ConfirmModal";
+import { initWorkpaceStorage } from "services/initService";
 
 import App from "./App";
 
@@ -20,9 +20,7 @@ const Main = (): JSX.Element => {
     try {
       await initWorkpaceStorage();
       setIsLoading(false);
-    } catch (err) {
-      console.log(err);
-    }
+    } catch (err) {}
   };
 
   useEffect(() => {
@@ -30,7 +28,7 @@ const Main = (): JSX.Element => {
   }, []);
 
   if (isLoading) {
-    return <div>loading</div>;
+    return null;
   }
 
   return (

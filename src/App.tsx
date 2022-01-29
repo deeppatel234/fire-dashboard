@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Switch, Route, useLocation, useHistory } from "react-router-dom";
+import { toast } from "react-toastify";
 
 import Home from "pages/Home";
 import Bookmark from "pages/Bookmark";
@@ -9,9 +10,8 @@ import FirebaseSetup from "pages/FirebaseSetup";
 import AppContext from "src/AppContext";
 import Header from "components/Header";
 import { routes } from "src/constants/routes";
-
-import { initStorage, deleteWorkspaceDb } from "./services/initService";
-import WorkspaceModal from "./services/WorkspaceModal";
+import { initStorage, deleteWorkspaceDb } from "services/initService";
+import WorkspaceModal from "services/WorkspaceModal";
 
 const App = (): JSX.Element => {
   const location = useLocation();
@@ -35,7 +35,7 @@ const App = (): JSX.Element => {
       setIsLoading(false);
       history.push(routes[newWorkspace.settings.general.defaultApp].path);
     } catch (err) {
-      console.log(err);
+      toast.error("Something went wrong. please try again");
     }
   };
 
@@ -52,7 +52,7 @@ const App = (): JSX.Element => {
         setIsLoading(false);
       }
     } catch (err) {
-      console.log(err);
+      toast.error("Something went wrong. please try again");
     }
   };
 
@@ -125,14 +125,12 @@ const App = (): JSX.Element => {
   };
 
   const createAndLoadFirstWorkspace = async () => {
-    const response = await WorkspaceModal.add({
+    const response = await updateWorkspace({
       ...WorkspaceModal.getInitialValues(),
       name: newWorkspaceName || "Your Workspace",
       icon: newWorkspaceIcon,
     });
-
-    updateWorkspace(response);
-    setWorkSpaceId(response.id);
+    onChangeWorkspace(response);
   };
 
   const renderHeader = () => {
@@ -147,7 +145,7 @@ const App = (): JSX.Element => {
   };
 
   if (isLoading) {
-    return <div>Loading</div>;
+    return null;
   }
 
   return (

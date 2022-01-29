@@ -66,6 +66,7 @@ module.exports = ({ mode, distPath } = {}) => {
         utils: PATHS.UTILS,
         src: PATHS.SRC_DIR,
         pages: PATHS.PAGES,
+        services: PATHS.SERVICES,
       },
     },
     plugins: [

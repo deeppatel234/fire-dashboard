@@ -22,8 +22,8 @@ import { routes } from "src/constants/routes";
 import EventManager from "utils/EventManager";
 import useFormError from "utils/useFormError";
 import useConfirm from "components/Confirm/useConfirm";
+import WorkspaceService from "services/WorkspaceModal";
 
-import WorkspaceService from "../../services/WorkspaceModal";
 import MultiImage from "./MultiImage";
 
 import "./index.scss";

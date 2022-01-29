@@ -2,7 +2,7 @@
 
 import { localGet } from "utils/chromeStorage";
 
-import sync from "../services/sync";
+import sync from "services/sync";
 
 const APP_NAME = "BOOKMARK_APP";
 const SYNC_NOW = "SYNC_NOW";

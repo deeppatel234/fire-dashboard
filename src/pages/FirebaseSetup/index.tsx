@@ -13,8 +13,7 @@ import useConfirm from "components/Confirm/useConfirm";
 import { localRemoveModalSyncTime, localSet } from "utils/chromeStorage";
 import useChromeSync from "utils/useChromeSync";
 import useFormError from "utils/useFormError";
-
-import firebase from "../../services/firebase";
+import firebase from "services/firebase";
 
 import ServerSvg from "./ServerSvg";
 
@@ -27,7 +26,8 @@ const validationSchema = object({
 
 const FirebaseSetup = () => {
   const { confirm } = useConfirm();
-  const { createAndLoadFirstWorkspace, loadWorkspaces } = useContext(AppContext);
+  const { createAndLoadFirstWorkspace, loadWorkspaces } =
+    useContext(AppContext);
   const history = useHistory();
   const params = useParams();
   const { onSubmitForm, showError } = useFormError();
@@ -51,10 +51,14 @@ const FirebaseSetup = () => {
     if (isEditMode) {
       history.goBack();
     } else {
-      if (!refreshWorkspace) {
-        createAndLoadFirstWorkspace();
+      try {
+        if (!refreshWorkspace) {
+          createAndLoadFirstWorkspace();
+        }
+        history.push("/");
+      } catch (err) {
+        toast.error("Unable to create your first workspace. please try again");
       }
-      history.push("/");
     }
   };
 

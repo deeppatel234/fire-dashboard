@@ -20,9 +20,13 @@ const Onboarding = () => {
     createAndLoadFirstWorkspace,
   } = useContext(AppContext);
 
-  const createAndLoadDashboard = () => {
-    createAndLoadFirstWorkspace();
-    history.push("/");
+  const createAndLoadDashboard = async () => {
+    try {
+      await createAndLoadFirstWorkspace();
+      history.push("/");
+    } catch (err) {
+      toast.error("Unable to create your first workspace. please try again");
+    }
   };
 
   const onClickSyncNow = () => {

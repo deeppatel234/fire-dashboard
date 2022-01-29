@@ -7,9 +7,8 @@ import _cloneDeep from "lodash/cloneDeep";
 
 import AppContext from "src/AppContext";
 import useChromeTabs from "utils/useChromeTabs";
-
-import BookmarkModal from "../../services/BookmarkModal";
-import BookmarkGroupModal from "../../services/BookmarkGroupModal";
+import BookmarkModal from "services/BookmarkModal";
+import BookmarkGroupModal from "services/BookmarkGroupModal";
 
 import BookmarkContext from "./BookmarkContext";
 import BookmarkView from "./BookmarkView";

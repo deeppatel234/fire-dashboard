@@ -14,6 +14,7 @@ const SRC_DIR = path.resolve(__dirname, "../src");
 const COMPONENTS = path.resolve(SRC_DIR, "components");
 const PAGES = path.resolve(SRC_DIR, "pages");
 const UTILS = path.resolve(SRC_DIR, "utils");
+const SERVICES = path.resolve(SRC_DIR, "services");
 
 module.exports = {
   EXTENSION_DIR,
@@ -23,4 +24,5 @@ module.exports = {
   UTILS,
   PAGES,
   BROWSER_DIR,
+  SERVICES,
 };
