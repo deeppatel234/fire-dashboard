@@ -82,7 +82,7 @@ const FirebaseSetup = () => {
       await localSet({
         syncSetting: {
           autoSync: true,
-          syncInterval: 6 * 60 * 60 * 1000, // 6 hr
+          syncInterval: 6 * 60, // 6 hr
         },
       });
 

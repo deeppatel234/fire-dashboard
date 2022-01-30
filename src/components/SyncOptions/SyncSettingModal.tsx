@@ -13,37 +13,38 @@ import { localGet, localSet } from "utils/chromeStorage";
 const updateIntervalOptions = [
   {
     label: "15 Min",
-    value: 15 * 60 * 1000,
+    value: 15,
   },
   {
     label: "30 Min",
-    value: 30 * 60 * 1000,
+    value: 30,
   },
   {
     label: "1 Hour",
-    value: 1 * 60 * 60 * 1000,
+    value: 1 * 60,
   },
   {
     label: "3 Hours",
-    value: 3 * 60 * 60 * 1000,
+    value: 3 * 60,
   },
   {
     label: "6 Hours",
-    value: 6 * 60 * 60 * 1000,
+    value: 6 * 60,
   },
   {
     label: "9 Hours",
-    value: 9 * 60 * 60 * 1000,
+    value: 9 * 60,
   },
   {
     label: "12 Hours",
-    value: 12 * 60 * 60 * 1000,
+    value: 12 * 60,
   },
 ];
 
 const SyncSettingModal = ({ onClose }) => {
-  const onSubmitData = (dataToSave) => {
-    localSet({ syncSetting: dataToSave });
+  const onSubmitData = async (dataToSave) => {
+    await localSet({ syncSetting: dataToSave });
+    onClose();
   };
 
   const formik = useFormik({
