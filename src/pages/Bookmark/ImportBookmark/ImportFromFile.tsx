@@ -1,6 +1,7 @@
 import React, { useContext, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import CheckboxTree from "react-checkbox-tree";
+import _unionBy from "lodash/unionBy";
 
 import FileUpload from "components/FileUpload";
 import Modal from "components/Modal";
@@ -25,9 +26,10 @@ const ImportFromFile = ({ onClose }) => {
   const onFileUpload = (files) => {
     const reader = new FileReader();
 
-    reader.onload = function (event) {
+    reader.onload = (event) => {
       try {
-        setDataToUpload(JSON.parse(event?.target?.result));
+        const paresedData = JSON.parse(event?.target?.result);
+        setDataToUpload(paresedData);
       } catch (err) {
         toast.error("Please upload valid json file");
       }
@@ -37,8 +39,8 @@ const ImportFromFile = ({ onClose }) => {
   };
 
   const onSubmit = async (groupData) => {
-    const dataToSave = checked.map((id) => {
-      return dataToUpload?.bookmarkList.find((b) => b.id === id);
+    const dataToSave = checked.map((url) => {
+      return dataToUpload?.bookmarkList.find((b) => b.url === url);
     });
 
     try {
@@ -58,12 +60,14 @@ const ImportFromFile = ({ onClose }) => {
   };
 
   const nodes = useMemo(() => {
-    const bookmarkList = dataToUpload?.bookmarkList?.map?.((bookmark) => {
-      return {
-        value: bookmark.id,
-        label: bookmark.title,
-      };
-    });
+    const bookmarkList = _unionBy(dataToUpload?.bookmarkList || [], "url").map(
+      (bookmark) => {
+        return {
+          value: bookmark.url,
+          label: bookmark.title,
+        };
+      },
+    );
 
     return [
       {
