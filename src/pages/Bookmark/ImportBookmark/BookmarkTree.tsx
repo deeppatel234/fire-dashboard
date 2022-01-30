@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
-
 import CheckboxTree from "react-checkbox-tree";
+import { toast } from "react-toastify";
 
 import Modal from "components/Modal";
 import Button from "components/Button";
@@ -71,7 +71,7 @@ const BookmarkTree = ({ onClose }) => {
         });
         onClose();
       } catch (err) {
-        console.log(err);
+        toast.error("Unable to import bookmarks. Please try again");
       }
     });
   };

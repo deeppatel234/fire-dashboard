@@ -1,11 +1,13 @@
 import React, { useContext, useState } from "react";
 import classNames from "classnames";
+import { toast } from "react-toastify";
 
+import useConfirm from "components/Confirm/useConfirm";
 import Button from "components/Button";
 import PopoverDropdown from "components/PopoverDropdown";
 import useChromeTabs from "utils/useChromeTabs";
+import Sortable from "components/DragAndDrop/Sortable";
 
-import Sortable from "../../../../components/DragAndDrop/Sortable";
 import BookmarkContext from "../../BookmarkContext";
 import BookmarkCard from "../BookmarkCard";
 import NewGroupModal from "../../NewGroupModal";
@@ -29,6 +31,7 @@ const GroupCard = ({
     getActiveTabsList,
   } = useContext(BookmarkContext);
   const { removeAllTabs, createTabs } = useChromeTabs();
+  const { confirm } = useConfirm();
   const [isOpenOptionPopper, setIsOpenOptionPopper] = useState(false);
   const [showUpdateTitleModal, setShowUpdateTitleModal] = useState(false);
   const [showMergeGroupModal, setShowMergeGroupModal] = useState(false);
@@ -65,32 +68,46 @@ const GroupCard = ({
     onClickOpenTabs();
   };
 
-  const onClickUpdateGroup = (newDate) => {
-    toggleUpdateTitleModal();
-    updateGroupData({
-      ...groupData,
-      ...newDate,
-    });
-  };
-
-  const deleteGroup = () => {
-    updateGroupData({
-      ...groupData,
-      isDeleted: 1,
-    });
-    if (dataList?.length) {
-      updateBookmarkData(
-        dataList.map((id) => {
-          const { bookmarkId } = getId(id);
-          const bookmark = bookmarks[bookmarkId];
-
-          return { ...bookmark, isDeleted: 1 };
-        }),
-      );
+  const onClickUpdateGroup = async (newDate) => {
+    try {
+      toggleUpdateTitleModal();
+      await updateGroupData({
+        ...groupData,
+        ...newDate,
+      });
+    } catch (err) {
+      toast.error("Unable to update collection. Please try again");
     }
   };
 
-  const moveToTop = () => {
+  const deleteGroup = async () => {
+    const isConfirmed = await confirm({
+      message: `Are you sure want to delete this collection?`,
+    });
+
+    if (isConfirmed) {
+      try {
+        if (dataList?.length) {
+          await updateBookmarkData(
+            dataList.map((id) => {
+              const { bookmarkId } = getId(id);
+              const bookmark = bookmarks[bookmarkId];
+
+              return { ...bookmark, isDeleted: 1 };
+            }),
+          );
+        }
+        await updateGroupData({
+          ...groupData,
+          isDeleted: 1,
+        });
+      } catch (err) {
+        toast.error("Unable to delete collection. Please try again");
+      }
+    }
+  };
+
+  const moveToTop = async () => {
     const newPosData = [];
     let counter = 1;
 
@@ -111,17 +128,25 @@ const GroupCard = ({
       }
     });
 
-    updateGroupData(newPosData);
+    try {
+      await updateGroupData(newPosData);
+    } catch (err) {
+      toast.error("Unable to move collection to top. Please try again");
+    }
   };
 
-  const importOpenTabs = () => {
+  const importOpenTabs = async () => {
     const bookmarkList = getActiveTabsList().map((b, index) => ({
       ...b,
       groupId: groupData.id,
       position: dataList.length + index,
     }));
 
-    updateBookmarkData(bookmarkList);
+    try {
+      await updateBookmarkData(bookmarkList);
+    } catch (err) {
+      toast.error("Unable to import open tabs. Please try again");
+    }
   };
 
   const exportCollection = () => {
@@ -155,11 +180,15 @@ const GroupCard = ({
     }
   };
 
-  const toggleCollapse = () => {
-    updateGroupData({
-      ...groupData,
-      collapse: !groupData.collapse,
-    });
+  const toggleCollapse = async () => {
+    try {
+      await updateGroupData({
+        ...groupData,
+        collapse: !groupData.collapse,
+      });
+    } catch (err) {
+      toast.error("Unable to toggle collection. Please try again");
+    }
   };
 
   const renderData = () => {

@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import { toast } from "react-toastify";
 
 import Button from "components/Button";
 
@@ -27,7 +28,7 @@ const ActiveTabs = ({ isSortingContainer }): JSX.Element => {
       });
       toggleCreateModal();
     } catch (err) {
-      console.log("err", err);
+      toast.error("Unable to save session. Please try again");
     }
   };
 
@@ -35,7 +36,12 @@ const ActiveTabs = ({ isSortingContainer }): JSX.Element => {
     <div className="current-tab-wrapper">
       <div className="current-tab-header">
         <div className="tab-title">Tabs</div>
-        <Button outline size="small" onClick={toggleCreateModal}>
+        <Button
+          outline
+          size="small"
+          onClick={toggleCreateModal}
+          disabled={!tabIds?.length}
+        >
           Save Session
         </Button>
       </div>
@@ -61,6 +67,12 @@ const ActiveTabs = ({ isSortingContainer }): JSX.Element => {
             );
           })}
         </Sortable>
+        {!tabIds?.length ? (
+          <div className="empty-block">
+            <i className="icon ri-window-line" />
+            <div className="title">No active tabs</div>
+          </div>
+        ) : null}
       </div>
       <NewGroupModal
         isOpen={showCreateModal}

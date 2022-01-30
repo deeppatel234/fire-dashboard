@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import { createPortal } from "react-dom";
 import classNames from "classnames";
+import { toast } from "react-toastify";
 import {
   DndContext,
   KeyboardSensor,
@@ -59,7 +60,7 @@ const Collections = (): JSX.Element => {
       await createNewGroup(newData);
       toggleCreateModal();
     } catch (err) {
-      console.log("err", err);
+      toast.error("Unable to create collection. Please try again");
     }
   };
 

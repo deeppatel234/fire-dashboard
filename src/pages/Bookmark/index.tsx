@@ -4,6 +4,7 @@ import _groupBy from "lodash/groupBy";
 import _sortBy from "lodash/sortBy";
 import _isEqual from "lodash/isEqual";
 import _cloneDeep from "lodash/cloneDeep";
+import { toast } from "react-toastify";
 
 import AppContext from "src/AppContext";
 import useChromeTabs from "utils/useChromeTabs";
@@ -28,15 +29,20 @@ const Bookmark = (): JSX.Element => {
   const [data, setData] = useState({});
   const [originalData, setOriginalData] = useState({});
   const [enableBulkAction, setEnableBulkAction] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [bulkActionIds, setBulkActionIds] = useState([]);
 
   const loadData = async () => {
+    setIsLoading(true);
     try {
       const groupResponse = await BookmarkGroupModal.getAll();
       const response = await BookmarkModal.getAll();
       setGroups(_keyBy(groupResponse, "id"));
       setBookmarks(_keyBy(response, "id"));
-    } catch (err) {}
+    } catch (err) {
+      toast.error("Unable to load data. Please try again");
+    }
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -68,74 +74,70 @@ const Bookmark = (): JSX.Element => {
   };
 
   const updateGroupData = async (newGroupData) => {
-    try {
-      if (Array.isArray(newGroupData)) {
-        const newGroupResponse = await BookmarkGroupModal.bulkPut(newGroupData);
-        setGroups((groups) => {
-          const dataToReturn = {
-            ...groups,
-            ..._keyBy(newGroupResponse, "id"),
-          };
+    if (Array.isArray(newGroupData)) {
+      const newGroupResponse = await BookmarkGroupModal.bulkPut(newGroupData);
+      setGroups((groups) => {
+        const dataToReturn = {
+          ...groups,
+          ..._keyBy(newGroupResponse, "id"),
+        };
 
-          Object.values(dataToReturn).forEach((data) => {
-            if (data.isDeleted) {
-              delete data[data.id];
-            }
-          });
-
-          return dataToReturn;
-        });
-      } else {
-        const newGroupResponse = await BookmarkGroupModal.update(newGroupData);
-        setGroups((current) => {
-          if (newGroupResponse.isDeleted) {
-            delete current[newGroupResponse.id];
-            return { ...current };
+        Object.values(dataToReturn).forEach((data) => {
+          if (data.isDeleted) {
+            delete data[data.id];
           }
-
-          return {
-            ...current,
-            [newGroupResponse.id]: newGroupResponse,
-          };
         });
-      }
-    } catch (err) {}
+
+        return dataToReturn;
+      });
+    } else {
+      const newGroupResponse = await BookmarkGroupModal.update(newGroupData);
+      setGroups((current) => {
+        if (newGroupResponse.isDeleted) {
+          delete current[newGroupResponse.id];
+          return { ...current };
+        }
+
+        return {
+          ...current,
+          [newGroupResponse.id]: newGroupResponse,
+        };
+      });
+    }
   };
 
   const updateBookmarkData = async (newBookmark) => {
-    try {
-      if (Array.isArray(newBookmark)) {
-        const newBookmarkResponse = await BookmarkModal.bulkPut(newBookmark);
-        setBookmarks((bookmarks) => {
-          const dataToReturn = {
-            ...bookmarks,
-            ..._keyBy(newBookmarkResponse, "id"),
-          };
+    if (Array.isArray(newBookmark)) {
+      const newBookmarkResponse = await BookmarkModal.bulkPut(newBookmark);
+      setBookmarks((bookmarks) => {
+        const dataToReturn = {
+          ...bookmarks,
+          ..._keyBy(newBookmarkResponse, "id"),
+        };
 
-          Object.values(dataToReturn).forEach((data) => {
-            if (data.isDeleted) {
-              delete dataToReturn[data.id];
-            }
-          });
-
-          return dataToReturn;
-        });
-      } else {
-        const newBookmarkResponse = await BookmarkModal.update(newBookmark);
-
-        setBookmarks((current) => {
-          if (newBookmarkResponse.isDeleted) {
-            delete current[newBookmarkResponse.id];
-            return { ...current };
+        Object.values(dataToReturn).forEach((data) => {
+          if (data.isDeleted) {
+            delete dataToReturn[data.id];
           }
-
-          return {
-            ...current,
-            [newBookmarkResponse.id]: newBookmarkResponse,
-          };
         });
-      }
-    } catch (err) {}
+
+        return dataToReturn;
+      });
+    } else {
+      const newBookmarkResponse = await BookmarkModal.update(newBookmark);
+
+      setBookmarks((current) => {
+        if (newBookmarkResponse.isDeleted) {
+          delete current[newBookmarkResponse.id];
+          return { ...current };
+        }
+
+        return {
+          ...current,
+          [newBookmarkResponse.id]: newBookmarkResponse,
+        };
+      });
+    }
   };
 
   const updateData = (containerId, newData) => {
@@ -186,26 +188,22 @@ const Bookmark = (): JSX.Element => {
   };
 
   const createNewGroup = async (newGroupData) => {
-    try {
-      const groupResponse = await BookmarkGroupModal.add({
-        ...newGroupData,
-        name: newGroupData.name || `Untitled`,
-        position: 0,
-      });
-      await updateGroupData(
-        [`Group-${groupResponse.id}`, ...data.groupIds].map((id, index) => {
-          const { groupId } = getId(id);
+    const groupResponse = await BookmarkGroupModal.add({
+      ...newGroupData,
+      name: newGroupData.name || `Untitled`,
+      position: 0,
+    });
+    await updateGroupData(
+      [`Group-${groupResponse.id}`, ...data.groupIds].map((id, index) => {
+        const { groupId } = getId(id);
 
-          return {
-            ...(groupId === groupResponse.id ? groupResponse : groups[groupId]),
-            position: index,
-          };
-        }),
-      );
-      return groupResponse;
-    } catch (err) {
-      console.log("err", err);
-    }
+        return {
+          ...(groupId === groupResponse.id ? groupResponse : groups[groupId]),
+          position: index,
+        };
+      }),
+    );
+    return groupResponse;
   };
 
   const createGroupAndAddBookmark = async ({
@@ -213,27 +211,23 @@ const Bookmark = (): JSX.Element => {
     bookmarkData,
     bookmarkList,
   }) => {
-    try {
-      const groupResponse = await createNewGroup(groupData);
+    const groupResponse = await createNewGroup(groupData);
 
-      const dataToSave = bookmarkList
-        ? bookmarkList.map((b, index) => ({
-            ...b,
+    const dataToSave = bookmarkList
+      ? bookmarkList.map((b, index) => ({
+          ...b,
+          groupId: groupResponse.id,
+          position: index,
+        }))
+      : [
+          {
+            ...bookmarkData,
             groupId: groupResponse.id,
-            position: index,
-          }))
-        : [
-            {
-              ...bookmarkData,
-              groupId: groupResponse.id,
-              position: 0,
-            },
-          ];
+            position: 0,
+          },
+        ];
 
-      await updateBookmarkData(dataToSave);
-    } catch (err) {
-      console.log("err", err);
-    }
+    await updateBookmarkData(dataToSave);
   };
 
   const getActiveTabsList = () => {
@@ -247,6 +241,10 @@ const Bookmark = (): JSX.Element => {
       };
     });
   };
+
+  if (isLoading) {
+    return null;
+  }
 
   return (
     <BookmarkContext.Provider

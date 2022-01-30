@@ -1,8 +1,10 @@
 import React, { useContext, useState } from "react";
 import classNames from "classnames";
+import { toast } from "react-toastify";
 
 import PopoverDropdown from "components/PopoverDropdown";
 import useChromeTabs from "utils/useChromeTabs";
+import useConfirm from "components/Confirm/useConfirm";
 
 import BookmarkContext from "../../BookmarkContext";
 import BookmarkEditModal from "../../BookmarkEditModal";
@@ -15,7 +17,9 @@ const BookmarkCard = ({
   bookmarkId,
   isDragComponent,
 }): JSX.Element => {
-  const { createTabs, updateCurrentTab } = useChromeTabs({ listnerTabs: false });
+  const { createTabs, updateCurrentTab } = useChromeTabs({
+    listnerTabs: false,
+  });
   const {
     bookmarks,
     tabData,
@@ -25,6 +29,7 @@ const BookmarkCard = ({
     setBulkActionIds,
     workspace,
   } = useContext(BookmarkContext);
+  const { confirm } = useConfirm();
   const [isOpenOptionPopper, setIsOpenOptionPopper] = useState(false);
   const [isOpenEditModal, setIsOpenEditModal] = useState(false);
 
@@ -53,20 +58,38 @@ const BookmarkCard = ({
     }
   };
 
-  const onSelectOption = (option) => {
-    if (option.key === "DELETE") {
-      updateBookmarkData({
-        ...bookmark,
-        isDeleted: 1,
-      });
-    } else if (option.key === "EDIT") {
-      toggleEditModal();
+  const onEdit = async (newData) => {
+    try {
+      await updateBookmarkData(newData);
+      setIsOpenEditModal(false);
+    } catch (err) {
+      toast.error("Unable to edit bookmark. Please try again");
     }
   };
 
-  const onEdit = (newData) => {
-    updateBookmarkData(newData);
-    setIsOpenEditModal(false);
+  const onDelete = async () => {
+    const isConfirmed = await confirm({
+      message: `Are you sure want to delete this bookmark?`,
+    });
+
+    if (isConfirmed) {
+      try {
+        await updateBookmarkData({
+          ...bookmark,
+          isDeleted: 1,
+        });
+      } catch (err) {
+        toast.error("Unable to delete bookmark. Please try again");
+      }
+    }
+  };
+
+  const onSelectOption = (option) => {
+    if (option.key === "DELETE") {
+      onDelete();
+    } else if (option.key === "EDIT") {
+      toggleEditModal();
+    }
   };
 
   return (

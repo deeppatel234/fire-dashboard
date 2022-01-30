@@ -53,7 +53,7 @@ const ImportFromFile = ({ onClose }) => {
       });
       onClose();
     } catch (err) {
-      console.log(err);
+      toast.error("Unable to import bookmarks. Please try again");
     }
   };
 

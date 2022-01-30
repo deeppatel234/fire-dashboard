@@ -20,6 +20,25 @@
     flex: 1;
     // overflow: auto;
     padding: 0 15px;
+
+    .empty-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      padding-bottom: 100px;
+
+      .icon {
+        font-size: 3rem;
+        color: var(--text-secondary);
+        margin-bottom: 10px;
+      }
+      .title {
+        font-size: 1.1rem;
+        color: var(--text-secondary);
+      }
+    }
   }
 }
 

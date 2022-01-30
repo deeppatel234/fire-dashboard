@@ -1,4 +1,5 @@
 import React, { useContext, useMemo, useState } from "react";
+import { toast } from "react-toastify";
 
 import Modal from "components/Modal";
 import Button from "components/Button";
@@ -29,7 +30,7 @@ const MergeCollectionModal = ({
     onClose();
   };
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     let bookmarkToMove = [];
 
     if (moveBookmarks?.length) {
@@ -50,7 +51,12 @@ const MergeCollectionModal = ({
       position: bookmarkToMoveIn.length + index,
     }));
 
-    updateBookmarkData(bookmarkList);
+    try {
+      await updateBookmarkData(bookmarkList);
+    } catch (err) {
+      toast.error("Unable to merge bookmarks. Please try again");
+    }
+
     onDone();
   };
 

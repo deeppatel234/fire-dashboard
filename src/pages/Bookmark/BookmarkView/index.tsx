@@ -1,6 +1,6 @@
 import React, { useContext, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-
+import { toast } from "react-toastify";
 import {
   DndContext,
   KeyboardSensor,
@@ -205,31 +205,35 @@ const BookmarkView = (): JSX.Element => {
     cancelResolveRef.current = {};
   };
 
-  const handleDragEnd = (dragState) => {
+  const handleDragEnd = async (dragState) => {
     const { active, over } = dragState;
     const { id: activeId } = active || {};
     const { id: overId } = over || {};
     const { type, tabId, bookmarkId } = active?.data?.current;
 
     if (overId === "NewGroupDroppable") {
-      if (type === "tab") {
-        const tab = tabData[tabId];
-        createGroupAndAddBookmark({
-          bookmarkData: {
-            favIconUrl: tab.favIconUrl,
-            url: tab.url,
-            title: tab.title,
-          },
-          groupData: cancelResolveRef.current.data,
-        });
-      } else if (type === "bookmark") {
-        const bookmark = bookmarks[bookmarkId];
-        createGroupAndAddBookmark({
-          bookmarkData: bookmark,
-          groupData: cancelResolveRef.current.data,
-        });
+      try {
+        if (type === "tab") {
+          const tab = tabData[tabId];
+          await createGroupAndAddBookmark({
+            bookmarkData: {
+              favIconUrl: tab.favIconUrl,
+              url: tab.url,
+              title: tab.title,
+            },
+            groupData: cancelResolveRef.current.data,
+          });
+        } else if (type === "bookmark") {
+          const bookmark = bookmarks[bookmarkId];
+          await createGroupAndAddBookmark({
+            bookmarkData: bookmark,
+            groupData: cancelResolveRef.current.data,
+          });
+        }
+        cleanOnEnd();
+      } catch (err) {
+        toast.error("Unable to create collection. Please try again");
       }
-      cleanOnEnd();
       return;
     }
 
@@ -313,7 +317,7 @@ const BookmarkView = (): JSX.Element => {
     return confirmed === false;
   };
 
-  const onClickExpandAll = () => {
+  const onClickExpandAll = async () => {
     const groupsToUpdate = [];
 
     Object.values(groups).forEach((group) => {
@@ -326,11 +330,15 @@ const BookmarkView = (): JSX.Element => {
     });
 
     if (groupsToUpdate.length) {
-      updateGroupData(groupsToUpdate);
+      try {
+        await updateGroupData(groupsToUpdate);
+      } catch (err) {
+        toast.error("Unable to expand collections. Please try again");
+      }
     }
   };
 
-  const onClickCollapseAll = () => {
+  const onClickCollapseAll = async () => {
     const groupsToUpdate = [];
 
     Object.values(groups).forEach((group) => {
@@ -343,7 +351,11 @@ const BookmarkView = (): JSX.Element => {
     });
 
     if (groupsToUpdate.length) {
-      updateGroupData(groupsToUpdate);
+      try {
+        await updateGroupData(groupsToUpdate);
+      } catch (err) {
+        toast.error("Unable to collapse collections. Please try again");
+      }
     }
   };
 
