@@ -28,7 +28,7 @@ class WorkspaceModal extends BaseModal {
           userName: "",
           clockType: "12hr",
           showGreeting: true,
-          imageType: "DEFAULT",
+          imageType: "UNSPLASH",
           imageConfig: {
             customImageUrls: [],
             unsplashCategories: ["nature"],
