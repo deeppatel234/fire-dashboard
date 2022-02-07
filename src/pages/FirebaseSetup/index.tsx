@@ -86,7 +86,7 @@ const FirebaseSetup = () => {
         },
       });
 
-      const hasBackup = firebase.hasBackup(data);
+      const hasBackup = await firebase.hasBackup(data);
 
       if (hasBackup) {
         const isConfirmed = await confirm({
@@ -96,6 +96,7 @@ const FirebaseSetup = () => {
 
         if (isConfirmed) {
           startSync();
+          setIsLoading(false);
           return;
         }
       }

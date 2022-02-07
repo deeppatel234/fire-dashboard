@@ -3,7 +3,6 @@ import { createPortal } from "react-dom";
 import { toast } from "react-toastify";
 import {
   DndContext,
-  KeyboardSensor,
   useSensor,
   useSensors,
   DragOverlay,
@@ -63,9 +62,6 @@ const BookmarkView = (): JSX.Element => {
         delay: 250,
         tolerance: 10,
       },
-    }),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
     }),
   );
   const [activeDrag, setActiveDrag] = useState(null);
@@ -220,6 +216,7 @@ const BookmarkView = (): JSX.Element => {
               favIconUrl: tab.favIconUrl,
               url: tab.url,
               title: tab.title,
+              pinned: tab.pinned,
             },
             groupData: cancelResolveRef.current.data,
           });

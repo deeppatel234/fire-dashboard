@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 
 import { useFormik } from "formik";
+import { object, string, boolean } from "yup";
 
 import Modal from "components/Modal";
 import Button from "components/Button";
@@ -8,10 +9,19 @@ import FormGroup from "components/FormGroup";
 import FormItem from "components/FormItem";
 import Input from "components/Input";
 import Switch from "components/Switch";
+import useFormError from "utils/useFormError";
 
 import "./index.scss";
 
+const validationSchema = object({
+  title: string().required("Title is required field"),
+  url: string().required("Url is required field"),
+  pinned: boolean().required("Pinned is required field"),
+});
+
 const BookmarkEditModal = ({ isOpen, onClose, onConfirm, dataToUpdate }) => {
+  const { onSubmitForm, showError } = useFormError();
+
   const onSubmitData = async (dataToSave) => {
     onConfirm(dataToSave);
   };
@@ -19,6 +29,7 @@ const BookmarkEditModal = ({ isOpen, onClose, onConfirm, dataToUpdate }) => {
   const formik = useFormik({
     initialValues: dataToUpdate,
     onSubmit: onSubmitData,
+    validationSchema,
   });
 
   const reset = () => {
@@ -45,7 +56,9 @@ const BookmarkEditModal = ({ isOpen, onClose, onConfirm, dataToUpdate }) => {
         <FormGroup
           labelWidth={3}
           values={formik.values}
+          errors={formik.errors}
           setValue={formik.setFieldValue}
+          showError={showError}
         >
           <FormItem formKey="title" label="Title" componentType="input">
             <Input />
@@ -59,7 +72,7 @@ const BookmarkEditModal = ({ isOpen, onClose, onConfirm, dataToUpdate }) => {
         </FormGroup>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={formik.handleSubmit}>Update</Button>
+        <Button onClick={onSubmitForm(formik.handleSubmit)}>Update</Button>
         <Button type="default" onClick={close}>
           Cancel
         </Button>

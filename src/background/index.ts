@@ -59,8 +59,6 @@ const init = async () => {
   });
 };
 
-init();
-
 chrome.runtime.onMessage.addListener((request) => {
   if (request.app === APP_NAME && request.type) {
     if (request.type === SYNC_NOW) {
@@ -68,3 +66,5 @@ chrome.runtime.onMessage.addListener((request) => {
     }
   }
 });
+
+init();

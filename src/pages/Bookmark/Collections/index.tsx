@@ -4,7 +4,6 @@ import classNames from "classnames";
 import { toast } from "react-toastify";
 import {
   DndContext,
-  KeyboardSensor,
   MouseSensor,
   useSensor,
   useSensors,
@@ -49,9 +48,6 @@ const Collections = (): JSX.Element => {
         delay: 250,
         tolerance: 10,
       },
-    }),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
     }),
   );
 

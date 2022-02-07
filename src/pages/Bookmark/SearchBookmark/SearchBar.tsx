@@ -16,8 +16,8 @@ const SearchBar = () => {
   const results = useMemo(() => {
     const searchedBookmarks = Object.values(bookmarks).filter((bookmark) => {
       if (
-        bookmark.title.includes(searchTerm) ||
-        bookmark.url.includes(searchTerm)
+        bookmark.title.toLowerCase().includes(searchTerm) ||
+        bookmark.url.toLowerCase().includes(searchTerm)
       ) {
         return true;
       }
