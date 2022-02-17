@@ -7,12 +7,12 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 <p align="center">
-  <img src="https://github.com/deeppatel234/fire-dashboard/blob/main/store-assets/screenshots/Bookmark.png?raw=true" width="50%"/>
+  <img src="https://github.com/deeppatel234/fire-dashboard/blob/main/store-assets/screenshots/bookmark.png?raw=true" width="50%"/>
 </p>
 <p align="center">
-  <img src="https://github.com/deeppatel234/fire-dashboard/blob/main/store-assets/screenshots/Add%20a%20subheading.png?raw=true" width="30%"/>
-  <img src="https://github.com/deeppatel234/fire-dashboard/blob/main/store-assets/screenshots/Theme%20Support.png?raw=true" width="30%"/>
-  <img src="https://github.com/deeppatel234/fire-dashboard/blob/main/store-assets/screenshots/Add%20a%20subheading%20(1).png?raw=true" height="50%" width="30%"/>
+  <img src="https://github.com/deeppatel234/fire-dashboard/blob/main/store-assets/screenshots/new-tab-bg.png?raw=true" width="30%"/>
+  <img src="https://github.com/deeppatel234/fire-dashboard/blob/main/store-assets/screenshots/theme-support.png?raw=true" width="30%"/>
+  <img src="https://github.com/deeppatel234/fire-dashboard/blob/main/store-assets/screenshots/multi-workspace.png?raw=true" height="50%" width="30%"/>
 </p>
 
 ## Installation
