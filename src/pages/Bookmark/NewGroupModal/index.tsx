@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 import Modal from "components/Modal";
 import Button from "components/Button";
@@ -33,8 +34,12 @@ const NewGroupModal = ({ isOpen, onClose, onConfirm, dataToUpdate }) => {
   };
 
   const onSubmit = () => {
-    onConfirm({ name, icon });
-    reset();
+    if (name) {
+      onConfirm({ name, icon });
+      reset();
+    } else {
+      toast.error("Please enter collection name");
+    }
   };
 
   return (
