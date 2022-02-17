@@ -30,7 +30,13 @@ const PopoverDropdown = ({
                 className={classNames("dropdown-item", op.className, {
                   disabled: op.disabled,
                 })}
-                onClick={() => onSelect(op)}
+                onClick={(event) => {
+                  if (!op.disabled) {
+                    onSelect(op);
+                  } else {
+                    event.stopPropagation();
+                  }
+                }}
               >
                 <i className={classNames("icon", op.icon)} />
                 <div>{op.label}</div>
