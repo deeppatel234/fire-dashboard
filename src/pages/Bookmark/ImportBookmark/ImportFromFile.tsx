@@ -29,7 +29,11 @@ const ImportFromFile = ({ onClose }) => {
     reader.onload = (event) => {
       try {
         const paresedData = JSON.parse(event?.target?.result);
-        setDataToUpload(paresedData);
+        if (paresedData?.bookmarkList?.length) {
+          setDataToUpload(paresedData);
+        } else {
+          throw {};
+        }
       } catch (err) {
         toast.error("Please upload valid json file");
       }
@@ -113,7 +117,7 @@ const ImportFromFile = ({ onClose }) => {
             />
           </>
         ) : (
-          <FileUpload onChange={onFileUpload} />
+          <FileUpload onChange={onFileUpload} accept="application/json" />
         )}
       </Modal.Body>
       <Modal.Footer>

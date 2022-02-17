@@ -102,7 +102,9 @@ const BookmarkTree = ({ onClose }) => {
         />
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={toggleCreateGroup}>Import</Button>
+        <Button disabled={!checked.length} onClick={toggleCreateGroup}>
+          Import
+        </Button>
         <Button type="default" onClick={onClose}>
           Cancel
         </Button>
