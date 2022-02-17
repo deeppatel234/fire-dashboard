@@ -16,7 +16,7 @@ import "./index.scss";
 const validationSchema = object({
   title: string().required("Title is required field"),
   url: string().required("Url is required field"),
-  pinned: boolean().required("Pinned is required field"),
+  pinned: boolean(),
 });
 
 const BookmarkEditModal = ({ isOpen, onClose, onConfirm, dataToUpdate }) => {
