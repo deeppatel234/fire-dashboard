@@ -2,7 +2,7 @@ import React from "react";
 
 import "./index.scss";
 
-const FileUpload = ({ onChange }) => {
+const FileUpload = ({ onChange, accept }) => {
   const onFileUpload = (event) => {
     const target = event.target;
     const files = [...target.files];
@@ -14,7 +14,7 @@ const FileUpload = ({ onChange }) => {
     <div className="file-upload-block-wrapper">
       <div className="file-upload-block">
         <div className="title">Click or Drag a file to this area to upload</div>
-        <input type="file" onChange={onFileUpload} />
+        <input type="file" onChange={onFileUpload} accept={accept} />
       </div>
     </div>
   );
