@@ -50,3 +50,8 @@ Genuinely enjoy the fire dashboard experience? Support the developer by giving a
 ## TODO
 
 - Convert this project to typescript
+
+
+## Product Hunt
+
+<a href="https://www.producthunt.com/posts/fire-dashboard?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-fire-dashboard" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=332231&theme=light" alt="Fire Dashboard - New tab dashboard and bookmark manager | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
