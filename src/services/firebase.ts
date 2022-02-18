@@ -70,23 +70,18 @@ class FirebaseService {
     }
   }
 
-  async getTempDB(config) {
-    const localConfig = await this.getConfig(config);
-
-    return this.initFirebase(localConfig);
-  }
-
   async test(config) {
-    const db = this.getTempDB(config);
+    const db = this.initFirebase(config);
 
     const response = await addDoc(collection(db, "test-fire-dashboard-app"), {
       hello: "world",
     });
+
     await deleteDoc(response);
   }
 
   async hasBackup(config) {
-    const db = this.getTempDB(config);
+    const db = this.initFirebase(config);
 
     const querySnapshot = await getDocs(
       query(collection(db, "workspace_workspace"), where("isDeleted", "==", 0)),
@@ -100,7 +95,7 @@ class FirebaseService {
   }
 
   async deleteAllWorkspace(config) {
-    const db = this.getTempDB(config);
+    const db = this.initFirebase(config);
 
     const querySnapshot = await getDocs(
       query(collection(db, "workspace_workspace"), where("isDeleted", "==", 0)),
