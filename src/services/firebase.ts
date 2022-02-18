@@ -46,103 +46,69 @@ class FirebaseService {
     });
   }
 
+  initFirebase(config) {
+    const firebaseConfig: FirebaseConfig = {
+      apiKey: config.apiKey,
+      authDomain: `${config.projectId}.firebaseapp.com`,
+      projectId: config.projectId,
+    };
+
+    const firebaseApp = initializeApp(firebaseConfig);
+
+    const db = initializeFirestore(firebaseApp, {
+      ignoreUndefinedProperties: true,
+    });
+
+    return db;
+  }
+
   async init() {
     const localConfig = await this.getConfig();
 
     if (localConfig.apiKey && localConfig.projectId) {
-      const firebaseConfig: FirebaseConfig = {
-        apiKey: localConfig.apiKey,
-        authDomain: `${localConfig.projectId}.firebaseapp.com`,
-        projectId: localConfig.projectId,
-      };
-
-      const firebaseApp = initializeApp(firebaseConfig);
-
-      this.db = initializeFirestore(firebaseApp, {});
+      this.db = this.initFirebase(localConfig);
     }
+  }
+
+  async getTempDB(config) {
+    const localConfig = await this.getConfig(config);
+
+    return this.initFirebase(localConfig);
   }
 
   async test(config) {
-    const localConfig = await this.getConfig(config);
+    const db = this.getTempDB(config);
 
-    const firebaseConfig: FirebaseConfig = {
-      apiKey: localConfig.apiKey,
-      authDomain: `${localConfig.projectId}.firebaseapp.com`,
-      projectId: localConfig.projectId,
-    };
-
-    try {
-      const firebaseApp = initializeApp(firebaseConfig);
-
-      const db = initializeFirestore(firebaseApp, {});
-
-      const response = await addDoc(collection(db, "test-fire-dashboard-app"), {
-        hello: "world",
-      });
-      await deleteDoc(response);
-    } catch (e) {
-      return Promise.reject();
-    }
+    const response = await addDoc(collection(db, "test-fire-dashboard-app"), {
+      hello: "world",
+    });
+    await deleteDoc(response);
   }
 
   async hasBackup(config) {
-    const localConfig = await this.getConfig(config);
+    const db = this.getTempDB(config);
 
-    const firebaseConfig: FirebaseConfig = {
-      apiKey: localConfig.apiKey,
-      authDomain: `${localConfig.projectId}.firebaseapp.com`,
-      projectId: localConfig.projectId,
-    };
+    const querySnapshot = await getDocs(
+      query(collection(db, "workspace_workspace"), where("isDeleted", "==", 0)),
+    );
 
-    try {
-      const firebaseApp = initializeApp(firebaseConfig);
+    const workspaces = [];
 
-      const db = initializeFirestore(firebaseApp, {});
+    querySnapshot.forEach((doc) => workspaces.push(doc.data()));
 
-      const querySnapshot = await getDocs(
-        query(
-          collection(db, "workspace_workspace"),
-          where("isDeleted", "==", 0),
-        ),
-      );
-
-      const workspaces = [];
-
-      querySnapshot.forEach((doc) => workspaces.push(doc.data()));
-
-      return !!workspaces.length;
-    } catch (e) {
-      return Promise.reject();
-    }
+    return !!workspaces.length;
   }
 
   async deleteAllWorkspace(config) {
-    const localConfig = await this.getConfig(config);
+    const db = this.getTempDB(config);
 
-    const firebaseConfig: FirebaseConfig = {
-      apiKey: localConfig.apiKey,
-      authDomain: `${localConfig.projectId}.firebaseapp.com`,
-      projectId: localConfig.projectId,
-    };
+    const querySnapshot = await getDocs(
+      query(collection(db, "workspace_workspace"), where("isDeleted", "==", 0)),
+    );
 
-    try {
-      const firebaseApp = initializeApp(firebaseConfig);
-
-      const db = initializeFirestore(firebaseApp, {});
-
-      const querySnapshot = await getDocs(
-        query(
-          collection(db, "workspace_workspace"),
-          where("isDeleted", "==", 0),
-        ),
-      );
-
-      querySnapshot.forEach((doc) => {
-        updateDoc(doc.ref, { isDeleted: 1 });
-      });
-    } catch (e) {
-      return Promise.reject();
-    }
+    querySnapshot.forEach((doc) => {
+      updateDoc(doc.ref, { isDeleted: 1 });
+    });
   }
 }
 
