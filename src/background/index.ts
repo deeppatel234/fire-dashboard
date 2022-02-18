@@ -8,6 +8,7 @@ const APP_NAME = "BOOKMARK_APP";
 const SYNC_NOW = "SYNC_NOW";
 const SYNC_STARTED = "SYNC_STARTED";
 const SYNC_COMPLETED = "SYNC_COMPLETED";
+const SYNC_FAILED = "SYNC_FAILED";
 
 const triggerSync = async () => {
   chrome.runtime.sendMessage({
@@ -17,12 +18,18 @@ const triggerSync = async () => {
 
   try {
     await sync.start();
-  } catch (err) {}
 
-  chrome.runtime.sendMessage({
-    app: APP_NAME,
-    type: SYNC_COMPLETED,
-  });
+    chrome.runtime.sendMessage({
+      app: APP_NAME,
+      type: SYNC_COMPLETED,
+    });
+  } catch (err) {
+    console.log(err);
+    chrome.runtime.sendMessage({
+      app: APP_NAME,
+      type: SYNC_FAILED,
+    });
+  }
 };
 
 const startSync = async () => {

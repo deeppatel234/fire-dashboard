@@ -88,23 +88,17 @@ class Sync {
   }
 
   async start() {
-    try {
-      await firebaseService.init();
+    await firebaseService.init();
 
-      const workspaceModal = initWorkpaceStorage();
+    const workspaceModal = initWorkpaceStorage();
 
-      await this.syncModal(workspaceModal);
+    await this.syncModal(workspaceModal);
 
-      const workspaces = await workspaceModal.getAll();
+    const workspaces = await workspaceModal.getAll();
 
-      for (let i = 0; i < workspaces.length; i++) {
-        try {
-          const workspace = workspaces[i];
-          await this.syncWorkspaceDb(workspace);
-        } catch (err) {}
-      }
-    } catch (err) {
-      console.log(err);
+    for (let i = 0; i < workspaces.length; i++) {
+      const workspace = workspaces[i];
+      await this.syncWorkspaceDb(workspace);
     }
   }
 }
