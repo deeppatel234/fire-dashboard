@@ -11,9 +11,9 @@ import FormItem from "components/FormItem";
 import AppContext from "src/AppContext";
 import useConfirm from "components/Confirm/useConfirm";
 import { localRemoveModalSyncTime, localSet } from "utils/chromeStorage";
-import useChromeSync from "utils/useChromeSync";
 import useFormError from "utils/useFormError";
 import firebase from "services/firebase";
+import sync from "services/sync";
 
 import ServerSvg from "./ServerSvg";
 
@@ -33,12 +33,7 @@ const FirebaseSetup = () => {
   const { onSubmitForm, showError } = useFormError();
   const [currentConfig, setCurrentConfig] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-
-  const onSyncComplete = () => {
-    goToHome(true);
-  };
-
-  const { isSyncInProgress, startSync } = useChromeSync({ onSyncComplete });
+  const [isSyncInProgress, setSyncInProgress] = useState(false);
 
   const isEditMode = useMemo(() => {
     return params?.mode === "edit";
@@ -95,13 +90,20 @@ const FirebaseSetup = () => {
         });
 
         if (isConfirmed) {
-          startSync();
           setIsLoading(false);
+          try {
+            setSyncInProgress(true);
+            await sync.start();
+            goToHome(true);
+          } catch (err) {
+            toast.error("Sync failed. please try again.");
+            setSyncInProgress(false);
+          }
           return;
         }
       }
 
-      await firebase.deleteAllWorkspace();
+      await firebase.deleteAllWorkspace(data);
 
       goToHome();
     } catch (err) {
