@@ -1,8 +1,14 @@
 .icon-selector-popover {
   .icon-selector-popover-content {
-    display: flex;
-    max-height: 300px;
-    max-width: 460px;
+    .icon-block {
+      display: flex;
+      max-height: 280px;
+      width: 460px;
+    }
+
+    .icon-input {
+      padding: 7px;
+    }
 
     .group-sidebar {
       overflow: auto;
@@ -24,10 +30,13 @@
     .group-content-wrapper {
       overflow: auto;
       scroll-behavior: smooth;
+      padding-top: 10px;
+      flex: 1;
       .group-content {
+        padding-bottom: 10px;
         .group-title {
           font-size: 1rem;
-          padding: 10px 15px;
+          padding: 0px 15px 10px 15px;
         }
         .group-icons {
           display: flex;
@@ -46,6 +55,12 @@
           cursor: pointer;
         }
       }
+    }
+
+    .empty-block {
+      padding: 20px;
+      justify-content: center;
+      color: var(--text-secondary);
     }
   }
 }
