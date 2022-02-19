@@ -21,7 +21,7 @@ const ImageOptions = () => {
       op.push({
         key: "SAVE_CUSTOM",
         icon: "ri-link-m",
-        label: "Save as Custom URL",
+        label: "Save as Custom Image",
       });
     }
 
