@@ -1,5 +1,4 @@
-// const chalk = require("chalk");
-import chalk from "chalk";
+const chalk = require("chalk");
 
 const archiver = require("archiver");
 const webpack = require("webpack");

@@ -1,8 +1,5 @@
-// const chalk = require("chalk");
-import chalk from "chalk";
-import build from "../../build/build";
-
-// const build = require("../../build/build");
+const chalk = require("chalk");
+const build = require("../../build/build");
 
 const startBuild = async () => {
   console.log(chalk.white.bgBlue("\nThe Chrome extension build started"));
