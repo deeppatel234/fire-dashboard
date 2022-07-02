@@ -8,7 +8,6 @@ module.exports = ({ isEnvDevelopment } = {}) => {
           regenerator: true,
         },
       ],
-      isEnvDevelopment && "react-refresh/babel",
     ].filter(Boolean),
     presets: [
       [

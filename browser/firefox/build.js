@@ -1,8 +1,9 @@
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable no-console */
 const chalk = require("chalk");
 const build = require("../../build/build");
 
 const startBuild = async () => {
-
   console.log(chalk.white.bgBlue("\nThe Firefox extension build started"));
 
   try {

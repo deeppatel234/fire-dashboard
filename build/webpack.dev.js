@@ -3,9 +3,8 @@ const path = require("path");
 const webpack = require("webpack");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const { merge } = require("webpack-merge");
-const ReactRefreshWebpackPlugin = require("@pmmmwh/react-refresh-webpack-plugin");
 
-const common = require("./webpack.common.js");
+const common = require("./webpack.common");
 const PATHS = require("./paths");
 
 const PORT = parseInt(process.env.PORT, 10) || 8000;
@@ -42,7 +41,6 @@ module.exports = ({ distPath } = {}) => {
     },
     plugins: [
       new webpack.SourceMapDevToolPlugin({}),
-      new ReactRefreshWebpackPlugin(),
       new MiniCssExtractPlugin({
         filename: "[name].css",
         ignoreOrder: true,

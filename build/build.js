@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const chalk = require("chalk");
 
 const archiver = require("archiver");
@@ -58,8 +59,6 @@ const buildProject = async ({ buildId, distPath, browserPath, tmpPath }) => {
 
   await new Promise((resove, reject) => {
     compailer.run((err, stats) => {
-      console.log(stats);
-
       if (err) {
         reject(err);
         return;
