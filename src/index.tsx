@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { MemoryRouter as Router } from "react-router-dom";
+import { MemoryRouter } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
 import ConfirmModal from "components/Confirm/ConfirmModal";
 import { initWorkpaceStorage } from "services/initService";
 
-import App from "./App";
-
 import "react-toastify/dist/ReactToastify.css";
+// eslint-disable-next-line import/no-extraneous-dependencies
 import "tippy.js/dist/tippy.css";
+
+import App from "./App";
 
 import "./styles/remixicon.css";
 import "./styles/app.scss";
@@ -32,7 +33,7 @@ const Main = (): JSX.Element => {
   }
 
   return (
-    <Router>
+    <MemoryRouter>
       <ToastContainer
         position="top-center"
         autoClose={5000}
@@ -47,7 +48,7 @@ const Main = (): JSX.Element => {
       <ConfirmModal>
         <App />
       </ConfirmModal>
-    </Router>
+    </MemoryRouter>
   );
 };
 

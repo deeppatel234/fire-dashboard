@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
-import { useHistory, useParams } from "react-router";
+import { useNavigate, useParams } from "react-router-dom";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import { object, string } from "yup";
@@ -26,9 +26,8 @@ const validationSchema = object({
 
 const FirebaseSetup = () => {
   const { confirm } = useConfirm();
-  const { createAndLoadFirstWorkspace, loadWorkspaces } =
-    useContext(AppContext);
-  const history = useHistory();
+  const { createAndLoadFirstWorkspace, loadWorkspaces } = useContext(AppContext);
+  const navigate = useNavigate();
   const params = useParams();
   const { onSubmitForm, showError } = useFormError();
   const [currentConfig, setCurrentConfig] = useState({});
@@ -44,13 +43,13 @@ const FirebaseSetup = () => {
       loadWorkspaces();
     }
     if (isEditMode) {
-      history.goBack();
+      navigate(-1);
     } else {
       try {
         if (!refreshWorkspace) {
           createAndLoadFirstWorkspace();
         }
-        history.push("/");
+        navigate("/");
       } catch (err) {
         toast.error("Unable to create your first workspace. please try again");
       }
@@ -58,10 +57,7 @@ const FirebaseSetup = () => {
   };
 
   const onSubmitData = async (data) => {
-    if (
-      currentConfig.projectId === data.projectId &&
-      currentConfig.apiKey === data.apiKey
-    ) {
+    if (currentConfig.projectId === data.projectId && currentConfig.apiKey === data.apiKey) {
       goToHome();
       return;
     }
@@ -138,9 +134,7 @@ const FirebaseSetup = () => {
       </div>
       <div className="form-content col-md-6">
         <div className="onboarding-title">
-          {isEditMode
-            ? "Firebase sync configuration"
-            : "Sync your data with firebase"}
+          {isEditMode ? "Firebase sync configuration" : "Sync your data with firebase"}
         </div>
         <div className="setup-modal">
           <FormGroup
@@ -152,27 +146,17 @@ const FirebaseSetup = () => {
           >
             <div className="setting-block">
               <div className="setting-content">
-                <FormItem
-                  formKey="projectId"
-                  label="Project Id"
-                  componentType="input"
-                >
+                <FormItem formKey="projectId" label="Project Id" componentType="input">
                   <Input />
                 </FormItem>
-                <FormItem
-                  formKey="apiKey"
-                  label="API Key"
-                  componentType="input"
-                >
+                <FormItem formKey="apiKey" label="API Key" componentType="input">
                   <Input />
                 </FormItem>
                 <div className="account-info">
                   Your firebase account data is stored in your browser only.
                 </div>
                 {isSyncInProgress ? (
-                  <div className="account-info">
-                    Please do not close this window while sync.
-                  </div>
+                  <div className="account-info">Please do not close this window while sync.</div>
                 ) : null}
               </div>
             </div>
@@ -185,11 +169,7 @@ const FirebaseSetup = () => {
             >
               {isSyncInProgress ? "Sync Data" : "Save"}
             </Button>
-            <Button
-              onClick={() => goToHome()}
-              link
-              disabled={isLoading || isSyncInProgress}
-            >
+            <Button onClick={() => goToHome()} link disabled={isLoading || isSyncInProgress}>
               {isEditMode ? "Close" : "Skip"}
             </Button>
           </div>

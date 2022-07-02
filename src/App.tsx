@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Switch, Route, useLocation, useHistory } from "react-router-dom";
+import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 import Home from "pages/Home";
@@ -15,7 +15,7 @@ import WorkspaceModal from "services/WorkspaceModal";
 
 const App = (): JSX.Element => {
   const location = useLocation();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [workspaceList, setWorkspaceList] = useState([]);
   const [workspaceId, setWorkSpaceId] = useState(() => {
     return localStorage.getItem("workspaceId");
@@ -33,7 +33,7 @@ const App = (): JSX.Element => {
       initStorage(newWorkspace);
       setWorkSpaceId(newWorkspace.id);
       setIsLoading(false);
-      history.push(routes[newWorkspace.settings.general.defaultApp].path);
+      navigate(routes[newWorkspace.settings.general.defaultApp].path);
     } catch (err) {
       toast.error("Something went wrong. please try again");
     }
@@ -44,11 +44,9 @@ const App = (): JSX.Element => {
       const workspaceData = await WorkspaceModal.getAll();
       if (workspaceData[0]) {
         setWorkspaceList(workspaceData);
-        loadWorkspaceDb(
-          workspaceData.find((w) => w.id === workspaceId) || workspaceData[0],
-        );
+        loadWorkspaceDb(workspaceData.find((w) => w.id === workspaceId) || workspaceData[0]);
       } else {
-        history.replace(routes.ONBOARDING.path);
+        navigate(routes.ONBOARDING.path, { replace: true });
         setIsLoading(false);
       }
     } catch (err) {
@@ -63,9 +61,7 @@ const App = (): JSX.Element => {
       }
     });
 
-    document.body.classList.add(
-      workspace?.settings?.general?.color || "color-1",
-    );
+    document.body.classList.add(workspace?.settings?.general?.color || "color-1");
   };
 
   useEffect(() => {
@@ -134,10 +130,7 @@ const App = (): JSX.Element => {
   };
 
   const renderHeader = () => {
-    if (
-      location.pathname.startsWith("/firebase") ||
-      location.pathname === "/onboarding"
-    ) {
+    if (location.pathname.startsWith("/firebase") || location.pathname === "/onboarding") {
       return null;
     }
 
@@ -169,20 +162,12 @@ const App = (): JSX.Element => {
       <div id="main-layout-wrapper" className="main-layout-wrapper">
         {renderHeader()}
         <div className="main-body">
-          <Switch>
-            <Route exact path={routes.BOOKMARK.path}>
-              <Bookmark />
-            </Route>
-            <Route exact path={routes.ONBOARDING.path}>
-              <Onboarding />
-            </Route>
-            <Route path={routes.FIREBASE.path}>
-              <FirebaseSetup />
-            </Route>
-            <Route exact path={routes.HOME.path}>
-              <Home />
-            </Route>
-          </Switch>
+          <Routes>
+            <Route path={routes.BOOKMARK.path} element={<Bookmark />} />
+            <Route path={routes.ONBOARDING.path} element={<Onboarding />} />
+            <Route path={routes.FIREBASE.path} element={<FirebaseSetup />} />
+            <Route path={routes.HOME.path} element={<Home />} />
+          </Routes>
         </div>
       </div>
     </AppContext.Provider>

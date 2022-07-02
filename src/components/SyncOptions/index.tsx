@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import classNames from "classnames";
 
 import PopoverDropdown from "components/PopoverDropdown";
@@ -12,7 +12,7 @@ import SyncSettingModal from "./SyncSettingModal";
 import "./index.scss";
 
 const SyncOptions = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { isSyncInProgress, startSync } = useChromeSync();
   const [isOpenOptionPopper, setIsOpenOptionPopper] = useState(false);
   const [showSettingModal, setShowSettingModal] = useState(false);
@@ -38,7 +38,7 @@ const SyncOptions = () => {
     } else if (option.key === "SYNC_SETTING") {
       toggleSettingModal();
     } else if (option.key === "FIREBASE_CONFIGURATION") {
-      history.push("/firebase/edit");
+      navigate("/firebase/edit");
     }
   };
 
@@ -55,8 +55,7 @@ const SyncOptions = () => {
             icon: "ri-refresh-line",
             label: "Sync Now",
             disabled: !isSyncAllowed,
-            disableTooltip:
-              "Please add firebase config for enable this feature",
+            disableTooltip: "Please add firebase config for enable this feature",
             tooltipPlacement: "left",
           },
           {
@@ -64,8 +63,7 @@ const SyncOptions = () => {
             icon: "ri-settings-3-line",
             label: "Sync Settings",
             disabled: !isSyncAllowed,
-            disableTooltip:
-              "Please add firebase config for enable this feature",
+            disableTooltip: "Please add firebase config for enable this feature",
             tooltipPlacement: "left",
           },
           {
@@ -75,7 +73,7 @@ const SyncOptions = () => {
           },
         ]}
       >
-        <a>
+        <a href="#javascript">
           <i
             className={classNames("sync-icon-menu ri-refresh-line", {
               spin: isSyncInProgress,

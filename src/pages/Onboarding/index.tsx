@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { useHistory } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 import Button from "components/Button";
@@ -10,7 +10,7 @@ import AppContext from "src/AppContext";
 import "./index.scss";
 
 const Onboarding = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [step, setStep] = useState(0);
   const {
     newWorkspaceIcon,
@@ -23,14 +23,14 @@ const Onboarding = () => {
   const createAndLoadDashboard = async () => {
     try {
       await createAndLoadFirstWorkspace();
-      history.push("/");
+      navigate("/");
     } catch (err) {
       toast.error("Unable to create your first workspace. please try again");
     }
   };
 
   const onClickSyncNow = () => {
-    history.push("/firebase/create");
+    navigate("/firebase/create");
   };
 
   const nextStep = () => {
@@ -44,7 +44,7 @@ const Onboarding = () => {
   const renderStep1 = () => {
     return (
       <div className="welcome-block">
-        <img className="logo" src="/assets/icons/icon500.png" />
+        <img alt="logo" className="logo" src="/assets/icons/icon500.png" />
         <div className="title">Welcome to Fire Dashboard</div>
         <div className="sub-title">
           Your personal browser new tab dashboard with multiple workspaces
@@ -61,10 +61,7 @@ const Onboarding = () => {
       <div className="welcome-block">
         <div className="title">Create your first workspace</div>
         <div className="workspace-basic">
-          <IconSelector
-            selectedIcon={newWorkspaceIcon}
-            setSelectedIcon={setNewWorkspaceIcon}
-          />
+          <IconSelector selectedIcon={newWorkspaceIcon} setSelectedIcon={setNewWorkspaceIcon} />
           <Input
             placeholder="Workspace Name"
             value={newWorkspaceName}
@@ -89,11 +86,7 @@ const Onboarding = () => {
         <Button size="large" onClick={onClickSyncNow}>
           Do it now
         </Button>
-        <Button
-          className="btn-ml"
-          size="large"
-          onClick={createAndLoadDashboard}
-        >
+        <Button className="btn-ml" size="large" onClick={createAndLoadDashboard}>
           Do it later
         </Button>
       </div>

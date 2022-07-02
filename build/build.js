@@ -1,15 +1,18 @@
+// const chalk = require("chalk");
+import chalk from "chalk";
+
 const archiver = require("archiver");
 const webpack = require("webpack");
-const chalk = require("chalk");
 const replace = require("replace-in-file");
 
 const { createWriteStream } = require("fs");
 const { copy, ensureDir, move, remove } = require("fs-extra");
 const path = require("path");
 
-const { BROWSER_DIR, DIST_DIR, EXTENSION_DIR } = require("./paths");
+const { BROWSER_DIR, DIST_DIR, EXTENSION_DIR } = require("../build/paths");
 
-const webpackConfig = require("./webpack.config");
+const webpackDevConfig = require("../build/webpack.dev");
+const webpackProdConfig = require("../build/webpack.prod");
 
 const EXTENSTION_FILES = ["assets", "newtab"];
 const EXTENSION_CORE_FILES = [];
@@ -31,9 +34,7 @@ const buildProject = async ({ buildId, distPath, browserPath, tmpPath }) => {
   console.log(chalk.green("\ncopy extension files successfully"));
 
   await Promise.all(
-    EXTENSTION_FILES.map((file) =>
-      copy(path.join(EXTENSION_DIR, file), path.join(tmpPath, file)),
-    ),
+    EXTENSTION_FILES.map((file) => copy(path.join(EXTENSION_DIR, file), path.join(tmpPath, file))),
   );
 
   await Promise.all(
@@ -51,29 +52,42 @@ const buildProject = async ({ buildId, distPath, browserPath, tmpPath }) => {
   console.log("\nwebpack build started");
 
   const compailer = webpack(
-    webpackConfig({
-      mode: env,
-      distPath: tmpPath,
-    }),
+    env === "development"
+      ? webpackDevConfig({ distPath: tmpPath })
+      : webpackProdConfig({ distPath: tmpPath }),
   );
 
   await new Promise((resove, reject) => {
     compailer.run((err, stats) => {
+      console.log(stats);
+
       if (err) {
-        console.log(chalk.red("\nwebpack build failed", err));
-        reject();
-      } else {
-        resove();
+        reject(err);
+        return;
       }
+
+      const info = stats.toJson();
+
+      if (stats.hasErrors()) {
+        reject(info.errors);
+        return;
+      }
+
+      // if (stats.hasWarnings()) {
+      //   reject(info.warnings);
+      //   return;
+      // }
+
+      resove();
     });
   });
+
+  compailer.close(() => {});
 
   console.log(chalk.green("\nwebpack build successfully"));
 
   const archive = archiver("zip", { zlib: { level: 9 } });
-  const zipStream = createWriteStream(
-    path.join(distPath, `ReactContextDevtool_${buildId}.zip`),
-  );
+  const zipStream = createWriteStream(path.join(distPath, `ReactContextDevtool_${buildId}.zip`));
 
   await new Promise((resolve, reject) => {
     archive
@@ -98,15 +112,11 @@ const startBuild = async (buildId) => {
   const tmpPath = path.join(distPath, "tmp");
   const browserPath = path.join(BROWSER_DIR, buildId);
 
-  try {
-    await preBuild({ distPath, tmpPath });
+  await preBuild({ distPath, tmpPath });
 
-    await buildProject({ buildId, distPath, browserPath, tmpPath });
+  await buildProject({ buildId, distPath, browserPath, tmpPath });
 
-    await postBuild({ distPath, tmpPath });
-  } catch (err) {
-    console.log(chalk.red("build failed", err));
-  }
+  await postBuild({ distPath, tmpPath });
 };
 
 module.exports = startBuild;
